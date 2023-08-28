@@ -1,20 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect } from "react";
+import { AppRegistry } from "react-native-web";
+import ReactDOMServer from "react-dom/server";
+import * as Font from "expo-font";
+import { Provider } from "react-redux";
+import mainStore from "./store";
+import AppNavigator from "./navigation/AppNavigator";
+import ErrorModal from "./components/error/ErrorModal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import NavigationContext from "./navigation/NavigationContext";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Platform } from "react-native";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./constants/firebaseConfig";
 
-export default function App() {
+export default function App(props) {
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  // Initialize Firebase
+  initializeApp(firebaseConfig);
+
+  useEffect(() => {
+    const fetchFonts = async () => {
+      await Font.loadAsync({
+        headers: require("./assets/fonts/monts.ttf"),
+      });
+      setAppIsReady(true); // Set appIsReady to true after the font has loaded
+    };
+
+    fetchFonts();
+  }, []);
+
+  if (!appIsReady) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <Provider store={mainStore}>
+          <AppNavigator />
+          {Platform.OS === "web" && <ErrorModal />}
+        </Provider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
