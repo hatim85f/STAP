@@ -20,6 +20,8 @@ const UploadImage = (props) => {
   const [imageUrl, setImageUrl] = useState("");
   const [progress, setProgress] = useState(0);
 
+  console.log(imageName, subFolder);
+
   const handleImgePcik = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -31,14 +33,14 @@ const UploadImage = (props) => {
 
       if (!result.canceled) {
         setSelectedImage(result.assets[0].uri);
-        await uploadImage(result.assets[0].uri);
+        await uploadImageToServer(result.assets[0].uri);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const uploadImage = async (image) => {
+  const uploadImageToServer = async (image) => {
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {

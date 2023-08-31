@@ -30,8 +30,12 @@ const SplashScreen = (props) => {
 
       const fetchUserDetails = async () => {
         try {
-          const storedUserDetails = await AsyncStorage.getItem("userDetails");
-
+          let storedUserDetails;
+          if (Platform.OS === "web") {
+            storedUserDetails = window.localStorage.getItem("userDetails");
+          } else {
+            storedUserDetails = await AsyncStorage.getItem("userDetails");
+          }
           if (storedUserDetails) {
             const parsedUserDetails = JSON.parse(storedUserDetails);
 
@@ -69,7 +73,7 @@ const SplashScreen = (props) => {
       <View style={styles.container}>
         <Card style={[styles.innerContainer, { backgroundColor: "white" }]}>
           <Image
-            source={require("../assets/vectors/intro.gif")}
+            source={require("../assets/vectors/logo_gif.gif")}
             style={[styles.gif, { height: hp("20%"), width: hp("20%") }]}
           />
           <Progress.Bar
@@ -91,7 +95,7 @@ const SplashScreen = (props) => {
     >
       <Card style={styles.innerContainer}>
         <Image
-          source={require("../assets/vectors/intro.gif")}
+          source={require("../assets/vectors/logo_gif.gif")}
           style={styles.gif}
         />
         <Progress.Bar
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     width: wp("95%"),
     height: hp("95%"),
-    backgroundColor: "rgba(232, 232, 232, 0.6)",
+    backgroundColor: "rgba(232, 232, 232, 0.8)",
     justifyContent: "center",
     alignItems: "center",
   },

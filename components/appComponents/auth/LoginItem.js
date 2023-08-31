@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useRef } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -15,6 +15,8 @@ import CustomInput from "../Input/Input";
 
 const LoginItem = (props) => {
   const { animateRegisterationUp, animateForgetIn } = props;
+
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [hidePassword, setHidePassword] = useState(true);
@@ -37,12 +39,14 @@ const LoginItem = (props) => {
     if (isValidEmail && password.length > 0) {
       dispatch(authActions.login(email, password)).then(() => {
         setIsLoading(false);
-        props.navigation.navigate("Home");
+        if (isLoggedIn) {
+          props.navigation.navigate("Home");
+        } else {
+          Alert.alert("Warning", "Invalid Username or Password", [
+            { text: "OK", onPress: () => setIsLoading(false) },
+          ]);
+        }
       });
-    } else {
-      Alert.alert("Warning", "Email and Password must be provided", [
-        { text: "OK", onPress: () => setIsLoading(false) },
-      ]);
     }
   };
 

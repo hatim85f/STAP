@@ -1,6 +1,6 @@
 // array of businesses each business contains all busness details
 
-import { ADD_BUSINESS } from "./businessActions";
+import { ADD_BUSINESS, GET_USER_BUSINESSES } from "./businessActions";
 
 const initialState = {
   business: [],
@@ -8,6 +8,11 @@ const initialState = {
 
 export const businessReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_USER_BUSINESSES:
+      return {
+        ...state,
+        business: action.payload,
+      };
     case ADD_BUSINESS:
       return {
         ...state,

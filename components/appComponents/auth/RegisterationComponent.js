@@ -53,6 +53,7 @@ const RegisterationComponent = (props) => {
     { label: "Employee", value: "Employee" },
   ]);
   const [hidePassword, setHidePassword] = useState(true);
+  const [imageUrl, setImageUrl] = useState("");
 
   const [confirmedEmailIsMatch, setConfirmedEmailIsMatch] = useState(true);
   const [isValidEmail, setIsValidEmail] = useState(true);

@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { mainLink } from "../mainLink";
 import { SYSTEM_MESSAGE } from "../messages/messagesActions";
+import { Platform } from "react-native";
 
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
@@ -37,6 +38,10 @@ export const login = (email, password) => {
     }
 
     await AsyncStorage.setItem("userDetails", JSON.stringify(userData));
+
+    if (Platform.OS === "web") {
+      window.localStorage.setItem("userDetails", JSON.stringify(userData));
+    }
 
     dispatch({
       type: LOGIN,
@@ -220,7 +225,7 @@ export const clearError = () => {
 
 export const getUserIn = (userDetails) => {
   return async (dispatch) => {
-    console.log(userDetails);
+    console.log(userDetails, "userDetails");
     dispatch({
       type: GET_USER_IN,
       token: userDetails.token,

@@ -8,7 +8,7 @@ import { FullAppNavigator } from "./MainNaviagtor";
 import { NavigationContext } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Linking from "expo-linking";
-import { Text } from "react-native";
+import { Modal, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as authActions from "../store/auth/authActions";
@@ -35,6 +35,16 @@ const AppNavigator = () => {
           Dashboard: "dashboard",
           businesses: "businesses",
           add_businesses: "add_businesses",
+          products: {
+            screens: {
+              main_products_nav: {
+                path: "/products/show-products",
+              },
+              add_product: {
+                path: "/products/add-products/:businessId",
+              },
+            },
+          },
         },
       },
     },
@@ -60,6 +70,31 @@ const AppNavigator = () => {
   // if (!isReady) {
   //   return <Loader />;
   // }
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        let storedUserDetails;
+        if (Platform.OS === "web") {
+          storedUserDetails = window.localStorage.getItem("userDetails");
+        } else {
+          storedUserDetails = await AsyncStorage.getItem("userDetails");
+        }
+
+        if (storedUserDetails) {
+          const parsedUserDetails = JSON.parse(storedUserDetails);
+
+          if (parsedUserDetails.user) {
+            dispatch(authActions.getUserIn(parsedUserDetails));
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [dispatch]);
 
   const dispatch = useDispatch();
 

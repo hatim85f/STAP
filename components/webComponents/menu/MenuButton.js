@@ -6,7 +6,6 @@ import Colors from "../../../constants/Colors";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 const MenuButton = (props) => {
-  console.log(props);
   return (
     <TouchableOpacity
       onPress={() => props.navigation.toggleDrawer()}

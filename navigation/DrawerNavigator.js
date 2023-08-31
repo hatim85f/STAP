@@ -27,6 +27,11 @@ import AddNewBusinessScreen from "../screens/business/AddNewBusinessScreen";
 import HomeScreen from "../screens/home/HomeScreen";
 import UploadImage from "../screens/test/UploadImage";
 import BusinessesScreen from "../screens/business/BusinessesScreen";
+import Svg, { Circle, Rect, Path } from "react-native-svg";
+import ProductsScreen from "../screens/products/ProductsScreen";
+import Icon from "react-native-vector-icons/Feather";
+
+import { MainProductNavigator } from "./ProductNavigator";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -144,7 +149,7 @@ export const MainDrawerNavigator = () => {
           borderRadius: 15,
           justifyContent: "center",
           borderWidth: 2,
-          borderColor: "black",
+          borderColor: "#bcc6d6",
           // height: Platform.OS === "web" ? hp("5.5%") : hp("6%"),
           marginTop: hp("0.5%"),
         },
@@ -191,11 +196,29 @@ export const MainDrawerNavigator = () => {
         options={{
           ...defaultNavOptions,
           title: "Add New Business",
-          headerTitle: "Businesses",
+          headerTitle: "Add New Business",
           drawerIcon: ({ focused }) => {
             return (
               <MaterialIcons
                 name="library-add"
+                size={hp("2.5%")}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="products"
+        component={MainProductNavigator}
+        options={{
+          ...defaultNavOptions,
+          title: "Products",
+          headerTitle: "Products",
+          drawerIcon: ({ focused }) => {
+            return (
+              <Icon
+                name="package"
                 size={hp("2.5%")}
                 color={focused ? "white" : "black"}
               />

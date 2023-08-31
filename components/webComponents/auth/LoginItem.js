@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -16,6 +16,8 @@ import CustomInput from "../Input/Input";
 
 const LoginItem = (props) => {
   const { animateRegisterationUp, animateForgetIn } = props;
+
+  const { isLoggedIn } = useSelector((state) => state.auth);
 
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
@@ -34,21 +36,22 @@ const LoginItem = (props) => {
 
   const dispatch = useDispatch();
 
-  const login = () => {
+  const login = async () => {
     setIsLoading(true);
     try {
       if (isValidEmail && password.length > 0) {
-        dispatch(authActions.login(email, password)).then(() => {
+        await dispatch(authActions.login(email, password)).then(() => {
           setIsLoading(false);
         });
-        props.navigation.navigate("Home");
-      } else {
-        Alert.alert("Warning", "Email and Password must be provided", [
-          { text: "OK", onPress: () => setIsLoading(false) },
-        ]);
+        if (isLoggedIn) {
+          props.navigation.navigate("Home");
+        }
       }
     } catch (error) {
-      console.log(error);
+      Alert.alert("Warning", "Email and Password must be provided", [
+        { text: "OK", onPress: () => setIsLoading(false) },
+      ]);
+      props.navigation.navigate("Login");
     }
   };
 

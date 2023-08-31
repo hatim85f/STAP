@@ -22,7 +22,11 @@ export default function App(props) {
   useEffect(() => {
     const fetchFonts = async () => {
       await Font.loadAsync({
-        headers: require("./assets/fonts/monts.ttf"),
+        headers:
+          Platform.OS === "web" || Platform.OS === "android"
+            ? require("./assets/fonts/monts.ttf")
+            : require("./assets/fonts/second.ttf"),
+        numbers: require("./assets/fonts/numbers.ttf"),
       });
       setAppIsReady(true); // Set appIsReady to true after the font has loaded
     };

@@ -22,6 +22,7 @@ import * as authActions from "../../store/auth/authActions";
 import UploadImage from "../../components/helpers/UploadImages";
 import Loader from "../../components/Loader";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
+import HeaderText from "../../components/HeaderText";
 
 const AddNewBusinessScreen = (props) => {
   // states
@@ -69,7 +70,21 @@ const AddNewBusinessScreen = (props) => {
         webSite
       )
     ).then(() => {
+      dispatch(businessActions.getUserBusiness());
+      setImageUrl("");
+      setBusinessName("");
+      setBusinessType("");
+      setBusinessDescription("");
+      setOfficeLocation("");
+      setContactPerson("");
+      setContactPersonEmail("");
+      setContactNumber("");
+      setNumberOfEmployees(0);
+      setHasWebSite(false);
+      setWebSite("");
+
       setIsLoading(false);
+
       props.navigation.navigate("Dashboard");
     });
   };
@@ -81,6 +96,7 @@ const AddNewBusinessScreen = (props) => {
   return (
     <Fragment>
       {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
+      {Platform.OS === "web" && <HeaderText text="Add New Business" />}
       <Card style={styles.container}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -143,7 +159,7 @@ const AddNewBusinessScreen = (props) => {
               disabled={businessName.length === 0}
               getURL={(data) => setImageUrl(data)}
               imageName={businessName}
-              subFolfer="businesses_logo/"
+              subFolder="businesses_logo/"
             />
           </View>
           <MainInput

@@ -2,6 +2,33 @@ import { ERROR } from "../auth/authActions";
 import { mainLink } from "../mainLink";
 
 export const ADD_BUSINESS = "ADD_BUSINESS";
+export const GET_USER_BUSINESSES = "GET_USER_BUSINESSES";
+
+export const getUserBusiness = () => {
+  return async (dispatch, getState) => {
+    const { token, user } = getState().auth;
+
+    const response = await fetch(
+      `${mainLink}/api/business/all/?userId=${user._id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token,
+        },
+      }
+    );
+
+    const resData = await response.json();
+
+    console.log(resData, token, user, "resData");
+
+    dispatch({
+      type: GET_USER_BUSINESSES,
+      payload: resData.userBusiness,
+    });
+  };
+};
 
 export const addBusiness = (
   businessLogo,
