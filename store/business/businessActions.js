@@ -21,8 +21,6 @@ export const getUserBusiness = () => {
 
     const resData = await response.json();
 
-    console.log(resData, token, user, "resData");
-
     dispatch({
       type: GET_USER_BUSINESSES,
       payload: resData.userBusiness,
@@ -67,8 +65,6 @@ export const addBusiness = (
     });
 
     const resData = await response.json();
-
-    console.log(user._id, resData, "resData");
 
     dispatch({
       type: ERROR,

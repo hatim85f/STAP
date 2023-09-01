@@ -20,8 +20,6 @@ const SplashScreen = (props) => {
 
   const { isLoggedIn } = useSelector((state) => state.auth);
 
-  console.log(isLoggedIn, Platform.OS, "splash screen");
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,7 +39,6 @@ const SplashScreen = (props) => {
 
             if (progress === 1) {
               dispatch(authActions.getUserIn(parsedUserDetails));
-              console.log(parsedUserDetails.user, "parsedUserDetails");
               props.navigation.navigate("Home");
             }
           } else {

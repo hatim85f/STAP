@@ -43,6 +43,9 @@ const AppNavigator = () => {
               add_product: {
                 path: "/products/add-products/:businessId",
               },
+              edit_product: {
+                path: "/products/edit-product/:productId/:businessId",
+              },
             },
           },
         },

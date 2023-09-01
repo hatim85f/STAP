@@ -5,7 +5,6 @@ import { Link, useLinkTo, useNavigation } from "@react-navigation/native";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import MenuButton from "../../../components/webComponents/menu/MenuButton";
 const WebHomeScreen = (props) => {
-  console.log(props);
   return (
     <View>
       <MenuButton navigation={props.navigation} />

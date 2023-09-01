@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
-import { Button, CheckBox } from "react-native-elements";
+import { Button, CheckBox, Header } from "react-native-elements";
 import {
   MaterialCommunityIcons,
   Ionicons,
@@ -11,6 +11,7 @@ import {
 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
@@ -22,31 +23,83 @@ import Loader from "../../components/Loader";
 import Colors from "../../constants/Colors";
 
 import * as productsActions from "../../store/products/productsActions";
+import * as authActions from "../../store/auth/authActions";
+import numberWithComa from "../../components/helpers/numberWithComa";
 
-const AddProductScreen = (props) => {
-  const { businessId } = props.route.params;
+const EditProductScreen = (props) => {
+  const { productId, businessId } = props.route.params;
+
+  const { products } = useSelector((state) => state.products);
+
   const [productType, setProductType] = useState("");
   const [productName, setProductName] = useState("");
   const [productNickName, setProductNickName] = useState("");
-  const [costPrice, setCostPrice] = useState(null);
-  const [retailPrice, setRetailPrice] = useState(null);
-  const [sellingPrice, setSellingPrice] = useState(null);
+  const [costPrice, setCostPrice] = useState(0);
+  const [retailPrice, setRetailPrice] = useState(0);
+  const [sellingPrice, setSellingPrice] = useState(0);
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [maximumDiscount, setMaximumDiscount] = useState(null);
-  const [minimumDiscount, setMinimumDiscount] = useState(null);
+  const [maximumDiscount, setMaximumDiscount] = useState(0);
+  const [minimumDiscount, setMinimumDiscount] = useState(0);
   const [category, setCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
-  // submitting form
+  // returning user back in if he refreshes the page
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        let storedUserDetails;
+        if (Platform.OS === "web") {
+          storedUserDetails = window.localStorage.getItem("userDetails");
+        } else {
+          storedUserDetails = await AsyncStorage.getItem("userDetails");
+        }
+        if (storedUserDetails) {
+          const parsedUserDetails = JSON.parse(storedUserDetails);
+          dispatch(authActions.getUserIn(parsedUserDetails));
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [dispatch]);
+
+  // getting the products of the business
+  useEffect(() => {
+    dispatch(productsActions.getBusinessProducts(businessId));
+  }, [businessId, dispatch]);
+
+  // getting the product that is needed to be edited
+  useEffect(() => {
+    const product = products.find((product) => product._id === productId);
+    if (product) {
+      setProductType(product.productType);
+      setProductName(product.productName);
+      setProductNickName(product.productNickName);
+      setCostPrice(product.costPrice);
+      setRetailPrice(product.retailPrice);
+      setSellingPrice(product.sellingPrice);
+      setDescription(product.description);
+      setImageUrl(product.imageURL);
+      setMaximumDiscount(product.maximumDiscount);
+      setMinimumDiscount(product.minimumDiscount);
+      setCategory(product.category ? product.category : "");
+    }
+
+    return () => {
+      console.log("cleaned up");
+    };
+  }, [productId, products]);
 
   const handleSubmitForm = () => {
     setIsLoading(true);
     dispatch(
-      productsActions.addProduct(
-        businessId,
+      productsActions.editProduct(
+        productId,
         productName,
         productNickName,
         productType,
@@ -57,11 +110,11 @@ const AddProductScreen = (props) => {
         imageUrl,
         minimumDiscount,
         maximumDiscount,
-        category,
-        productType
+        category
       )
     ).then(() => {
       setIsLoading(false);
+      dispatch(productsActions.getBusinessProducts(businessId));
       props.navigation.navigate("main_products_nav");
     });
   };
@@ -83,7 +136,10 @@ const AddProductScreen = (props) => {
       >
         <AntDesign name="arrowleft" size={35} color={Colors.primary} />
       </TouchableOpacity>
-      <HeaderText text="Add Product" />
+      <HeaderText
+        style={{ alignSelf: "center" }}
+        text={`Editing ${productName}`}
+      />
       <Card style={styles.card}>
         <ScrollView scrollEnabled scrollEventThrottle={16}>
           <View style={styles.checkboxContainer}>
@@ -139,7 +195,7 @@ const AddProductScreen = (props) => {
           <MainInput
             label="Cost Price"
             style={styles.input}
-            value={costPrice}
+            value={numberWithComa(costPrice)}
             onChangeText={(text) => setCostPrice(text)}
             keyboardType="numeric"
             rightIcon={() => (
@@ -153,7 +209,7 @@ const AddProductScreen = (props) => {
           <MainInput
             label="Retail Price"
             style={styles.input}
-            value={retailPrice}
+            value={numberWithComa(retailPrice)}
             onChangeText={(text) => setRetailPrice(text)}
             keyboardType="numeric"
             rightIcon={() => (
@@ -167,7 +223,7 @@ const AddProductScreen = (props) => {
           <MainInput
             label="Selling Price"
             style={styles.input}
-            value={sellingPrice}
+            value={numberWithComa(sellingPrice)}
             onChangeText={(text) => setSellingPrice(text)}
             keyboardType="numeric"
             rightIcon={() => (
@@ -222,7 +278,7 @@ const AddProductScreen = (props) => {
           <MainInput
             label="Maximum Discount"
             style={styles.input}
-            value={maximumDiscount}
+            value={numberWithComa(maximumDiscount)}
             onChangeText={(text) => setMaximumDiscount(text)}
             keyboardType="numeric"
             rightIcon={() => (
@@ -236,7 +292,7 @@ const AddProductScreen = (props) => {
           <MainInput
             label="Minimum Discount"
             style={styles.input}
-            value={minimumDiscount}
+            value={numberWithComa(minimumDiscount)}
             onChangeText={(text) => setMinimumDiscount(text)}
             keyboardType="numeric"
             rightIcon={() => (
@@ -319,4 +375,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddProductScreen;
+export default EditProductScreen;

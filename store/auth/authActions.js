@@ -225,7 +225,6 @@ export const clearError = () => {
 
 export const getUserIn = (userDetails) => {
   return async (dispatch) => {
-    console.log(userDetails, "userDetails");
     dispatch({
       type: GET_USER_IN,
       token: userDetails.token,

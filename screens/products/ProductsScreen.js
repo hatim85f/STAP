@@ -120,7 +120,11 @@ const ProductsScreen = (props) => {
           dropDownContainerStyle={styles.dropListStyle}
         />
         {businessValue && products.length > 0 && (
-          <ProductsShow products={products} />
+          <ProductsShow
+            products={products}
+            businessId={businessValue}
+            navigation={props.navigation}
+          />
         )}
         {businessValue && products.length === 0 && (
           <View

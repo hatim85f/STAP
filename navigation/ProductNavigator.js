@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import ProductsScreen from "../screens/products/ProductsScreen";
 import AddProductScreen from "../screens/products/AddProductScreen";
+import EditProductScreen from "../screens/products/EditProductScreen";
 
 const ProductNavigator = createStackNavigator();
 
@@ -21,6 +22,14 @@ export const MainProductNavigator = () => {
         options={{
           title: "Add Products",
           headerTitle: "Add Products",
+        }}
+      />
+      <ProductNavigator.Screen
+        name="edit_product"
+        component={EditProductScreen}
+        options={{
+          title: "Edit Product",
+          headerTitle: "Edit Product",
         }}
       />
     </ProductNavigator.Navigator>
