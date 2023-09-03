@@ -207,6 +207,8 @@ const ProductsShow = (props) => {
                       size={
                         Platform.OS === "web"
                           ? globalWidth("4%")
+                          : Platform.isPad
+                          ? globalWidth("6%")
                           : globalWidth("8%")
                       }
                       color="#ff0055"

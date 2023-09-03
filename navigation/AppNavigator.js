@@ -48,6 +48,16 @@ const AppNavigator = () => {
               },
             },
           },
+          team: {
+            screens: {
+              team_details: {
+                path: "/team/team-details/",
+              },
+              add_member: {
+                path: "/team/invite-new-member/:businessId",
+              },
+            },
+          },
         },
       },
     },

@@ -32,6 +32,7 @@ import ProductsScreen from "../screens/products/ProductsScreen";
 import Icon from "react-native-vector-icons/Feather";
 
 import { MainProductNavigator } from "./ProductNavigator";
+import { TeamNavigator } from "./TeamNavigator";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -220,6 +221,24 @@ export const MainDrawerNavigator = () => {
               <Icon
                 name="package"
                 size={hp("2.5%")}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="team"
+        component={TeamNavigator}
+        options={{
+          ...defaultNavOptions,
+          title: "Team",
+          headerTitle: "Team",
+          drawerIcon: ({ focused }) => {
+            return (
+              <MaterialIcons
+                name="people-alt"
+                size={24}
                 color={focused ? "white" : "black"}
               />
             );

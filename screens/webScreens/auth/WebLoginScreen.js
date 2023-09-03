@@ -122,7 +122,7 @@ const WebLoginScreen = (props) => {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../../../assets/bg.jpeg")}
+        source={require("../../../assets/bg2.jpeg")}
         style={styles.bg}
       >
         <View style={styles.mainRow}>
