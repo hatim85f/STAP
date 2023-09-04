@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -143,6 +143,8 @@ const AddMemberScreen = (props) => {
     designation,
   ]);
 
+  console.log(selectedValue);
+
   // submitting registering functionality
   const register = () => {
     if (formIsValid) {
@@ -154,13 +156,25 @@ const AddMemberScreen = (props) => {
           userName,
           firstName,
           lastName,
-          phoneNumber,
+          `${selectedValue}${phoneNumber}`,
           designation,
           userType,
           businessId,
           "www.stap-crm.com/intro"
         )
       ).then(() => {
+        setUserName("");
+        setEmail("");
+        setConfirmedEmail("");
+        setPassword("");
+        setConfirmedPassword("");
+        setConfirmedPasswordMatch(true);
+        setUserType("");
+        setFirstName("");
+        setLastName("");
+        setPhoneNumber("");
+        setDesignation("");
+        props.navigation.navigate("team_details");
         setIsLoading(false);
       });
       return;
@@ -171,9 +185,20 @@ const AddMemberScreen = (props) => {
     }
   };
 
+  // set ref for every input
+  const userNameRef = useRef();
+  const emailRef = useRef();
+  const confirmedEmailRef = useRef();
+  const passwordRef = useRef();
+  const confirmedPasswordRef = useRef();
+  const firstNameRef = useRef();
+  const lastNameRef = useRef();
+  const phoneNumberRef = useRef();
+  const designationRef = useRef();
+
   return (
     <View style={styles.container}>
-      <BackButton navigation={props.navigation} />
+      <BackButton navigation={props.navigation} route={"team_details"} />
       <HeaderText text="Inviting New Member" />
       <ScrollView
         scrollEnabled
@@ -194,7 +219,11 @@ const AddMemberScreen = (props) => {
               <MainInput
                 placeholder="User Name"
                 onChangeText={(text) => setUserName(text)}
-                textContentType="name"
+                textContentType="name-phone-pad"
+                onEndEditing={() => {
+                  emailRef.current.focus();
+                }}
+                autoCapitalize="words"
                 rightIcon={() => (
                   <Ionicons name="person" size={24} color="black" />
                 )}
@@ -202,8 +231,12 @@ const AddMemberScreen = (props) => {
 
               <MainInput
                 placeholder="Email Address"
+                ref={emailRef}
+                onEndEditing={() => {
+                  confirmedEmailRef.current.focus();
+                }}
                 onChangeText={(text) => setEmail(text)}
-                textContentType="emailAddress"
+                keyboardType="email-address"
                 rightIcon={() => (
                   <Entypo name="email" size={24} color="black" />
                 )}
@@ -214,9 +247,10 @@ const AddMemberScreen = (props) => {
               />
               <MainInput
                 placeholder="Confirm Email Address"
+                ref={confirmedEmailRef}
                 onChangeText={(text) => setConfirmedEmail(text)}
                 onFocus={() => setConfirmedEmailIsMatch(true)}
-                textContentType="emailAddress"
+                keyboardType="email-address"
                 rightIcon={() => (
                   <Entypo name="email" size={24} color="black" />
                 )}
@@ -244,12 +278,17 @@ const AddMemberScreen = (props) => {
               <MainInput
                 placeholder="First Name"
                 onChangeText={(text) => setFirstName(text)}
-                textContentType="name"
+                textContentType="name-phone-pad"
+                ref={firstNameRef}
+                onEndEditing={() => {
+                  lastNameRef.current.focus();
+                }}
               />
               <MainInput
                 placeholder="Last Name"
                 onChangeText={(text) => setLastName(text)}
-                textContentType="name"
+                textContentType="name-phone-pad"
+                ref={lastNameRef}
               />
               <View style={{ height: globalHeight("0.5%") }} />
               <View style={styles.singleInputContainer}>
@@ -266,7 +305,10 @@ const AddMemberScreen = (props) => {
                   searchablePlaceholder="Search for a country..." // Placeholder for search input
                   searchableStyle={{ color: "#6a6b6c" }} // Style for the search input
                   style={[styles.listStyle, { width: "100%" }]}
-                  textStyle={[styles.dropText, { fontSize: globalHeight("2") }]}
+                  textStyle={[
+                    styles.dropText,
+                    { fontSize: globalHeight("2%") },
+                  ]}
                   listChildContainerStyle={{
                     borderRadius: 25,
                     borderColor: Colors.primary,
@@ -277,6 +319,11 @@ const AddMemberScreen = (props) => {
                 placeholder="Phone Number"
                 onChangeText={(text) => setPhoneNumber(text)}
                 keyboardType="numeric"
+                textContentType="telephoneNumber"
+                ref={phoneNumberRef}
+                onEndEditing={() => {
+                  passwordRef.current.focus();
+                }}
                 rightIcon={() => {
                   return <Entypo name="phone" size={24} color="black" />;
                 }}
@@ -288,6 +335,10 @@ const AddMemberScreen = (props) => {
                 placeholderTextColor={"#6a6b6c"}
                 onChangeText={(text) => setPassword(text)}
                 textContentType="password"
+                ref={passwordRef}
+                onEndEditing={() => {
+                  confirmedPasswordRef.current.focus();
+                }}
                 secureTextEntry={hidePassword}
                 rightIcon={() => {
                   return (
@@ -309,6 +360,10 @@ const AddMemberScreen = (props) => {
                 placeholderTextColor={"#6a6b6c"}
                 onChangeText={(text) => setConfirmedPassword(text)}
                 textContentType="password"
+                ref={confirmedPasswordRef}
+                onEndEditing={() => {
+                  designationRef.current.focus();
+                }}
                 secureTextEntry={hidePassword}
                 error="Password is Not Matching"
                 showError={!confirmedPasswordMatch}
@@ -330,16 +385,19 @@ const AddMemberScreen = (props) => {
               />
               <MainInput
                 placeholder="Designation"
+                autoCapitalize="words"
+                ref={designationRef}
+                onEndEditing={register}
                 placeholderTextColor={"#6a6b6c"}
                 onChangeText={(text) => setDesignation(text)}
-                textContentType="name"
+                textContentType="name-phone-pad"
                 rightIcon={() => (
                   <FontAwesome5 name="critical-role" size={24} color="black" />
                 )}
               />
               <View style={{ height: globalHeight("0.5%") }} />
               <Button
-                title="Sign Up"
+                title="Send Invitation"
                 titleStyle={styles.title}
                 onPress={register}
                 buttonStyle={styles.buttonStyle}

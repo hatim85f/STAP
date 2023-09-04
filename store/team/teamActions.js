@@ -2,6 +2,7 @@ import { ERROR } from "../auth/authActions";
 import { mainLink } from "../mainLink";
 
 export const INVITE_MEMBER = "INVITE_MEMBER";
+export const GET_TEAM = "GET_TEAM";
 
 export const inviteMember = (
   email,
@@ -62,6 +63,28 @@ export const inviteMember = (
         userType,
         isActivated: false,
       },
+    });
+  };
+};
+
+export const getTeam = () => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/team/${user._id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+    });
+
+    const resData = await response.json();
+
+    console.log(user, resData, "resData");
+    dispatch({
+      type: GET_TEAM,
+      team: resData,
     });
   };
 };

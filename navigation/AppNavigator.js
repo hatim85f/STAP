@@ -8,12 +8,15 @@ import { FullAppNavigator } from "./MainNaviagtor";
 import { NavigationContext } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Linking from "expo-linking";
-import { Modal, Text } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 import * as authActions from "../store/auth/authActions";
 import { Platform } from "react-native";
 import { Alert } from "react-native";
+import SearchBar from "../components/SearchBar";
+import { globalHeight } from "../constants/globalWidth";
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE_V1";
 
@@ -83,6 +86,26 @@ const AppNavigator = () => {
   // if (!isReady) {
   //   return <Loader />;
   // }
+  function ConditionalComponent() {
+    const navigation = useNavigation();
+    const activeRouteName = navigation.getCurrentRoute();
+
+    // Conditionally render a component based on the active route
+    if (
+      activeRouteName &&
+      activeRouteName.name !== "Intro" &&
+      activeRouteName.name !== "Login"
+    ) {
+      return (
+        <View style={styles.mainView}>
+          <SearchBar />
+        </View>
+      );
+    }
+    return null;
+  }
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -109,8 +132,6 @@ const AppNavigator = () => {
     fetchUserDetails();
   }, [dispatch]);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     if (error && Platform.OS !== "web") {
       Alert.alert(error, errorMessage, [
@@ -127,9 +148,17 @@ const AppNavigator = () => {
       initialState={initialState}
       onStateChange={(state) => setInitialState(state)}
     >
+      {Platform.OS === "web" && <ConditionalComponent />}
       <FullAppNavigator />
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  mainView: {
+    height: globalHeight("10%"),
+    width: "100%",
+  },
+});
 
 export default AppNavigator;

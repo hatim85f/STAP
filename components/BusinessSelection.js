@@ -30,7 +30,7 @@ const BusinessSelection = (props) => {
 
   // preparing list for selection
   const businessList = useMemo(() => {
-    const list = [];
+    const list = [{ label: "All", value: null, businessLogo: null }];
     business.map((item) => {
       list.push({
         label: item.business.businessName,
@@ -50,6 +50,9 @@ const BusinessSelection = (props) => {
       );
       setSelectedBusiness(selected.business.businessName);
       setBusinessLogo(selected.business.businessLogo);
+    } else {
+      setSelectedBusiness("All");
+      setBusinessLogo("");
     }
   }, [businessValue]);
 
@@ -76,7 +79,7 @@ const BusinessSelection = (props) => {
           textStyle={styles.dropText}
           dropDownContainerStyle={styles.dropListStyle}
         />
-        {businessLogo.length > 0 && (
+        {businessLogo.length > 0 && businessLogo && props.showLogo && (
           <Image source={{ uri: businessLogo }} style={styles.image} />
         )}
       </View>
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
     width: Platform.OS === "web" ? "80%" : "95%",
     alignSelf: "center",
-    zIndex: 100,
+    zIndex: 10000,
   },
   image: {
     width: 120,

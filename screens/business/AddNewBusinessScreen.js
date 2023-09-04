@@ -94,10 +94,14 @@ const AddNewBusinessScreen = (props) => {
   }
 
   return (
-    <Fragment>
-      {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
+    <View style={styles.container}>
+      {Platform.OS === "web" && (
+        <View style={{ width: "100%" }}>
+          <MenuButton navigation={props.navigation} />
+        </View>
+      )}
       {Platform.OS === "web" && <HeaderText text="Add New Business" />}
-      <Card style={styles.container}>
+      <Card style={styles.card}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEnabled
@@ -281,19 +285,18 @@ const AddNewBusinessScreen = (props) => {
           />
         </ScrollView>
       </Card>
-    </Fragment>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 15,
     alignItems: "center",
-    width: Platform.OS === "web" ? globalWidth("50%") : globalWidth("95%"),
-    alignSelf: "center",
-    borderWidth: Platform.OS === "web" ? 0 : 2,
-    borderRadius: Platform.OS === "web" ? 10 : 25,
+    backgroundColor: "white",
+  },
+  card: {
+    marginTop: 15,
   },
   scroll: {
     width: Platform.OS === "web" ? globalWidth("50%") : globalWidth("95%"),

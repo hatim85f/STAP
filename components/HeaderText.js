@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: globalHeight("2.5%"),
     fontWeight: "bold",
-    color: Colors.primary,
+    color: "#000",
     fontFamily: "headers",
     fontStyle: "italic",
     textAlign: "center",

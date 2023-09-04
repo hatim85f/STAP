@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
 import { Button } from "react-native-elements";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import HeaderText from "../../components/HeaderText";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import BusinessSelection from "../../components/BusinessSelection";
@@ -9,11 +9,45 @@ import { globalHeight } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 
-const TeamDetailsScreen = (props) => {
-  const [selectedBusiness, setSelectedBusiness] = useState("");
-  const [businessId, setBusinessId] = useState("");
+import * as teamActions from "../../store/team/teamActions";
+import Loader from "../../components/Loader";
+import ShowTeamDetails from "../../components/team/ShowTeamDetails";
+import { getUserBack } from "../../components/helpers/getUserBack";
 
-  console.log({ selectedBusiness, businessId });
+const TeamDetailsScreen = (props) => {
+  const { team } = useSelector((state) => state.team);
+  const { token } = useSelector((state) => state.auth);
+
+  console.log(token);
+
+  const [selectedBusiness, setSelectedBusiness] = useState("");
+  const [businessId, setBusinessId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState([]);
+  const [listIsOpened, setListIsOpened] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(teamActions.getTeam()).then(() => {
+      setIsLoading(false);
+    });
+  }, [dispatch]);
+
+  console.log(selectedTeam);
+
+  useEffect(() => {
+    if (businessId) {
+      setSelectedTeam(team.filter((item) => item.businessId === businessId));
+    } else {
+      setSelectedTeam(team);
+    }
+  }, [businessId, team]);
+
+  if (isLoading) {
+    return <Loader center />;
+  }
 
   return (
     <View style={styles.container}>
@@ -23,14 +57,23 @@ const TeamDetailsScreen = (props) => {
         </View>
       )}
       <View style={styles.innerContainer}>
-        <HeaderText
-          text={selectedBusiness ? `${selectedBusiness} Team` : "Team Details"}
-        />
         <BusinessSelection
           getBusinessId={(id) => setBusinessId(id)}
           getSelectedBusiness={(business) => setSelectedBusiness(business)}
+          listIsOpened={(data) => setListIsOpened(data)}
         />
+        <View style={{ zIndex: -500 }}>
+          <HeaderText
+            text={
+              selectedBusiness ? `${selectedBusiness} Team` : "Team Details"
+            }
+          />
+        </View>
+        {selectedTeam && selectedTeam.length > 0 && (
+          <ShowTeamDetails team={selectedTeam} />
+        )}
       </View>
+
       {businessId && (
         <Button
           title="Invite New Team Member"
@@ -62,6 +105,7 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
+    // zIndex: -100,
   },
   buttonStyle: {
     backgroundColor: "#fff",

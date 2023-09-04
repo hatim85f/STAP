@@ -14,6 +14,7 @@ const MainInput = forwardRef((props, ref) => {
       <Input
         ref={ref} // Forward the ref to the Input component
         style={styles.input}
+        autoCapitalize={props.autoCapitalize}
         placeholder={props.placeholder}
         placeholderTextColor={"#6a6b6c"}
         inputStyle={styles.inputStyle}
