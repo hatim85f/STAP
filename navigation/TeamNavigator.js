@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import TeamDetailsScreen from "../screens/team/TeamDetailsScreen";
-import AddminMemberScreen from "../screens/team/AddMemberScreen";
+import AddMemberScreen from "../screens/team/AddMemberScreen";
 
 const TeamNav = createStackNavigator();
 
@@ -16,7 +16,7 @@ export const TeamNavigator = () => {
       />
       <TeamNav.Screen
         name="add_member"
-        component={AddminMemberScreen}
+        component={AddMemberScreen}
         options={{
           title: "Invite New Member",
         }}

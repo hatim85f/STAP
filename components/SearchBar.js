@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   greeting: {
     width: "30%",
     justifyContent: "center",
+    alignItems: "center",
   },
   greetingText: {
     fontFamily: "headers",

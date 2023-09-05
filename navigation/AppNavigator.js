@@ -35,6 +35,7 @@ const AppNavigator = () => {
       Login: "login",
       Home: {
         screens: {
+          Profile: "profile",
           Dashboard: "dashboard",
           businesses: "businesses",
           add_businesses: "add_businesses",
@@ -60,6 +61,9 @@ const AppNavigator = () => {
                 path: "/team/invite-new-member/:businessId",
               },
             },
+          },
+          settings: {
+            path: "/settings",
           },
         },
       },

@@ -20,8 +20,6 @@ const UploadImage = (props) => {
   const [imageUrl, setImageUrl] = useState("");
   const [progress, setProgress] = useState(0);
 
-  console.log(imageName, subFolder);
-
   const handleImgePcik = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -67,19 +65,13 @@ const UploadImage = (props) => {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(snapshot.totalBytes, "totalBytes");
 
-        console.log("Upload is " + progress + "% done");
         setProgress(progress);
 
         switch (snapshot.state) {
           case "paused":
-            console.log("Upload is paused");
-
             break;
           case "running":
-            console.log("Upload is running");
-
             break;
         }
       },

@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { mainLink } from "../mainLink";
 import { SYSTEM_MESSAGE } from "../messages/messagesActions";
 import { Platform } from "react-native";
+import { Alert } from "react-native";
 
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
@@ -11,6 +12,7 @@ export const CLEAR_ERROR = "CLEAR_ERROR";
 export const ERROR = "ERROR";
 export const VERIFY_CODE = "VERIFY_CODE";
 export const GET_USER_IN = "GET_USER_IN";
+export const GET_PROFILE = "GET_PROFILE";
 
 export const login = (email, password) => {
   return async (dispatch) => {
@@ -24,10 +26,7 @@ export const login = (email, password) => {
 
     const resData = await response.json();
 
-    const userData = {
-      user: resData.user,
-      token: resData.token,
-    };
+    console.log(resData, "resData login");
 
     if (!response.ok) {
       dispatch({
@@ -35,19 +34,32 @@ export const login = (email, password) => {
         error: resData.error,
         errorMessage: resData.message,
       });
+
+      if (Platform.OS !== "web") {
+        Alert.alert(
+          "Warning",
+          resData.message,
+          [{ text: "OK", onPress: () => dispatch({ type: CLEAR_ERROR }) }],
+          { cancelable: false }
+        );
+      }
+    } else {
+      const userData = {
+        user: resData.user,
+        token: resData.token,
+      };
+      await AsyncStorage.setItem("userDetails", JSON.stringify(userData));
+
+      if (Platform.OS === "web") {
+        window.localStorage.setItem("userDetails", JSON.stringify(userData));
+      }
+
+      dispatch({
+        type: LOGIN,
+        token: resData.token,
+        user: resData.user,
+      });
     }
-
-    await AsyncStorage.setItem("userDetails", JSON.stringify(userData));
-
-    if (Platform.OS === "web") {
-      window.localStorage.setItem("userDetails", JSON.stringify(userData));
-    }
-
-    dispatch({
-      type: LOGIN,
-      token: resData.token,
-      user: resData.user,
-    });
   };
 };
 
@@ -240,6 +252,83 @@ export const setError = (error, errorMessage) => {
       type: ERROR,
       error: error,
       errorMessage: errorMessage,
+    });
+  };
+};
+
+export const getProfile = () => {
+  return async (dispatch, getState) => {
+    const { token, user } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/profile/${user._id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+    });
+
+    const resData = await response.json();
+
+    if (!response.ok) {
+      dispatch({
+        type: ERROR,
+        error: resData.error,
+        errorMessage: resData.message,
+      });
+    }
+
+    console.log(resData, "resData profile");
+
+    dispatch({
+      type: GET_PROFILE,
+      profile: resData.userProfile[0],
+    });
+  };
+};
+
+export const verifyEmail = () => {
+  return async (dispatch, getState) => {
+    const { token, user } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/profile/verifyEmail`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+      body: JSON.stringify({ userId: user._id }),
+    });
+
+    const resData = await response.json();
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+  };
+};
+
+export const confirmCode = (code) => {
+  return async (dispatch, getState) => {
+    const { token, user } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/profile/confirmEmail`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+      body: JSON.stringify({ userId: user._id, code }),
+    });
+
+    const resData = await response.json();
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
     });
   };
 };

@@ -143,8 +143,6 @@ const AddMemberScreen = (props) => {
     designation,
   ]);
 
-  console.log(selectedValue);
-
   // submitting registering functionality
   const register = () => {
     if (formIsValid) {

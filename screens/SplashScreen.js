@@ -59,8 +59,6 @@ const SplashScreen = (props) => {
     };
   }, [progress, dispatch]);
 
-  useEffect(() => {}, []);
-
   // if (Platform.OS !== "web") {
   //   return <View style={{ flex: 1, backgroundColor: "white" }}></View>;
   // }

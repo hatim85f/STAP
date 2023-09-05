@@ -33,6 +33,8 @@ import Icon from "react-native-vector-icons/Feather";
 
 import { MainProductNavigator } from "./ProductNavigator";
 import { TeamNavigator } from "./TeamNavigator";
+import ProfileScreen from "../screens/profile/ProfileScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -155,7 +157,26 @@ export const MainDrawerNavigator = () => {
           marginTop: hp("0.5%"),
         },
       }}
+      initialRouteName="Dashboard"
     >
+      <MainDrawer.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          ...defaultNavOptions,
+          title: "Profile",
+          headerTitle: "Profile",
+          drawerIcon: ({ focused }) => {
+            return (
+              <MaterialIcons
+                name="person"
+                size={hp("2.5%")}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
       <MainDrawer.Screen
         name="Dashboard"
         component={HomeScreen}
@@ -238,6 +259,24 @@ export const MainDrawerNavigator = () => {
             return (
               <MaterialIcons
                 name="people-alt"
+                size={24}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="settings"
+        component={SettingsScreen}
+        options={{
+          ...defaultNavOptions,
+          title: "Settings",
+          headerTitle: "Settings",
+          drawerIcon: ({ focused }) => {
+            return (
+              <MaterialIcons
+                name="settings"
                 size={24}
                 color={focused ? "white" : "black"}
               />

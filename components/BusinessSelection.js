@@ -31,13 +31,15 @@ const BusinessSelection = (props) => {
   // preparing list for selection
   const businessList = useMemo(() => {
     const list = [{ label: "All", value: null, businessLogo: null }];
-    business.map((item) => {
-      list.push({
-        label: item.business.businessName,
-        value: item.business._id,
-        logo: item.business.businessLogo,
+    business &&
+      business.length > 0 &&
+      business.map((item) => {
+        list.push({
+          label: item.business.businessName,
+          value: item.business._id,
+          logo: item.business.businessLogo,
+        });
       });
-    });
     return list;
   }, [business]);
 
@@ -129,6 +131,11 @@ const styles = StyleSheet.create({
     borderWidth: 2.5,
     borderColor: "#6a6b6c",
     marginTop: 15,
+  },
+  notes: {
+    textAlign: "center",
+    fontFamily: "headers",
+    fontSize: 24,
   },
 });
 

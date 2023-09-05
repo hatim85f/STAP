@@ -143,8 +143,6 @@ const ForgotPassword = (props) => {
     }
   }, [error, errorMessage, dispatch]);
 
-  console.log(error, errorMessage);
-
   useEffect(() => {
     if (getCode && !codeVerified) {
       const interval = setInterval(() => {

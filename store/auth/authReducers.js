@@ -2,6 +2,7 @@ import {
   CLEAR_ERROR,
   COUNTRIES_CODES,
   ERROR,
+  GET_PROFILE,
   GET_USER_IN,
   LOGIN,
   LOGOUT,
@@ -17,6 +18,7 @@ const initialState = {
   error: "",
   errorMessage: "",
   isLoggedIn: false,
+  profile: {},
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -34,6 +36,11 @@ export const authReducer = (state = initialState, action) => {
         token: action.token,
         user: action.user,
         isLoggedIn: true,
+      };
+    case GET_PROFILE:
+      return {
+        ...state,
+        profile: action.profile,
       };
     case COUNTRIES_CODES:
       return {

@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,7 +17,7 @@ import CustomInput from "../Input/Input";
 const LoginItem = (props) => {
   const { animateRegisterationUp, animateForgetIn } = props;
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, token } = useSelector((state) => state.auth);
 
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
@@ -36,25 +36,27 @@ const LoginItem = (props) => {
 
   const dispatch = useDispatch();
 
-  const login = async () => {
+  useEffect(() => {
+    if (token) {
+      props.navigation.navigate("Home");
+    }
+  }, [token]);
+
+  const login = () => {
     setIsLoading(true);
-    try {
-      if (isValidEmail && password.length > 0) {
-        await dispatch(authActions.login(email, password)).then(() => {
+
+    if (isValidEmail && password.length > 0) {
+      try {
+        dispatch(authActions.login(email, password)).then(() => {
           setIsLoading(false);
         });
-        if (isLoggedIn) {
-          props.navigation.navigate("Home");
-        }
+      } catch (error) {
+        Alert.alert("Warning", "Invalid Username or Password", [
+          { text: "OK", onPress: () => setIsLoading(false) },
+        ]);
       }
-    } catch (error) {
-      Alert.alert("Warning", "Email and Password must be provided", [
-        { text: "OK", onPress: () => setIsLoading(false) },
-      ]);
-      props.navigation.navigate("Login");
     }
   };
-
   if (isLoading) {
     return <Loader />;
   }

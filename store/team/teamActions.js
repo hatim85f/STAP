@@ -2,7 +2,8 @@ import { ERROR } from "../auth/authActions";
 import { mainLink } from "../mainLink";
 
 export const INVITE_MEMBER = "INVITE_MEMBER";
-export const GET_TEAM = "GET_TEAM";
+export const EDIT_MEMBER = "EDIT_MEMBER";
+export const DELETE_MEMBER = "DELETE_MEMBER";
 
 export const inviteMember = (
   email,
@@ -43,8 +44,6 @@ export const inviteMember = (
 
     const resData = await response.json();
 
-    console.log(resData);
-
     dispatch({
       type: ERROR,
       error: resData.error ? resData.error : "Done",
@@ -67,12 +66,54 @@ export const inviteMember = (
   };
 };
 
-export const getTeam = () => {
+export const editTeamMember = (
+  memberId,
+  designation,
+  userType,
+  isAuthorized
+) => {
   return async (dispatch, getState) => {
-    const { user, token } = getState().auth;
+    const { token } = getState().auth;
 
-    const response = await fetch(`${mainLink}/api/team/${user._id}`, {
-      method: "GET",
+    const response = await fetch(`${mainLink}/api/team/${memberId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+      body: JSON.stringify({
+        designation,
+        userType,
+        isAuthorized,
+        authority: ["Sales", "Team"],
+      }),
+    });
+
+    const resData = await response.json();
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+
+    dispatch({
+      type: EDIT_MEMBER,
+      memberId,
+      designation,
+      userType,
+      isAuthorized,
+      authority,
+    });
+  };
+};
+
+export const deleteTeamMember = (memberId) => {
+  return async (dispatch, getState) => {
+    const { token } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/team/${memberId}`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "x-auth-token": token,
@@ -81,10 +122,15 @@ export const getTeam = () => {
 
     const resData = await response.json();
 
-    console.log(user, resData, "resData");
     dispatch({
-      type: GET_TEAM,
-      team: resData,
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+
+    dispatch({
+      type: DELETE_MEMBER,
+      memberId,
     });
   };
 };

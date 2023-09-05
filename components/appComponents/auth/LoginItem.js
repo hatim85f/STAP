@@ -1,4 +1,10 @@
-import React, { useState, Fragment, useRef } from "react";
+import React, {
+  useState,
+  Fragment,
+  useRef,
+  useCallback,
+  useEffect,
+} from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,11 +18,12 @@ import * as authActions from "../../../store/auth/authActions";
 
 import Loader from "../../Loader";
 import CustomInput from "../Input/Input";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginItem = (props) => {
   const { animateRegisterationUp, animateForgetIn } = props;
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, token } = useSelector((state) => state.auth);
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [hidePassword, setHidePassword] = useState(true);
@@ -34,19 +41,28 @@ const LoginItem = (props) => {
 
   const dispatch = useDispatch();
 
+  // user is navigating to home even if he response is not ok
+  // need to fix this
+
+  useEffect(() => {
+    if (token) {
+      props.navigation.navigate("Home");
+    }
+  }, [token]);
+
   const login = () => {
     setIsLoading(true);
+
     if (isValidEmail && password.length > 0) {
-      dispatch(authActions.login(email, password)).then(() => {
-        setIsLoading(false);
-        if (isLoggedIn) {
-          props.navigation.navigate("Home");
-        } else {
-          Alert.alert("Warning", "Invalid Username or Password", [
-            { text: "OK", onPress: () => setIsLoading(false) },
-          ]);
-        }
-      });
+      try {
+        dispatch(authActions.login(email, password)).then(() => {
+          setIsLoading(false);
+        });
+      } catch (error) {
+        Alert.alert("Warning", "Invalid Username or Password", [
+          { text: "OK", onPress: () => setIsLoading(false) },
+        ]);
+      }
     }
   };
 

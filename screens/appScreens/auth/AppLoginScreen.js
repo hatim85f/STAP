@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   mainView: {
     position: "relative",
     alignSelf: "center",
-    top: height / 3,
+    top: height / 3.5,
   },
   forgotText: {
     color: Colors.font,

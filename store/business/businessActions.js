@@ -8,22 +8,30 @@ export const getUserBusiness = () => {
   return async (dispatch, getState) => {
     const { token, user } = getState().auth;
 
-    const response = await fetch(
-      `${mainLink}/api/business/all/?userId=${user._id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": token,
-        },
-      }
-    );
+    const response = await fetch(`${mainLink}/api/business/${user._id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+    });
 
     const resData = await response.json();
+
+    let team = [];
+    const businessDetails = resData.userBusiness;
+
+    for (let data of businessDetails) {
+      team.push({
+        businessId: data.business._id,
+        teamMembers: data.teamMembers,
+      });
+    }
 
     dispatch({
       type: GET_USER_BUSINESSES,
       payload: resData.userBusiness,
+      team: team,
     });
   };
 };

@@ -1,41 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { Button } from "react-native-elements";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { FontAwesome } from "@expo/vector-icons";
+
 import HeaderText from "../../components/HeaderText";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import BusinessSelection from "../../components/BusinessSelection";
 import { globalHeight } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
-import { FontAwesome } from "@expo/vector-icons";
-
-import * as teamActions from "../../store/team/teamActions";
 import Loader from "../../components/Loader";
 import ShowTeamDetails from "../../components/team/ShowTeamDetails";
-import { getUserBack } from "../../components/helpers/getUserBack";
 
 const TeamDetailsScreen = (props) => {
   const { team } = useSelector((state) => state.team);
   const { token } = useSelector((state) => state.auth);
 
-  console.log(token);
-
   const [selectedBusiness, setSelectedBusiness] = useState("");
   const [businessId, setBusinessId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState([]);
-  const [listIsOpened, setListIsOpened] = useState(false);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setIsLoading(true);
-    dispatch(teamActions.getTeam()).then(() => {
-      setIsLoading(false);
-    });
-  }, [dispatch]);
-
-  console.log(selectedTeam);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     if (businessId) {
@@ -60,7 +45,6 @@ const TeamDetailsScreen = (props) => {
         <BusinessSelection
           getBusinessId={(id) => setBusinessId(id)}
           getSelectedBusiness={(business) => setSelectedBusiness(business)}
-          listIsOpened={(data) => setListIsOpened(data)}
         />
         <View style={{ zIndex: -500 }}>
           <HeaderText
@@ -70,11 +54,14 @@ const TeamDetailsScreen = (props) => {
           />
         </View>
         {selectedTeam && selectedTeam.length > 0 && (
-          <ShowTeamDetails team={selectedTeam} />
+          <ShowTeamDetails
+            team={selectedTeam}
+            getEditing={(data) => setEditing(data)}
+          />
         )}
       </View>
 
-      {businessId && (
+      {businessId && !editing && (
         <Button
           title="Invite New Team Member"
           titleStyle={styles.titleStyle}
