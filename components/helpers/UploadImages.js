@@ -114,7 +114,7 @@ const UploadImage = (props) => {
       <Text style={styles.note}>Accepting Only JPEG or PNG files</Text>
       <Progress.Bar
         progress={parseFloat(progress / 100)}
-        width={Platform.OS === "web" ? globalWidth("49%") : globalWidth("90%")}
+        width={Platform.OS === "web" ? globalWidth("40%") : globalWidth("90%")}
         height={globalHeight("1.5%")}
         color={Colors.primary}
         style={{

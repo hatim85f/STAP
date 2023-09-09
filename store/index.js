@@ -4,6 +4,7 @@ import { messagesReducer } from "./messages/messagesReducer";
 import { businessReducer } from "./business/businessReducer";
 import { productsReducer } from "./products/productsReducer";
 import { teamReducer } from "./team/teamReducer";
+import { settingsReducer } from "./settings/settingsReducer";
 
 const mainStore = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const mainStore = configureStore({
     business: businessReducer,
     products: productsReducer,
     team: teamReducer,
+    settings: settingsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),

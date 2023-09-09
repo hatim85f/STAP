@@ -43,6 +43,8 @@ const ProductsShow = (props) => {
     dispatch(productsActions.getBusinessProducts(businessId));
   };
 
+  console.log(products);
+
   // deleting a product
   const deleteItem = (id, productName) => {
     setIsLoading(true);
@@ -196,6 +198,7 @@ const ProductsShow = (props) => {
                       <Text style={styles.numbers}>
                         {numberWithComma(item.sellingPrice)}
                       </Text>{" "}
+                      <Text style={styles.code}>{item.currencyCode}</Text>
                     </Text>
                   </View>
                   <TouchableOpacity
@@ -253,7 +256,7 @@ const styles = StyleSheet.create({
         ? globalWidth("3%")
         : isTablet()
         ? globalWidth("2.5%")
-        : globalWidth("4%"),
+        : globalWidth("3.5%"),
     fontFamily: "headers",
     color: Colors.font,
   },

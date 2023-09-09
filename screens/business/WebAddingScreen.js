@@ -21,17 +21,16 @@ import * as authActions from "../../store/auth/authActions";
 
 import UploadImage from "../../components/helpers/UploadImages";
 import Loader from "../../components/Loader";
-import MenuButton from "../../components/webComponents/menu/MenuButton";
 import HeaderText from "../../components/HeaderText";
-import WebAddingScreen from "./WebAddingScreen";
+import MenuButton from "../../components/webComponents/menu/MenuButton";
 
 import * as settingsActions from "../../store/settings/settingsActions";
 import DropDownPicker from "react-native-dropdown-picker";
+import { set } from "react-native-reanimated";
 
-const AddNewBusinessScreen = (props) => {
+const WebAddingScreen = (props) => {
   const { currencyList } = useSelector((state) => state.settings);
 
-  // states
   const [businessName, setBusinessName] = useState("");
   const [businessType, setBusinessType] = useState("");
   const [businessDescription, setBusinessDescription] = useState("");
@@ -138,18 +137,16 @@ const AddNewBusinessScreen = (props) => {
   if (isLoading) {
     return <Loader center />;
   }
-
-  if (Platform.OS === "web") {
-    return <WebAddingScreen navigation={props.navigation} />;
-  }
   return (
     <View style={styles.container}>
-      <Card style={styles.card}>
-        <ScrollView
-          scrollEnabled
-          scrollEventThrottle={16}
-          contentContainerStyle={styles.scroll}
-        >
+      {Platform.OS === "web" && (
+        <View style={{ width: "100%" }}>
+          <MenuButton navigation={props.navigation} />
+        </View>
+      )}
+      {Platform.OS === "web" && <HeaderText text="Add New Business" />}
+      <View style={styles.mainRow}>
+        <View style={styles.leftSide}>
           <MainInput
             label="Business Name"
             style={styles.input}
@@ -219,7 +216,7 @@ const AddNewBusinessScreen = (props) => {
             ref={descriptionRef}
             onSubmitEditing={() => locationRef.current.focus()}
           />
-          <View style={[styles.checkboxContainer, { zIndex: 100 }]}>
+          <View style={styles.checkboxContainer}>
             <Text style={styles.checkboxLabel}>Select Currency</Text>
             <DropDownPicker
               searchable={true}
@@ -239,6 +236,8 @@ const AddNewBusinessScreen = (props) => {
               }}
             />
           </View>
+        </View>
+        <View style={styles.leftSide}>
           <MainInput
             label="Office Location"
             style={styles.input}
@@ -338,14 +337,14 @@ const AddNewBusinessScreen = (props) => {
               style={styles.input}
             />
           )}
-          <Button
-            title="Submit"
-            onPress={handleSubmitForm}
-            titleStyle={styles.titleStyle}
-            buttonStyle={styles.buttonStyle}
-          />
-        </ScrollView>
-      </Card>
+        </View>
+      </View>
+      <Button
+        title="Submit"
+        onPress={handleSubmitForm}
+        titleStyle={styles.titleStyle}
+        buttonStyle={styles.buttonStyle}
+      />
     </View>
   );
 };
@@ -353,21 +352,27 @@ const AddNewBusinessScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#fff",
+    overflow: "scroll",
+  },
+  header: {},
+  mainRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: globalHeight("5%"),
+  },
+  leftSide: {
+    width: "45%",
+    padding: 15,
+    borderWidth: 2,
+    borderColor: Colors.primary,
+    borderRadius: 10,
   },
   card: {
     marginTop: 15,
   },
-  scroll: {
-    width: Platform.OS === "web" ? globalWidth("50%") : globalWidth("95%"),
-    marginTop: 5,
-    alignItems: "center",
-
-    paddingTop: 25,
-  },
   input: {
-    width: Platform.OS === "web" ? globalWidth("45%") : globalWidth("80%"),
+    width: Platform.OS === "web" ? globalWidth("40%") : globalWidth("80%"),
   },
   checkboxContainer: {
     marginTop: 15,
@@ -405,16 +410,18 @@ const styles = StyleSheet.create({
     marginTop: 25,
     borderRadius: 10,
     marginBottom: 25,
+    alignSelf: "center",
   },
   titleStyle: {
     color: "white",
     fontFamily: "headers",
   },
-  dropText: {
-    fontFamily: "headers",
-    color: "black",
-    fontSize: globalHeight("2%"),
-  },
 });
 
-export default AddNewBusinessScreen;
+export const WebAddingScreenOptions = (navData) => {
+  return {
+    headerTitle: "WebAddingScreen",
+  };
+};
+
+export default WebAddingScreen;

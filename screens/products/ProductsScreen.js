@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
     width: Platform.OS === "web" ? "80%" : "95%",
     alignSelf: "center",
     zIndex: 100,
+    elevation: 10,
   },
   noProducts: {
     fontFamily: "headers",

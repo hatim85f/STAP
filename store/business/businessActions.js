@@ -46,7 +46,10 @@ export const addBusiness = (
   contactPersonEmail,
   contactNumber,
   numberOfEmployees,
-  webSite
+  webSite,
+  currencyCode,
+  currencyName,
+  currencySymbol
 ) => {
   return async (dispatch, getState) => {
     const { token, user } = getState().auth;
@@ -69,6 +72,9 @@ export const addBusiness = (
         numberOfEmployees,
         webSite,
         userId: user._id,
+        currencyCode,
+        currencyName,
+        currencySymbol,
       }),
     });
 
@@ -94,6 +100,9 @@ export const addBusiness = (
         numberOfEmployees,
         webSite,
         userId: user._id,
+        currencyCode,
+        currencyName,
+        currencySymbol,
       },
     });
   };
