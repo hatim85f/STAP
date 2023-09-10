@@ -43,7 +43,6 @@ const ShowTeamDetails = (props) => {
   }, [editing]);
 
   const editUser = (user) => {
-    console.log(user);
     setSelectedMember(user);
     setEditing(true);
 

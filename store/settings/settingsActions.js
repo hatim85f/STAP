@@ -57,7 +57,6 @@ export const getCurrencyList = () => {
 
 export const updateCurency = (currencyDetails) => {
   return async (dispatch, getState) => {
-    console.log(currencyDetails);
     const { user, token } = getState().auth;
 
     const response = await fetch(`${mainLink}/api/settings/currency`, {
@@ -111,8 +110,6 @@ export const updatePassword = (oldPassword, newPassword) => {
     });
 
     const resData = await response.json();
-
-    console.log(resData);
 
     dispatch({
       type: ERROR,

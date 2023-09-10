@@ -26,8 +26,6 @@ export const login = (email, password) => {
 
     const resData = await response.json();
 
-    console.log(resData, "resData login");
-
     if (!response.ok) {
       dispatch({
         type: ERROR,
@@ -237,7 +235,6 @@ export const clearError = () => {
 
 export const getUserIn = (userDetails) => {
   return async (dispatch) => {
-    console.log(userDetails.token, userDetails.user, "userDetails");
     dispatch({
       type: GET_USER_IN,
       token: userDetails.token,
@@ -277,8 +274,6 @@ export const getProfile = () => {
         errorMessage: resData.message,
       });
     }
-
-    console.log(resData, "resData profile");
 
     dispatch({
       type: GET_PROFILE,

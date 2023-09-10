@@ -43,8 +43,6 @@ const ProductsShow = (props) => {
     dispatch(productsActions.getBusinessProducts(businessId));
   };
 
-  console.log(products);
-
   // deleting a product
   const deleteItem = (id, productName) => {
     setIsLoading(true);
