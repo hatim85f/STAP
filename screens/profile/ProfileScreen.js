@@ -21,6 +21,7 @@ import Colors from "../../constants/Colors";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 
 import * as authActions from "../../store/auth/authActions";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ProfileScreen = (props) => {
   const { user, profile } = useSelector((state) => state.auth);
@@ -112,106 +113,109 @@ const ProfileScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
-      <View style={styles.innerContainer}>
-        <Image
-          source={{ uri: profile.profilePicture }}
-          style={styles.profile}
-        />
-        <HeaderText text={profile.userName} />
-        <Text style={styles.position}>{profile.designation}</Text>
-        <View style={{ height: 30 }} />
-        <Card style={styles.contentRow}>
-          <View style={styles.icon}>
-            <MaterialIcons name="email" size={iconSize} color={Colors.font} />
-            <Text style={styles.data}>{profile.email}</Text>
-          </View>
-          <View style={styles.verifyBox}>
-            {profile.emailVerified ? (
-              <Text
-                style={[
-                  styles.verified,
-                  { color: "green", textDecorationLine: "none" },
-                ]}
-              >
-                {" "}
-                (Verified){" "}
-              </Text>
-            ) : (
-              <TouchableOpacity onPress={verifyEmail} style={styles.smallRow}>
-                <Text style={styles.verified}> Verify Mail </Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </Card>
-        <Card style={styles.contentRow}>
-          <View style={styles.icon}>
-            <MaterialIcons
-              name="phone-android"
-              size={iconSize}
-              color={Colors.font}
-            />
-            <Text style={styles.data}>{profile.phone}</Text>
-          </View>
-          <View style={styles.verifyBox}>
-            {profile.phoneVerified ? (
-              <View style={styles.smallRow}>
-                <Text style={styles.verified}> (Verified) </Text>
-                <MaterialIcons name="done" size={iconSize} color="green" />
-              </View>
-            ) : (
-              <TouchableOpacity onPress={verifyPhone} style={styles.smallRow}>
-                <Text style={styles.verified}> Verify Phone </Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </Card>
-        {profile.business &&
-          profile.business.length > 0 &&
-          profile.business.map((business, index) => {
-            return (
-              <View style={styles.businessContainer} key={index}>
-                <Text style={styles.number}> {index + 1} </Text>
-                <Card style={styles.cardRow}>
-                  <Image
-                    source={{ uri: business.businessLogo }}
-                    style={styles.logo}
-                  />
-                  <Text style={styles.data}>{business.businessName}</Text>
-                  <Text style={[styles.data, { color: Colors.font }]}>
-                    {" "}
-                    {business.numberOfEmployees}{" "}
-                    {business.numberOfEmployees > 1 ? "Users" : "User"}{" "}
-                  </Text>
-                </Card>
-              </View>
-            );
-          })}
-      </View>
-      <Animated.View
-        style={[
-          styles.codeContainer,
-          { transform: [{ translateY: codeContainerHeight }] },
-        ]}
-      >
-        <TouchableOpacity onPress={cancelVerification}>
-          <AntDesign name="closesquare" size={iconSize} color="white" />
-        </TouchableOpacity>
-        <Input
-          label="Enter Code"
-          onChangeText={(text) => setMailCode(text)}
-          style={styles.input}
-          labelStyle={styles.labelStyle}
-          keyboardType="number-pad"
-          value={mailCode}
-        />
-        <Button
-          onPress={verifyMailCode}
-          title="Verify"
-          buttonStyle={styles.button}
-          titleStyle={styles.buttonTitle}
-        />
-      </Animated.View>
+      <ScrollView scrollEnabled scrollEventThrottle={16}>
+        {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
+        <View style={styles.innerContainer}>
+          <Image
+            source={{ uri: profile.profilePicture }}
+            style={styles.profile}
+          />
+          <HeaderText text={profile.userName} />
+          <Text style={styles.position}>{profile.designation}</Text>
+          <View style={{ height: 30 }} />
+          <Card style={styles.contentRow}>
+            <View style={styles.icon}>
+              <MaterialIcons name="email" size={iconSize} color={Colors.font} />
+              <Text style={styles.data}>{profile.email}</Text>
+            </View>
+            <View style={styles.verifyBox}>
+              {profile.emailVerified ? (
+                <Text
+                  style={[
+                    styles.verified,
+                    { color: "green", textDecorationLine: "none" },
+                  ]}
+                >
+                  {" "}
+                  (Verified){" "}
+                </Text>
+              ) : (
+                <TouchableOpacity onPress={verifyEmail} style={styles.smallRow}>
+                  <Text style={styles.verified}> Verify Mail </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </Card>
+          <Card style={styles.contentRow}>
+            <View style={styles.icon}>
+              <MaterialIcons
+                name="phone-android"
+                size={iconSize}
+                color={Colors.font}
+              />
+              <Text style={styles.data}>{profile.phone}</Text>
+            </View>
+            <View style={styles.verifyBox}>
+              {profile.phoneVerified ? (
+                <View style={styles.smallRow}>
+                  <Text style={styles.verified}> (Verified) </Text>
+                  <MaterialIcons name="done" size={iconSize} color="green" />
+                </View>
+              ) : (
+                <TouchableOpacity onPress={verifyPhone} style={styles.smallRow}>
+                  <Text style={styles.verified}> Verify Phone </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </Card>
+          {profile.business &&
+            profile.business.length > 0 &&
+            profile.business.map((business, index) => {
+              return (
+                <View style={styles.businessContainer} key={index}>
+                  <Text style={styles.number}> {index + 1} </Text>
+                  <Card style={styles.cardRow}>
+                    <Image
+                      source={{ uri: business.businessLogo }}
+                      style={styles.logo}
+                    />
+                    <Text style={styles.data}>{business.businessName}</Text>
+                    <Text style={[styles.data, { color: Colors.font }]}>
+                      {" "}
+                      {business.numberOfEmployees}{" "}
+                      {business.numberOfEmployees > 1 ? "Users" : "User"}{" "}
+                    </Text>
+                  </Card>
+                </View>
+              );
+            })}
+        </View>
+        <Animated.View
+          style={[
+            styles.codeContainer,
+            { transform: [{ translateY: codeContainerHeight }] },
+          ]}
+        >
+          <TouchableOpacity onPress={cancelVerification}>
+            <AntDesign name="closesquare" size={iconSize} color="white" />
+          </TouchableOpacity>
+          <Input
+            label="Enter Code"
+            onChangeText={(text) => setMailCode(text)}
+            style={styles.input}
+            labelStyle={styles.labelStyle}
+            keyboardType="number-pad"
+            value={mailCode}
+          />
+          <Button
+            onPress={verifyMailCode}
+            title="Verify"
+            buttonStyle={styles.button}
+            titleStyle={styles.buttonTitle}
+          />
+        </Animated.View>
+        <View style={{ height: 60 }} />
+      </ScrollView>
     </View>
   );
 };
@@ -335,13 +339,13 @@ const styles = StyleSheet.create({
         ? globalWidth("4%")
         : Platform.isPad
         ? globalWidth("9%")
-        : globalWidth("15%"),
+        : globalWidth("10%"),
     height:
       Platform.OS === "web"
         ? globalWidth("4%")
         : Platform.isPad
         ? globalWidth("9%")
-        : globalWidth("15%"),
+        : globalWidth("10%"),
     borderRadius:
       Platform.OS === "web"
         ? globalWidth("2%")

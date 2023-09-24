@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
+import { View, Text, StyleSheet, Platform, ScrollView } from "react-native";
 import { Avatar, Button, Switch } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
@@ -21,6 +21,7 @@ const SettingsScreen = (props) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMatching, setPasswordMatching] = useState(true);
   const [isActivated, setIsActivated] = useState(false);
+  const [isBiometricEnabled, setIsBiometricEnabled] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -59,6 +60,11 @@ const SettingsScreen = (props) => {
     setIsActivated(isActivated);
   }, [profile]);
 
+  useEffect(() => {
+    const isBiometricEnabled = profile.biometricEnabled;
+    setIsBiometricEnabled(isBiometricEnabled);
+  }, [profile]);
+
   // saving changes
   const saveChanges = () => {
     if (newPassword !== confirmPassword) {
@@ -76,71 +82,108 @@ const SettingsScreen = (props) => {
     dispatch(settingsActions.deactivateAccount(isActivated));
   };
 
+  const enableBiometricsData = () => {
+    dispatch(authActions.sendBiometric());
+  };
+
   return (
     <View style={styles.container}>
-      {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
-      <View style={styles.innerContainer}>
-        <Card style={styles.card}>
-          <Text style={[styles.title, { marginBottom: 15 }]}>
-            Change Password
-          </Text>
-          <MainInput
-            value={oldPassword}
-            onChangeText={(text) => setOldPassword(text)}
-            secureTextEntry
-            placeholder="Enter Old Password"
-          />
-          <View style={{ marginTop: 10 }} />
-          <MainInput
-            value={newPassword}
-            onChangeText={(text) => setNewPassword(text)}
-            secureTextEntry
-            placeholder="Enter New Password"
-          />
-          <View style={{ marginTop: 10 }} />
-          <MainInput
-            value={confirmPassword}
-            onChangeText={(text) => setConfirmPassword(text)}
-            secureTextEntry
-            placeholder="Confirm New Password"
-            error="Password Not Matching"
-            showError={!passwordMatching}
-          />
-          <Button
-            title="Save Changes"
-            onPress={saveChanges}
-            buttonStyle={styles.buttonStyle}
-            titleStyle={styles.buttonTitleStyle}
-            disabled={
-              oldPassword === "" || newPassword === "" || confirmPassword === ""
-            }
-          />
-        </Card>
-        <Card style={styles.card}>
-          <View
-            style={[
-              styles.card,
-              { flexDirection: "row", alignItems: "center" },
-            ]}
-          >
-            <Text style={styles.title}>
-              {profile.isActivated ? "Deactivate" : "Activate"} Account
+      <ScrollView scrollEnabled scrollEventThrottle={16}>
+        {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
+        <View style={styles.innerContainer}>
+          <Card style={styles.card}>
+            <Text style={[styles.title, { marginBottom: 15 }]}>
+              Change Password
             </Text>
-            <Switch
-              value={!isActivated}
-              color={Colors.primary}
-              onValueChange={() => setIsActivated(!isActivated)}
+            <MainInput
+              value={oldPassword}
+              onChangeText={(text) => setOldPassword(text)}
+              secureTextEntry
+              placeholder="Enter Old Password"
             />
-          </View>
-          <Button
-            title="Save Changes"
-            onPress={deactivateAccount}
-            buttonStyle={styles.buttonStyle}
-            titleStyle={styles.buttonTitleStyle}
-            disabled={isActivated === profile.isActivated}
-          />
-        </Card>
-      </View>
+            <View style={{ marginTop: 10 }} />
+            <MainInput
+              value={newPassword}
+              onChangeText={(text) => setNewPassword(text)}
+              secureTextEntry
+              placeholder="Enter New Password"
+            />
+            <View style={{ marginTop: 10 }} />
+            <MainInput
+              value={confirmPassword}
+              onChangeText={(text) => setConfirmPassword(text)}
+              secureTextEntry
+              placeholder="Confirm New Password"
+              error="Password Not Matching"
+              showError={!passwordMatching}
+            />
+            <Button
+              title="Save Changes"
+              onPress={saveChanges}
+              buttonStyle={styles.buttonStyle}
+              titleStyle={styles.buttonTitleStyle}
+              disabled={
+                oldPassword === "" ||
+                newPassword === "" ||
+                confirmPassword === ""
+              }
+            />
+          </Card>
+          <Card style={styles.card}>
+            <View
+              style={[
+                styles.card,
+                { flexDirection: "row", alignItems: "center" },
+              ]}
+            >
+              <Text style={styles.title}>
+                {profile.isActivated ? "Deactivate" : "Activate"} Account
+              </Text>
+              <Switch
+                value={!isActivated}
+                color={Colors.primary}
+                onValueChange={() => setIsActivated(!isActivated)}
+              />
+            </View>
+            <Button
+              title="Save Changes"
+              onPress={deactivateAccount}
+              buttonStyle={styles.buttonStyle}
+              titleStyle={styles.buttonTitleStyle}
+              disabled={isActivated === profile.isActivated}
+            />
+          </Card>
+          {Platform.OS !== "web" && (
+            <Card style={[styles.card, { marginBottom: 50 }]}>
+              <View
+                style={[
+                  styles.card,
+                  { flexDirection: "row", alignItems: "center" },
+                ]}
+              >
+                <Text style={styles.title}>
+                  {profile.biometricEnabled ? "Disable" : "Enable"} BIOMETRIC
+                  Login
+                </Text>
+                <Switch
+                  value={isBiometricEnabled}
+                  color={Colors.primary}
+                  onValueChange={() =>
+                    setIsBiometricEnabled(!isBiometricEnabled)
+                  }
+                />
+              </View>
+              <Button
+                title="Save Changes"
+                buttonStyle={styles.buttonStyle}
+                onPress={enableBiometricsData}
+                titleStyle={styles.buttonTitleStyle}
+                disabled={isBiometricEnabled === profile.biometricEnabled}
+              />
+            </Card>
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 };

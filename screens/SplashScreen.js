@@ -85,7 +85,7 @@ const SplashScreen = (props) => {
 
   return (
     <ImageBackground
-      source={require("../assets/bg2.jpeg")}
+      source={require("../assets/bg.jpeg")}
       style={styles.container}
     >
       <Card style={styles.innerContainer}>

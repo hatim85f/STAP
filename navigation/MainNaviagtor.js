@@ -3,6 +3,7 @@ import Colors from "../constants/Colors";
 import LoginScreen from "../screens/auth/LoginScreen";
 import SplashScreen from "../screens/SplashScreen";
 import { MainDrawerNavigator } from "./DrawerNavigator";
+import { useSelector } from "react-redux";
 
 const defaultNavOptions = {
   headerStyle: {

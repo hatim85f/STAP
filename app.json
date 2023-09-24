@@ -18,6 +18,12 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow STAP™ to use Face ID."
+        }
       ]
     ],
     "assetBundlePatterns": ["**/*"],

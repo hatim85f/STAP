@@ -31,7 +31,7 @@ const AppNavigator = () => {
 
   const config = {
     screens: {
-      Into: "intro",
+      Intro: "intro",
       Login: "login",
       Home: {
         screens: {

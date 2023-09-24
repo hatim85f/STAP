@@ -104,8 +104,9 @@ export const MainDrawerNavigator = () => {
                 title="Logout"
                 buttonStyle={styles.logoutButton}
                 onPress={() => {
-                  dispatch(logOut());
-                  props.navigation.navigate("Login");
+                  dispatch(logOut()).then(() => {
+                    props.navigation.navigate("Login");
+                  });
                 }}
                 icon={() => (
                   <MaterialCommunityIcons

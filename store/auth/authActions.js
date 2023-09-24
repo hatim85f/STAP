@@ -327,3 +327,76 @@ export const confirmCode = (code) => {
     });
   };
 };
+
+export const sendBiometric = () => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/auth/biometric`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+      body: JSON.stringify({ userId: user._id }),
+    });
+
+    const resData = await response.json();
+
+    await AsyncStorage.setItem("biometric_details", user._id);
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+  };
+};
+
+export const biometricLogin = (userId) => {
+  return async (dispatch) => {
+    const response = await fetch(`${mainLink}/api/auth/login_biometric`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    const resData = await response.json();
+
+    const userData = {
+      user: resData.user,
+      token: resData.token,
+    };
+    await AsyncStorage.setItem("userDetails", JSON.stringify(userData));
+
+    if (Platform.OS === "web") {
+      window.localStorage.setItem("userDetails", JSON.stringify(userData));
+    }
+
+    dispatch({
+      type: LOGIN,
+      token: resData.token,
+      user: resData.user,
+    });
+
+    const profileResponse = await fetch(
+      `${mainLink}/api/profile/${resData.user._id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": resData.token,
+        },
+      }
+    );
+
+    const profileData = await profileResponse.json();
+
+    dispatch({
+      type: GET_PROFILE,
+      profile: profileData.userProfile[0],
+    });
+  };
+};

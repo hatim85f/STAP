@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { height, width } from "../../../constants/dimensions";
 import Colors from "../../../constants/Colors";
+import * as LocalAuthentication from "expo-local-authentication";
 
 import {
   widthPercentageToDP as wp,
@@ -20,6 +21,10 @@ import { Ionicons } from "@expo/vector-icons";
 import LoginItem from "../../../components/appComponents/auth/LoginItem";
 import RegisterationComponent from "../../../components/appComponents/auth/RegisterationComponent";
 import ForgotPassword from "../../../components/appComponents/auth/ForgotPassword";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as authActions from "../../../store/auth/authActions";
+import { useDispatch } from "react-redux";
+import Loader from "../../../components/Loader";
 
 const AppLoginScreen = (props) => {
   const registerationHeight = useRef(new Animated.Value(hp("100%"))).current; // value is hp('100%')
@@ -27,6 +32,9 @@ const AppLoginScreen = (props) => {
   const loginWidth = useRef(new Animated.Value(0)).current; // value is 0
   const forgotXValue = useRef(new Animated.Value(-hp("150%"))).current; // needed value is -wp('100%')
   const logoScale = useRef(new Animated.Value(1)).current;
+
+  const [biometricStatus, setBiometricStatus] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // animating registeration component in
   // animating login box out
@@ -130,9 +138,39 @@ const AppLoginScreen = (props) => {
     });
   };
 
-  const handleBiometricLogin = () => {
-    // Your logic for biometric login
+  const dispatch = useDispatch();
+
+  // login using biometric login
+  const handleBiometricLogin = async () => {
+    const supported =
+      (await LocalAuthentication.hasHardwareAsync()) &&
+      (await LocalAuthentication.isEnrolledAsync());
+
+    if (supported) {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Authenticate with your fingerprint or face.",
+      });
+
+      if (result.success) {
+        // Biometric authentication successful
+        setBiometricStatus("Biometric authentication successful!");
+        // You can navigate the user to their account screen or perform other actions here.
+        // Replace 'Home' with the actual route name for the user's account screen
+
+        const userBiometrics = await AsyncStorage.getItem("biometric_details");
+        setIsLoading(true);
+        dispatch(authActions.biometricLogin(userBiometrics)).then(() => {
+          setIsLoading(false);
+        });
+      } else {
+        setBiometricStatus("Biometric authentication failed.");
+      }
+    } else {
+      setBiometricStatus("Biometrics not available on this device.");
+    }
   };
+
+  console.log(biometricStatus);
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -173,17 +211,21 @@ const AppLoginScreen = (props) => {
             },
           ]}
         >
-          <TouchableOpacity
-            style={styles.touchableRow}
-            onPress={handleBiometricLogin}
-          >
-            <Ionicons
-              name="finger-print-outline"
-              size={40}
-              color={Colors.font}
-            />
-            <Text style={styles.forgotText}> Biometric Login</Text>
-          </TouchableOpacity>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <TouchableOpacity
+              style={styles.touchableRow}
+              onPress={handleBiometricLogin}
+            >
+              <Ionicons
+                name="finger-print-outline"
+                size={40}
+                color={Colors.font}
+              />
+              <Text style={styles.forgotText}> Biometric Login</Text>
+            </TouchableOpacity>
+          )}
           <LoginItem
             animateRegisterationUp={animateRegisterationUp}
             animateForgetIn={animateForgetIn}

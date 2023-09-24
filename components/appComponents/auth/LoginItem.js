@@ -18,7 +18,7 @@ import * as authActions from "../../../store/auth/authActions";
 
 import Loader from "../../Loader";
 import CustomInput from "../Input/Input";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as LocalAuthentication from "expo-local-authentication";
 
 const LoginItem = (props) => {
   const { animateRegisterationUp, animateForgetIn } = props;
@@ -63,6 +63,28 @@ const LoginItem = (props) => {
           { text: "OK", onPress: () => setIsLoading(false) },
         ]);
       }
+    }
+  };
+
+  const checkBiometrics = async () => {
+    const supported =
+      (await LocalAuthentication.hasHardwareAsync()) &&
+      (await LocalAuthentication.isEnrolledAsync());
+
+    if (supported) {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Authenticate with your fingerprint or face.",
+      });
+
+      if (result.success) {
+        // Biometric authentication successful
+        setBiometricStatus("Biometric authentication successful!");
+        // You can navigate the user to their account screen or perform other actions here.
+      } else {
+        setBiometricStatus("Biometric authentication failed.");
+      }
+    } else {
+      setBiometricStatus("Biometrics not available on this device.");
     }
   };
 
