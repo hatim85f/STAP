@@ -105,7 +105,14 @@ export const MainDrawerNavigator = () => {
                 buttonStyle={styles.logoutButton}
                 onPress={() => {
                   dispatch(logOut()).then(() => {
-                    props.navigation.navigate("Login");
+                    if (Platform.OS === "web") {
+                      // Use web-specific navigation logic here
+                      // For example, you can use window.location.href to redirect to the login page
+                      window.location.href = "/login";
+                    } else {
+                      // Use mobile-specific navigation logic here
+                      props.navigation.navigate("Login");
+                    }
                   });
                 }}
                 icon={() => (

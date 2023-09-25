@@ -158,6 +158,7 @@ const AppLoginScreen = (props) => {
         // Replace 'Home' with the actual route name for the user's account screen
 
         const userBiometrics = await AsyncStorage.getItem("biometric_details");
+        console.log(userBiometrics, "ddd");
         setIsLoading(true);
         dispatch(authActions.biometricLogin(userBiometrics)).then(() => {
           setIsLoading(false);

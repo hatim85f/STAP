@@ -4,6 +4,7 @@ import LoginScreen from "../screens/auth/LoginScreen";
 import SplashScreen from "../screens/SplashScreen";
 import { MainDrawerNavigator } from "./DrawerNavigator";
 import { useSelector } from "react-redux";
+import VerifyEmailScreen from "../screens/VerifyEmailScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -28,6 +29,13 @@ export const FullAppNavigator = () => {
       <MainAppNav.Screen
         name="Login"
         component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <MainAppNav.Screen
+        name="Verify"
+        component={VerifyEmailScreen}
         options={{
           headerShown: false,
         }}

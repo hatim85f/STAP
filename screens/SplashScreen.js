@@ -22,7 +22,12 @@ const SplashScreen = (props) => {
 
   const dispatch = useDispatch();
 
+  console.log(isLoggedIn);
+
   useEffect(() => {
+    if (isLoggedIn) {
+      props.navigation.navigate("Home");
+    }
     const timeout = setTimeout(() => {
       setProgress(1); // Set progress to 100% after 3 seconds
 
@@ -34,12 +39,21 @@ const SplashScreen = (props) => {
           } else {
             storedUserDetails = await AsyncStorage.getItem("userDetails");
           }
-          if (storedUserDetails) {
-            const parsedUserDetails = JSON.parse(storedUserDetails);
 
+          const parsedUserDetails = JSON.parse(storedUserDetails);
+
+          console.log(storedUserDetails);
+          if (parsedUserDetails.token.length > 0) {
             if (progress === 1) {
               dispatch(authActions.getUserIn(parsedUserDetails));
-              props.navigation.navigate("Home");
+
+              const { user } = parsedUserDetails;
+
+              if (!user.emailVerified) {
+                props.navigation.navigate("Verify");
+              } else {
+                props.navigation.navigate("Home");
+              }
             }
           } else {
             if (progress === 1) {
@@ -57,7 +71,7 @@ const SplashScreen = (props) => {
     return () => {
       clearTimeout(timeout); // Clear the timeout when the component unmounts
     };
-  }, [progress, dispatch]);
+  }, [progress, dispatch, isLoggedIn]);
 
   // if (Platform.OS !== "web") {
   //   return <View style={{ flex: 1, backgroundColor: "white" }}></View>;

@@ -25,7 +25,7 @@ const AppNavigator = () => {
   const [isReady, setIsReady] = useState(false);
   const navigationContext = useContext(NavigationContext);
 
-  const { error, errorMessage } = useSelector((state) => state.auth);
+  const { error, errorMessage, user } = useSelector((state) => state.auth);
 
   const prefix = Linking.createURL("stap://");
 
@@ -33,6 +33,7 @@ const AppNavigator = () => {
     screens: {
       Intro: "intro",
       Login: "login",
+      Verify: "verify_email_address",
       Home: {
         screens: {
           Profile: "profile",
@@ -152,7 +153,7 @@ const AppNavigator = () => {
       initialState={initialState}
       onStateChange={(state) => setInitialState(state)}
     >
-      {Platform.OS === "web" && <ConditionalComponent />}
+      {Platform.OS === "web" && user.emailVerified && <ConditionalComponent />}
       <FullAppNavigator />
     </NavigationContainer>
   );

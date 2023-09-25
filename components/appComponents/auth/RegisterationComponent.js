@@ -165,6 +165,7 @@ const RegisterationComponent = (props) => {
           designation
         )
       ).then(() => {
+        dispatch(authActions.verifyEmail());
         setIsLoading(false);
       });
       return;

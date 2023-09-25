@@ -24,6 +24,7 @@ const LoginItem = (props) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [formIsValid, setFormIsValid] = useState(false);
 
   const handleBlur = () => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -34,18 +35,26 @@ const LoginItem = (props) => {
     }
   };
 
+  useEffect(() => {
+    if ((isValidEmail && email.length > 0) || password.length > 0) {
+      setFormIsValid(true);
+    } else {
+      setFormIsValid(false);
+    }
+  }, [email, isValidEmail, password]);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (token) {
-      props.navigation.navigate("Home");
+      props.navigation.navigate("Intro");
     }
   }, [token]);
 
   const login = () => {
     setIsLoading(true);
 
-    if (isValidEmail && password.length > 0) {
+    if (formIsValid) {
       try {
         dispatch(authActions.login(email, password)).then(() => {
           setIsLoading(false);
@@ -55,6 +64,15 @@ const LoginItem = (props) => {
           { text: "OK", onPress: () => setIsLoading(false) },
         ]);
       }
+    } else {
+      dispatch(
+        authActions.setError(
+          "Warning",
+          "Make sure to enter a correct username and password"
+        )
+      );
+      setIsLoading(false);
+      return;
     }
   };
   if (isLoading) {

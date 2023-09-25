@@ -13,6 +13,7 @@ export const ERROR = "ERROR";
 export const VERIFY_CODE = "VERIFY_CODE";
 export const GET_USER_IN = "GET_USER_IN";
 export const GET_PROFILE = "GET_PROFILE";
+export const CODE_SUCCESS = "CODE_SUCCESS";
 
 export const login = (email, password) => {
   return async (dispatch) => {
@@ -320,6 +321,28 @@ export const confirmCode = (code) => {
 
     const resData = await response.json();
 
+    if (response.ok) {
+      const userDetails = await AsyncStorage.getItem("userDetails");
+      if (userDetails) {
+        const parsedUserDetails = JSON.parse(userDetails);
+
+        parsedUserDetails.user.emailVerified = true;
+
+        console.log(JSON.stringify(parsedUserDetails));
+
+        await AsyncStorage.setItem(
+          "userDetails",
+          JSON.stringify(parsedUserDetails)
+        );
+      }
+    }
+
+    if (response.ok) {
+      dispatch({
+        type: CODE_SUCCESS,
+      });
+    }
+
     dispatch({
       type: ERROR,
       error: resData.error ? resData.error : "Done",
@@ -365,10 +388,20 @@ export const biometricLogin = (userId) => {
 
     const resData = await response.json();
 
+    if (!response.ok) {
+      dispatch({
+        type: ERROR,
+        error: resData.error,
+        errorMessage: resData.message,
+      });
+    }
+
     const userData = {
       user: resData.user,
       token: resData.token,
     };
+
+    console.log(userData, "we are in");
     await AsyncStorage.setItem("userDetails", JSON.stringify(userData));
 
     if (Platform.OS === "web") {

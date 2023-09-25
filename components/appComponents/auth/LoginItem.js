@@ -29,6 +29,7 @@ const LoginItem = (props) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [formIsValid, setFormIsValid] = useState(false);
 
   const handleBlur = () => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -46,14 +47,22 @@ const LoginItem = (props) => {
 
   useEffect(() => {
     if (token) {
-      props.navigation.navigate("Home");
+      props.navigation.navigate("Intro");
     }
   }, [token]);
+
+  useEffect(() => {
+    if ((isValidEmail && email.length > 0) || password.length > 0) {
+      setFormIsValid(true);
+    } else {
+      setFormIsValid(false);
+    }
+  }, [email, isValidEmail, password]);
 
   const login = () => {
     setIsLoading(true);
 
-    if (isValidEmail && password.length > 0) {
+    if (formIsValid) {
       try {
         dispatch(authActions.login(email, password)).then(() => {
           setIsLoading(false);
@@ -63,28 +72,18 @@ const LoginItem = (props) => {
           { text: "OK", onPress: () => setIsLoading(false) },
         ]);
       }
-    }
-  };
-
-  const checkBiometrics = async () => {
-    const supported =
-      (await LocalAuthentication.hasHardwareAsync()) &&
-      (await LocalAuthentication.isEnrolledAsync());
-
-    if (supported) {
-      const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: "Authenticate with your fingerprint or face.",
-      });
-
-      if (result.success) {
-        // Biometric authentication successful
-        setBiometricStatus("Biometric authentication successful!");
-        // You can navigate the user to their account screen or perform other actions here.
-      } else {
-        setBiometricStatus("Biometric authentication failed.");
-      }
     } else {
-      setBiometricStatus("Biometrics not available on this device.");
+      Alert.alert(
+        "Warning!",
+        "Make sure to enter the correct username and password",
+        [
+          {
+            text: "Ok",
+            onPress: () => setIsLoading(false),
+          },
+        ]
+      );
+      return;
     }
   };
 

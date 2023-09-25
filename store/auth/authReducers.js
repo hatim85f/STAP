@@ -1,5 +1,6 @@
 import {
   CLEAR_ERROR,
+  CODE_SUCCESS,
   COUNTRIES_CODES,
   ERROR,
   GET_PROFILE,
@@ -19,6 +20,7 @@ const initialState = {
   errorMessage: "",
   isLoggedIn: false,
   profile: {},
+  verificationSuccess: false,
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -51,6 +53,11 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         codeVerified: true,
+      };
+    case CODE_SUCCESS:
+      return {
+        ...state,
+        verificationSuccess: true,
       };
     case ERROR:
       return {

@@ -6,7 +6,7 @@ import { DrawerToggleButton } from "@react-navigation/drawer";
 import MenuButton from "../../../components/webComponents/menu/MenuButton";
 const WebHomeScreen = (props) => {
   return (
-    <View>
+    <View style={styles.container}>
       <MenuButton navigation={props.navigation} />
       <Text style={styles.header}>WebHomeScreen</Text>
     </View>
@@ -14,6 +14,10 @@ const WebHomeScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
   header: {
     textAlign: "center",
     color: Colors.primary,
