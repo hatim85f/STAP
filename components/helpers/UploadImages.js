@@ -13,6 +13,7 @@ import Colors from "../../constants/Colors";
 import * as Progress from "react-native-progress";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import { Platform } from "react-native";
+import { isTablet, isWeb } from "../../constants/device";
 
 const UploadImage = (props) => {
   const { imageName, getURL, disabled, subFolder } = props;
@@ -114,7 +115,7 @@ const UploadImage = (props) => {
       <Text style={styles.note}>Accepting Only JPEG or PNG files</Text>
       <Progress.Bar
         progress={parseFloat(progress / 100)}
-        width={Platform.OS === "web" ? globalWidth("40%") : globalWidth("90%")}
+        width={isWeb() ? globalWidth("40%") : globalWidth("90%")}
         height={globalHeight("1.5%")}
         color={Colors.primary}
         style={{
@@ -131,12 +132,11 @@ const styles = StyleSheet.create({
   note: {
     textAlign: "center",
     fontFamily: "headers",
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("1.2%")
-        : Platform.isPad
-        ? globalWidth("2%")
-        : globalWidth("3.5%"),
+    fontSize: isWeb()
+      ? globalWidth("1.2%")
+      : isTablet()
+      ? globalWidth("2%")
+      : globalWidth("3.5%"),
     color: Colors.font,
     marginTop: 15,
   },

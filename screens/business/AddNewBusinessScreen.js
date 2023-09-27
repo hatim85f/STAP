@@ -27,6 +27,7 @@ import WebAddingScreen from "./WebAddingScreen";
 
 import * as settingsActions from "../../store/settings/settingsActions";
 import DropDownPicker from "react-native-dropdown-picker";
+import { isWeb } from "../../constants/device";
 
 const AddNewBusinessScreen = (props) => {
   const { currencyList } = useSelector((state) => state.settings);
@@ -360,14 +361,14 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   scroll: {
-    width: Platform.OS === "web" ? globalWidth("50%") : globalWidth("95%"),
+    width: isWeb() ? globalWidth("50%") : globalWidth("95%"),
     marginTop: 5,
     alignItems: "center",
 
     paddingTop: 25,
   },
   input: {
-    width: Platform.OS === "web" ? globalWidth("45%") : globalWidth("80%"),
+    width: isWeb() ? globalWidth("45%") : globalWidth("80%"),
   },
   checkboxContainer: {
     marginTop: 15,
@@ -376,8 +377,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     marginBottom: globalHeight("2%"),
     paddingBottom: globalHeight("2%"),
-    paddingHorizontal:
-      Platform.OS === "web" ? globalWidth("0.5%") : globalWidth("2%"),
+    paddingHorizontal: isWeb() ? globalWidth("0.5%") : globalWidth("2%"),
   },
   checkboxLabel: {
     color: Colors.font,
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     backgroundColor: Colors.primary,
-    width: Platform.OS === "web" ? globalWidth("20%") : globalWidth("50%"),
+    width: isWeb() ? globalWidth("20%") : globalWidth("50%"),
     marginTop: 25,
     borderRadius: 10,
     marginBottom: 25,

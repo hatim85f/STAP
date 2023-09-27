@@ -15,6 +15,7 @@ import { Button, CheckBox } from "react-native-elements";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import MainInput from "../MainInput";
 import Colors from "../../constants/Colors";
+import { isWeb } from "../../constants/device";
 
 const AddNewBusiness = (props) => {
   const { focused } = props;
@@ -248,20 +249,20 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 15,
     alignItems: "center",
-    width: Platform.OS === "web" ? globalWidth("50%") : globalWidth("95%"),
+    width: isWeb() ? globalWidth("50%") : globalWidth("95%"),
     alignSelf: "center",
-    borderWidth: Platform.OS === "web" ? 0 : 2,
-    borderRadius: Platform.OS === "web" ? 10 : 25,
+    borderWidth: isWeb() ? 0 : 2,
+    borderRadius: isWeb() ? 10 : 25,
   },
   scroll: {
-    width: Platform.OS === "web" ? globalWidth("50%") : globalWidth("95%"),
+    width: isWeb() ? globalWidth("50%") : globalWidth("95%"),
     marginTop: 5,
     alignItems: "center",
 
     paddingTop: 25,
   },
   input: {
-    width: Platform.OS === "web" ? globalWidth("45%") : globalWidth("80%"),
+    width: isWeb() ? globalWidth("45%") : globalWidth("80%"),
   },
   checkboxContainer: {
     marginTop: 15,
@@ -270,8 +271,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     marginBottom: globalHeight("2%"),
     paddingBottom: globalHeight("2%"),
-    paddingHorizontal:
-      Platform.OS === "web" ? globalWidth("0.5%") : globalWidth("2%"),
+    paddingHorizontal: isWeb() ? globalWidth("0.5%") : globalWidth("2%"),
   },
   checkboxLabel: {
     fontSize: 16,
@@ -291,12 +291,11 @@ const styles = StyleSheet.create({
     fontFamily: "headers",
     fontWeight: "bold",
     textAlign: "left",
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("0.8")
-        : Platform.isPad
-        ? globalWidth("2.5%")
-        : globalWidth("4%"),
+    fontSize: isWeb()
+      ? globalWidth("0.8")
+      : Platform.isPad
+      ? globalWidth("2.5%")
+      : globalWidth("4%"),
   },
   checkboxRow: {
     flexDirection: "row",
@@ -316,18 +315,17 @@ const styles = StyleSheet.create({
   note: {
     textAlign: "center",
     fontFamily: "headers",
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("1.2%")
-        : Platform.isPad
-        ? globalWidth("2%")
-        : globalWidth("3.5%"),
+    fontSize: isWeb()
+      ? globalWidth("1.2%")
+      : Platform.isPad
+      ? globalWidth("2%")
+      : globalWidth("3.5%"),
     color: Colors.font,
     marginTop: 15,
   },
   buttonStyle: {
     backgroundColor: Colors.primary,
-    width: Platform.OS === "web" ? globalWidth("20%") : globalWidth("50%"),
+    width: isWeb() ? globalWidth("20%") : globalWidth("50%"),
     marginTop: 25,
     borderRadius: 10,
     marginBottom: 25,

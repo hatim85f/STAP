@@ -29,6 +29,7 @@ import MenuButton from "../../components/webComponents/menu/MenuButton";
 import Loader from "../../components/Loader";
 import Card from "../../components/Card";
 import HeaderText from "../../components/HeaderText";
+import { isTablet, isWeb } from "../../constants/device";
 
 const BusinessesScreen = (props) => {
   const { business } = useSelector((state) => state.business);
@@ -371,12 +372,11 @@ const BusinessesScreen = (props) => {
               {
                 alignSelf: "center",
                 marginTop: 25,
-                borderRadius:
-                  Platform.OS === "web"
-                    ? globalHeight("5%")
-                    : Platform.isPad
-                    ? globalHeight("6%")
-                    : globalHeight("7.5%"),
+                borderRadius: isWeb()
+                  ? globalHeight("5%")
+                  : isTablet()
+                  ? globalHeight("6%")
+                  : globalHeight("7.5%"),
               },
             ]}
           />
@@ -422,16 +422,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   mainContainer: {
-    flexDirection: Platform.OS === "web" ? "row" : "column",
+    flexDirection: isWeb() ? "row" : "column",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    width: Platform.OS === "web" ? "80%" : "95%",
+    width: isWeb() ? "80%" : "95%",
     alignSelf: "center",
     alignItems: "center",
     marginTop: 25,
   },
   businessContainer: {
-    width: Platform.OS === "web" ? "48%" : "100%",
+    width: isWeb() ? "48%" : "100%",
     borderWidth: 1.5,
     alignSelf: "center",
     overflow: "hidden",
@@ -462,18 +462,16 @@ const styles = StyleSheet.create({
     color: Colors.primary,
   },
   image: {
-    width:
-      Platform.OS === "web"
-        ? globalHeight("10%")
-        : Platform.isPad
-        ? globalHeight("12%")
-        : globalHeight("15%"),
-    height:
-      Platform.OS === "web"
-        ? globalHeight("10%")
-        : Platform.isPad
-        ? globalHeight("12%")
-        : globalHeight("15%"),
+    width: isWeb()
+      ? globalHeight("10%")
+      : isTablet()
+      ? globalHeight("12%")
+      : globalHeight("15%"),
+    height: isWeb()
+      ? globalHeight("10%")
+      : isTablet()
+      ? globalHeight("12%")
+      : globalHeight("15%"),
   },
   innerModal: {
     flex: 1,
@@ -481,7 +479,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: "white",
-    width: Platform.OS === "web" ? "50%" : "95%",
+    width: isWeb() ? "50%" : "95%",
     alignSelf: "center",
     marginTop: 25,
     borderRadius: 10,
@@ -504,7 +502,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     backgroundColor: "#ff0055",
-    width: Platform.OS === "web" ? "25%" : "40%",
+    width: isWeb() ? "25%" : "40%",
     borderRadius: 10,
     marginTop: 35,
     alignSelf: "center",

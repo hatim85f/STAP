@@ -1,8 +1,9 @@
 import { Platform } from "react-native";
 import { globalHeight, globalWidth } from "./globalWidth";
+import { isTablet, isWeb } from "./device";
 
 export const fontSize = () => {
-  return Platform.OS === "web"
+  return isWeb()
     ? globalHeight("2%")
     : Platform.isPad
     ? globalHeight("2%")
@@ -10,12 +11,11 @@ export const fontSize = () => {
 };
 
 export const iconSizes = () => {
-  const iconSize =
-    Platform.OS === "web"
-      ? globalWidth("2%")
-      : Platform.isPad
-      ? globalWidth("5%")
-      : globalWidth("6%");
+  const iconSize = isWeb()
+    ? globalWidth("2%")
+    : isTablet()
+    ? globalWidth("5%")
+    : globalWidth("6%");
 
   return iconSize;
 };

@@ -22,6 +22,7 @@ import Loader from "../../components/Loader";
 import Colors from "../../constants/Colors";
 
 import * as productsActions from "../../store/products/productsActions";
+import { isWeb } from "../../constants/device";
 
 const AddProductScreen = (props) => {
   const { businessId } = props.route.params;
@@ -85,7 +86,11 @@ const AddProductScreen = (props) => {
       </TouchableOpacity>
       <HeaderText text="Add Product" />
       <Card style={styles.card}>
-        <ScrollView scrollEnabled scrollEventThrottle={16}>
+        <ScrollView
+          scrollEnabled
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={isWeb() && false}
+        >
           <View style={styles.checkboxContainer}>
             <Text style={styles.checkboxLabel}>Type Of Product</Text>
             <View style={styles.checkboxRow}>
@@ -270,7 +275,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    width: Platform.OS === "web" ? "50%" : "95%",
+    width: isWeb() ? "50%" : "95%",
     alignSelf: "center",
     marginTop: 10,
   },
@@ -281,8 +286,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     marginBottom: globalHeight("2%"),
     paddingBottom: globalHeight("2%"),
-    paddingHorizontal:
-      Platform.OS === "web" ? globalHeight("0.5%") : globalWidth("2%"),
+    paddingHorizontal: isWeb() ? globalHeight("0.5%") : globalWidth("2%"),
   },
   checkboxLabel: {
     color: Colors.font,
@@ -307,7 +311,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     backgroundColor: Colors.primary,
-    width: Platform.OS === "web" ? globalWidth("20%") : globalWidth("50%"),
+    width: isWeb() ? globalWidth("20%") : globalWidth("50%"),
     marginTop: 25,
     borderRadius: 10,
     marginBottom: 25,

@@ -5,6 +5,8 @@ import SplashScreen from "../screens/SplashScreen";
 import { MainDrawerNavigator } from "./DrawerNavigator";
 import { useSelector } from "react-redux";
 import VerifyEmailScreen from "../screens/VerifyEmailScreen";
+import { MainNavigator } from "./HomeNavigator";
+import { Platform } from "react-native";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -26,6 +28,9 @@ export const FullAppNavigator = () => {
           headerShown: false,
         }}
       />
+      {Platform.OS === "web" && (
+        <MainAppNav.Screen name="Main" component={MainNavigator} />
+      )}
       <MainAppNav.Screen
         name="Login"
         component={LoginScreen}

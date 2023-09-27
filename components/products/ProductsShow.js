@@ -17,6 +17,7 @@ import Card from "../Card";
 import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
 import Loader from "../Loader";
+import { isWeb } from "../../constants/device";
 
 const isTablet = () => {
   const { width, height } = Dimensions.get("window");
@@ -113,14 +114,14 @@ const ProductsShow = (props) => {
         scrollEnabled
         scrollEventThrottle={16}
         horizontal={true}
-        showsHorizontalScrollIndicator={Platform.OS === "web" ? true : false}
+        showsHorizontalScrollIndicator={isWeb() ? true : false}
         contentContainerStyle={{
           alignItems: "center",
           flexWrap: "wrap",
           marginTop: 10,
-          height: Platform.isPad
+          height: isTablet()
             ? globalHeight("13%")
-            : Platform.OS === "web"
+            : isWeb()
             ? globalHeight("8%")
             : globalHeight("6%"),
         }}
@@ -206,9 +207,9 @@ const ProductsShow = (props) => {
                     <MaterialCommunityIcons
                       name="delete-sweep"
                       size={
-                        Platform.OS === "web"
+                        isWeb()
                           ? globalWidth("4%")
-                          : Platform.isPad
+                          : isTablet()
                           ? globalWidth("6%")
                           : globalWidth("8%")
                       }
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     borderBottomColor: Colors.font,
     borderBottomWidth: 1,
-    width: Platform.OS === "web" ? globalWidth("80%") : globalWidth("90%"),
+    width: isWeb() ? globalWidth("80%") : globalWidth("90%"),
     marginTop: 10,
     padding: 3,
   },
@@ -247,14 +248,13 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   title: {
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("1.5%")
-        : Platform.isPad
-        ? globalWidth("3%")
-        : isTablet()
-        ? globalWidth("2.5%")
-        : globalWidth("3.5%"),
+    fontSize: isWeb()
+      ? globalWidth("1.5%")
+      : isTablet()
+      ? globalWidth("3%")
+      : isTablet()
+      ? globalWidth("2.5%")
+      : globalWidth("3.5%"),
     fontFamily: "headers",
     color: Colors.font,
   },
@@ -265,14 +265,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
     marginBottom: 10,
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("1.5%")
-        : Platform.isPad
-        ? globalWidth("3%")
-        : isTablet()
-        ? globalWidth("2.5%")
-        : globalWidth("4%"),
+    fontSize: isWeb()
+      ? globalWidth("1.5%")
+      : isTablet()
+      ? globalWidth("3%")
+      : isTablet()
+      ? globalWidth("2.5%")
+      : globalWidth("4%"),
     color: "#000",
   },
   card: {
@@ -282,8 +281,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   image: {
-    height: Platform.OS === "web" ? globalWidth("10%") : globalWidth("10%"),
-    width: Platform.OS === "web" ? globalWidth("8.8%") : globalWidth("12.5%"),
+    height: isWeb() ? globalWidth("10%") : globalWidth("10%"),
+    width: isWeb() ? globalWidth("8.8%") : globalWidth("12.5%"),
     marginLeft: 5,
   },
   categoriesBtn: {
@@ -297,20 +296,20 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOpacity: 0.26,
     elevation: 5,
-    width: Platform.OS === "web" ? globalWidth("20%") : globalWidth("40%"),
-    height: Platform.OS === "web" ? globalWidth("3%") : globalWidth("10%"),
+    width: isWeb() ? globalWidth("20%") : globalWidth("40%"),
+    height: isWeb() ? globalWidth("3%") : globalWidth("10%"),
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "white",
   },
   buttonText: {
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("1.5%")
-        : Platform.isPad
-        ? globalWidth("3%")
-        : isTablet()
-        ? globalWidth("2.5%")
-        : globalWidth("4%"),
+    fontSize: isWeb()
+      ? globalWidth("1.5%")
+      : isTablet()
+      ? globalWidth("3%")
+      : isTablet()
+      ? globalWidth("2.5%")
+      : globalWidth("4%"),
     fontFamily: "headers",
   },
 });

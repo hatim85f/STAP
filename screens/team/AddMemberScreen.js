@@ -26,6 +26,7 @@ import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
 import HeaderText from "../../components/HeaderText";
 import * as teamActions from "../../store/team/teamActions";
+import { isWeb } from "../../constants/device";
 const AddMemberScreen = (props) => {
   const { businessId } = props.route.params;
   const { countriesCodes } = useSelector((state) => state.auth);
@@ -211,7 +212,7 @@ const AddMemberScreen = (props) => {
             <InputsContainer
               style={{
                 height: globalHeight("150%"),
-                width: Platform.OS === "web" ? "50%" : "90%",
+                width: isWeb() ? "50%" : "90%",
               }}
             >
               <MainInput
@@ -456,7 +457,7 @@ const styles = StyleSheet.create({
     width: globalWidth("100%") / 25,
   },
   buttonStyle: {
-    width: Platform.OS === "web" ? globalWidth("30%") : globalWidth("70%"),
+    width: isWeb() ? globalWidth("30%") : globalWidth("70%"),
     borderRadius: 15,
     height: globalHeight("6%"),
     backgroundColor: "white",

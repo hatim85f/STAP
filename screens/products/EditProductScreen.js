@@ -25,6 +25,7 @@ import Colors from "../../constants/Colors";
 import * as productsActions from "../../store/products/productsActions";
 import * as authActions from "../../store/auth/authActions";
 import numberWithComa from "../../components/helpers/numberWithComa";
+import { isWeb } from "../../constants/device";
 
 const EditProductScreen = (props) => {
   const { productId, businessId } = props.route.params;
@@ -141,7 +142,11 @@ const EditProductScreen = (props) => {
         text={`Editing ${productName}`}
       />
       <Card style={styles.card}>
-        <ScrollView scrollEnabled scrollEventThrottle={16}>
+        <ScrollView
+          scrollEnabled
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={isWeb() && false}
+        >
           <View style={styles.checkboxContainer}>
             <Text style={styles.checkboxLabel}>Type Of Product</Text>
             <View style={styles.checkboxRow}>

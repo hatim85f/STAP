@@ -32,6 +32,19 @@ const AppNavigator = () => {
   const config = {
     screens: {
       Intro: "intro",
+      Main: {
+        screens: {
+          "STAP™": "main_home",
+          Documentation: "documentation",
+          About: "about",
+          "Why STAP™": "why",
+          Developers: "developers",
+          Pricing: "pricing",
+          Payment: "payment/:packageId",
+          Request: "request_demo",
+        },
+      },
+
       Login: "login",
       Verify: "verify_email_address",
       Home: {

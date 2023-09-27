@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "white",
+    overflow: "scroll",
   },
   innerContainer: {
     width: Platform.OS === "web" ? "50%" : "95%",

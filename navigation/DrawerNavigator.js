@@ -35,6 +35,7 @@ import { MainProductNavigator } from "./ProductNavigator";
 import { TeamNavigator } from "./TeamNavigator";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import SettingsScreen from "../screens/settings/SettingsScreen";
+import { isTablet, isWeb } from "../constants/device";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   logoutButton: {
     backgroundColor: "#FA5454",
     width: "95%",
-    height: Platform.OS === "web" ? hp("5.5%") : hp("6%"),
+    height: isWeb() ? hp("5.5%") : hp("6%"),
     borderRadius: 15,
     alignSelf: "center",
     marginTop: 10,
@@ -108,7 +109,7 @@ export const MainDrawerNavigator = () => {
                     if (Platform.OS === "web") {
                       // Use web-specific navigation logic here
                       // For example, you can use window.location.href to redirect to the login page
-                      window.location.href = "/login";
+                      window.location.href = "/main_home";
                     } else {
                       // Use mobile-specific navigation logic here
                       props.navigation.navigate("Login");
@@ -126,7 +127,11 @@ export const MainDrawerNavigator = () => {
                 titleStyle={{
                   color: "white",
                   fontFamily: "headers",
-                  fontSize: Platform.OS === "web" ? wp("1.5%") : wp("4%"),
+                  fontSize: isWeb()
+                    ? wp("1.5%")
+                    : isTablet()
+                    ? wp("3%")
+                    : wp("4%"),
                 }}
               />
             </SafeAreaView>
@@ -143,18 +148,10 @@ export const MainDrawerNavigator = () => {
         },
         drawerAllowFontScaling: true,
         headerShown: false,
-        drawerLabelStyle: {
-          fontFamily: "headers",
-          fontSize: Platform.OS === "web" ? wp("1%") : wp("4%"),
-        },
         drawerIcon: { focused: true },
         drawerActiveBackgroundColor: Colors.primary,
         drawerLabelStyle: {
-          fontSize: Platform.isPad
-            ? wp("3%")
-            : Platform.OS === "web"
-            ? wp("1%")
-            : wp("4%"),
+          fontSize: isTablet() ? wp("3%") : isWeb() ? wp("1%") : wp("4%"),
         },
         drawerItemStyle: {
           borderRadius: 15,

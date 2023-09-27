@@ -11,6 +11,7 @@ import { globalHeight } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
 import Loader from "../../components/Loader";
 import ShowTeamDetails from "../../components/team/ShowTeamDetails";
+import { isWeb, isTablet } from "../../constants/device";
 
 const TeamDetailsScreen = (props) => {
   const { team } = useSelector((state) => state.team);
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     borderColor: "#6a6b6c",
     borderWidth: 2,
     borderRadius: 10,
-    width: Platform.OS === "web" ? "30%" : Platform.isPad ? "50%" : "80%",
+    width: isWeb() ? "30%" : isTablet() ? "50%" : "80%",
     alignSelf: "center",
     bottom: 0,
     marginBottom: globalHeight("5%"),

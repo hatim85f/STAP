@@ -1,33 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-
-import { ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  ImageBackground,
+  Platform,
+} from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import Card from "../components/Card";
-import { Image } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import * as authActions from "../store/auth/authActions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Progress from "react-native-progress";
 import Colors from "../constants/Colors";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as authActions from "../store/auth/authActions";
-import { useDispatch, useSelector } from "react-redux";
-import { Platform } from "react-native";
+import { isPhone, isWeb } from "../constants/device";
+import Card from "../components/Card";
+import { useHistory } from "react-router-dom";
+import { Button } from "react-native-elements";
 
 const SplashScreen = (props) => {
   const [progress, setProgress] = useState(0);
-
   const { isLoggedIn } = useSelector((state) => state.auth);
 
+  const [canNavigate, setCanNavigate] = useState(false);
   const dispatch = useDispatch();
 
-  console.log(isLoggedIn);
-
   useEffect(() => {
-    if (isLoggedIn) {
-      props.navigation.navigate("Home");
-    }
     const timeout = setTimeout(() => {
       setProgress(1); // Set progress to 100% after 3 seconds
 
@@ -42,28 +42,30 @@ const SplashScreen = (props) => {
 
           const parsedUserDetails = JSON.parse(storedUserDetails);
 
-          console.log(storedUserDetails);
-          if (parsedUserDetails.token.length > 0) {
-            if (progress === 1) {
-              dispatch(authActions.getUserIn(parsedUserDetails));
+          if (parsedUserDetails.token) {
+            dispatch(authActions.getUserIn(parsedUserDetails));
 
-              const { user } = parsedUserDetails;
+            const { user } = parsedUserDetails;
 
-              if (!user.emailVerified) {
-                props.navigation.navigate("Verify");
+            if (!user.emailVerified) {
+              props.navigation.navigate("Verify");
+            } else {
+              if (Platform.OS === "web") {
+                props.navigation.navigate("Main");
               } else {
                 props.navigation.navigate("Home");
               }
             }
           } else {
-            if (progress === 1) {
-              props.navigation.navigate("Login");
+            if (!isLoggedIn) {
+              props.navigation.navigate("Login"); // Navigate to the "Login" page
             }
           }
         } catch (error) {
           console.error("Error fetching user details:", error);
         }
       };
+      setCanNavigate(true);
 
       fetchUserDetails();
     }, 3000);
@@ -71,51 +73,69 @@ const SplashScreen = (props) => {
     return () => {
       clearTimeout(timeout); // Clear the timeout when the component unmounts
     };
-  }, [progress, dispatch, isLoggedIn]);
+  }, [dispatch, isLoggedIn, props.navigation]);
 
-  // if (Platform.OS !== "web") {
-  //   return <View style={{ flex: 1, backgroundColor: "white" }}></View>;
-  // }
-
-  if (Platform.OS !== "web") {
-    return (
-      <View style={styles.container}>
-        <Card style={[styles.innerContainer, { backgroundColor: "white" }]}>
-          <Image
-            source={require("../assets/vectors/logo_gif.gif")}
-            style={[styles.gif, { height: hp("20%"), width: hp("20%") }]}
-          />
-          <Progress.Bar
-            progress={progress}
-            width={hp("40%")}
-            height={hp("1.5%")}
-            color={Colors.primary}
-            style={{ borderRadius: 50, borderWidth: 0, marginTop: hp("1.5%") }}
-          />
-        </Card>
-      </View>
-    );
-  }
+  useEffect(() => {
+    if (progress === 1) {
+      if (isLoggedIn && canNavigate) {
+        props.navigation.navigate("Home");
+      } else if (canNavigate && !isLoggedIn) {
+        if (Platform.OS === "web") {
+          props.navigation.navigate("Main");
+        } else {
+          props.navigation.navigate("Login");
+        }
+      }
+    }
+  }, [canNavigate, props.navigation, progress, isLoggedIn]);
 
   return (
-    <ImageBackground
-      source={require("../assets/bg.jpeg")}
-      style={styles.container}
-    >
-      <Card style={styles.innerContainer}>
-        <Image
-          source={require("../assets/vectors/logo_gif.gif")}
-          style={styles.gif}
-        />
-        <Progress.Bar
-          progress={progress}
-          width={hp("80%")}
-          height={hp("1.5%")}
-          color={Colors.primary}
-          style={{ borderRadius: 50, borderWidth: 0, marginTop: hp("1.5%") }}
-        />
-      </Card>
-    </ImageBackground>
+    <View style={styles.container}>
+      {Platform.OS !== "web" ? (
+        <View style={styles.container}>
+          <Card style={[styles.innerContainer, { backgroundColor: "white" }]}>
+            <Image
+              source={require("../assets/vectors/logo_gif.gif")}
+              style={[styles.gif, { height: hp("20%"), width: hp("20%") }]}
+            />
+            <Progress.Bar
+              progress={progress}
+              width={hp("40%")}
+              height={hp("1.5%")}
+              color={Colors.primary}
+              style={{
+                borderRadius: 50,
+                borderWidth: 0,
+                marginTop: hp("1.5%"),
+              }}
+            />
+          </Card>
+        </View>
+      ) : (
+        <ImageBackground
+          source={require("../assets/bg.jpeg")}
+          style={styles.container}
+        >
+          <Card style={styles.innerContainer}>
+            <Image
+              source={require("../assets/vectors/logo_gif.gif")}
+              style={styles.gif}
+            />
+            <Progress.Bar
+              progress={progress}
+              width={hp("80%")}
+              height={hp("1.5%")}
+              color={Colors.primary}
+              style={{
+                borderRadius: 50,
+                borderWidth: 0,
+                marginTop: hp("1.5%"),
+              }}
+            />
+          </Card>
+        </ImageBackground>
+      )}
+    </View>
   );
 };
 

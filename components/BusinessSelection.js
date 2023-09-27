@@ -10,6 +10,7 @@ import { Image } from "react-native";
 import { globalWidth } from "../constants/globalWidth";
 
 import Colors from "../constants/Colors";
+import { isWeb } from "../constants/device";
 
 const BusinessSelection = (props) => {
   const { token } = useSelector((state) => state.auth);
@@ -94,14 +95,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   innerContainer: {
-    width: Platform.OS === "web" ? "50%" : "95%",
+    width: isWeb() ? "50%" : "95%",
     marginTop: 10,
     alignItems: "center",
   },
   listStyle: {
     backgroundColor: "white",
     borderRadius: 10,
-    width: Platform.OS === "web" ? "80%" : "95%",
+    width: isWeb() ? "80%" : "95%",
     alignSelf: "center",
     borderWidth: 0,
     height: globalWidth("3.5%"),
@@ -113,13 +114,13 @@ const styles = StyleSheet.create({
   dropText: {
     fontFamily: "headers",
     color: "black",
-    fontSize: Platform.OS === "web" ? globalWidth("1.1%") : globalWidth("3.5%"),
+    fontSize: isWeb() ? globalWidth("1.1%") : globalWidth("3.5%"),
   },
   dropListStyle: {
     backgroundColor: "white",
     borderRadius: 15,
     borderColor: Colors.primary,
-    width: Platform.OS === "web" ? "80%" : "95%",
+    width: isWeb() ? "80%" : "95%",
     alignSelf: "center",
     zIndex: 10000,
   },

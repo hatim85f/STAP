@@ -19,7 +19,7 @@ import HeaderText from "../../components/HeaderText";
 import Card from "../../components/Card";
 import Colors from "../../constants/Colors";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
-
+import { isWeb, isPhone, isTablet } from "../../constants/device";
 import * as authActions from "../../store/auth/authActions";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -104,12 +104,11 @@ const ProfileScreen = (props) => {
 
   const verifyPhone = () => {};
 
-  const iconSize =
-    Platform.OS === "web"
-      ? globalWidth("2%")
-      : Platform.isPad
-      ? globalWidth("5%")
-      : globalWidth("6%");
+  const iconSize = isWeb()
+    ? globalWidth("2%")
+    : isTablet()
+    ? globalWidth("5%")
+    : globalWidth("6%");
 
   return (
     <View style={styles.container}>
@@ -227,32 +226,29 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     height: "99.5%",
-    width: Platform.OS === "web" ? "60%" : "100%",
+    width: isWeb() ? "60%" : "100%",
     alignSelf: "center",
     // marginTop: "0.5%",
     borderRadius: 15,
     borderColor: "#6a6b6c",
-    borderWidth: Platform.OS === "web" ? 1 : 0,
+    borderWidth: isWeb() ? 1 : 0,
   },
   profile: {
-    height:
-      Platform.OS === "web"
-        ? globalWidth("8%")
-        : Platform.isPad
-        ? globalWidth("18%")
-        : globalWidth("30%"),
-    width:
-      Platform.OS === "web"
-        ? globalWidth("8%")
-        : Platform.isPad
-        ? globalWidth("18%")
-        : globalWidth("30%"),
-    borderRadius:
-      Platform.OS === "web"
-        ? globalWidth("4%")
-        : Platform.isPad
-        ? globalWidth("9%")
-        : globalWidth("15%"),
+    height: isWeb()
+      ? globalWidth("8%")
+      : isTablet()
+      ? globalWidth("18%")
+      : globalWidth("30%"),
+    width: isWeb()
+      ? globalWidth("8%")
+      : isTablet()
+      ? globalWidth("18%")
+      : globalWidth("30%"),
+    borderRadius: isWeb()
+      ? globalWidth("4%")
+      : isTablet()
+      ? globalWidth("9%")
+      : globalWidth("15%"),
     alignSelf: "center",
     marginTop: 15,
   },
@@ -266,34 +262,32 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 8,
     height: globalHeight("8%"),
-    width: Platform.OS === "web" ? "70%" : "90%",
+    width: isWeb() ? "70%" : "90%",
   },
   icon: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
     width: "60%",
-    paddingHorizontal: Platform.OS === "web" ? 10 : 0,
+    paddingHorizontal: isWeb() ? 10 : 0,
   },
   data: {
     marginLeft: 5,
     fontFamily: "headers",
     color: Colors.primary,
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("1.5%")
-        : Platform.isPad
-        ? globalWidth("3%")
-        : globalWidth("4%"),
+    fontSize: isWeb()
+      ? globalWidth("1.5%")
+      : isTablet()
+      ? globalWidth("3%")
+      : globalWidth("4%"),
   },
   verified: {
     fontFamily: "headers",
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("1.5%")
-        : Platform.isPad
-        ? globalWidth("3%")
-        : globalWidth("4%"),
+    fontSize: isWeb()
+      ? globalWidth("1.5%")
+      : isTablet()
+      ? globalWidth("3%")
+      : globalWidth("4%"),
   },
 
   verified: {
@@ -301,57 +295,51 @@ const styles = StyleSheet.create({
     color: "blue",
     textDecorationColor: "blue",
     textDecorationLine: "underline",
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("1%")
-        : Platform.isPad
-        ? globalWidth("2%")
-        : globalWidth("3%"),
+    fontSize: isWeb()
+      ? globalWidth("1%")
+      : isTablet()
+      ? globalWidth("2%")
+      : globalWidth("3%"),
   },
   position: {
     textAlign: "center",
     fontFamily: "headers",
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("1%")
-        : Platform.isPad
-        ? globalWidth("2%")
-        : globalWidth("3%"),
+    fontSize: isWeb()
+      ? globalWidth("1%")
+      : isTablet()
+      ? globalWidth("2%")
+      : globalWidth("3%"),
     color: Colors.font,
   },
   businessContainer: {
-    width: Platform.OS === "web" ? "70%" : "90%",
+    width: isWeb() ? "70%" : "90%",
     alignSelf: "center",
     marginTop: 10,
   },
   number: {
     fontFamily: "numbers",
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("2%")
-        : Platform.isPad
-        ? globalWidth("4%")
-        : globalWidth("5.5%"),
+    fontSize: isWeb()
+      ? globalWidth("2%")
+      : isTablet()
+      ? globalWidth("4%")
+      : globalWidth("5.5%"),
   },
   logo: {
-    width:
-      Platform.OS === "web"
-        ? globalWidth("4%")
-        : Platform.isPad
-        ? globalWidth("9%")
-        : globalWidth("10%"),
-    height:
-      Platform.OS === "web"
-        ? globalWidth("4%")
-        : Platform.isPad
-        ? globalWidth("9%")
-        : globalWidth("10%"),
-    borderRadius:
-      Platform.OS === "web"
-        ? globalWidth("2%")
-        : Platform.isPad
-        ? globalWidth("4.5%")
-        : globalWidth("7.5%"),
+    width: isWeb()
+      ? globalWidth("4%")
+      : isTablet()
+      ? globalWidth("9%")
+      : globalWidth("10%"),
+    height: isWeb()
+      ? globalWidth("4%")
+      : isTablet()
+      ? globalWidth("9%")
+      : globalWidth("10%"),
+    borderRadius: isWeb()
+      ? globalWidth("2%")
+      : isTablet()
+      ? globalWidth("4.5%")
+      : globalWidth("7.5%"),
     borderColor: "navy",
     borderWidth: 2.5,
   },
@@ -371,7 +359,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: Colors.accent,
     height: 250,
-    width: Platform.OS === "web" ? "60%" : "90%",
+    width: isWeb() ? "60%" : "90%",
     top: globalHeight("30%"),
     alignSelf: "center",
     borderRadius: 15,
@@ -382,12 +370,11 @@ const styles = StyleSheet.create({
   labelStyle: {
     color: "white",
     fontFamily: "headers",
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("2%")
-        : Platform.isPad
-        ? globalWidth("4%")
-        : globalWidth("5.5%"),
+    fontSize: isWeb()
+      ? globalWidth("2%")
+      : Platform.isPad
+      ? globalWidth("4%")
+      : globalWidth("5.5%"),
     marginTop: 10,
   },
   input: {
@@ -407,12 +394,11 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: Colors.font,
     fontFamily: "headers",
-    fontSize:
-      Platform.OS === "web"
-        ? globalWidth("2%")
-        : Platform.isPad
-        ? globalWidth("4%")
-        : globalWidth("5.5%"),
+    fontSize: isWeb()
+      ? globalWidth("2%")
+      : Platform.isPad
+      ? globalWidth("4%")
+      : globalWidth("5.5%"),
   },
 });
 
