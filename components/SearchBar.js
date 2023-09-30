@@ -6,6 +6,7 @@ import { globalHeight, globalWidth } from "../constants/globalWidth";
 import * as authActions from "../store/auth/authActions";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { isWeb } from "../constants/device";
 
 const SearchBar = (props) => {
   const { user, token } = useSelector((state) => state.auth);
@@ -89,7 +90,7 @@ const SearchBar = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: globalWidth("60%"),
+    width: isWeb() ? globalWidth("60%") : globalWidth("90%"),
     borderRadius: 10,
     borderColor: "#6a6b6c",
     borderWidth: 1,

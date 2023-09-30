@@ -19,12 +19,18 @@ import PaymentDetails, {
 import RequestDemoScreen, {
   requestDemoSCreenOptions,
 } from "../screens/mainHome/RequestDemo";
+import LoginScreen from "../screens/auth/LoginScreen";
 
 const MainAppNavigator = createStackNavigator();
 
 export const MainNavigator = () => {
   return (
     <MainAppNavigator.Navigator>
+      <MainAppNavigator.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
       <MainAppNavigator.Screen
         name="STAP™"
         component={MainHome}

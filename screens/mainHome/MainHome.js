@@ -96,6 +96,7 @@ const MainHome = (props) => {
             buttonStyle={styles.button}
             titleStyle={styles.title}
           />
+
           <View style={styles.social}>
             <SocialIcons icon="facebook" />
             <SocialIcons icon="instagram" />
@@ -110,7 +111,7 @@ const MainHome = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: "scroll",
+    // overflow: "scroll",
   },
   header: {},
   image: {

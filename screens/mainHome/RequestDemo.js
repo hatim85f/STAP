@@ -480,7 +480,7 @@ export const requestDemoSCreenOptions = (navData) => {
       return (
         <Pressable
           onPress={() => {
-            navData.navigation.navigate("STAP™");
+            navData.navigation.navigate("Login");
           }}
         >
           <Image

@@ -28,12 +28,10 @@ export const FullAppNavigator = () => {
           headerShown: false,
         }}
       />
-      {Platform.OS === "web" && (
-        <MainAppNav.Screen name="Main" component={MainNavigator} />
-      )}
+
       <MainAppNav.Screen
-        name="Login"
-        component={LoginScreen}
+        name="Main"
+        component={MainNavigator}
         options={{
           headerShown: false,
         }}

@@ -116,7 +116,7 @@ export const developersPageOptions = (navData) => {
       return (
         <TouchableOpacity
           onPress={() => {
-            navData.navigation.navigate("STAP™");
+            navData.navigation.navigate("Login");
           }}
         >
           <Image

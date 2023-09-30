@@ -59,15 +59,15 @@ const HomePageIcon = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255,255,255,0.6)",
+    backgroundColor: "rgba(255,255,255,0.4)",
     width: isWeb()
-      ? globalWidth("12%")
+      ? globalWidth("13%")
       : isTablet()
       ? globalWidth("25%")
       : globalWidth("35%"),
-    minHeight: isPhone() ? globalHeight("10%") : globalHeight("15%"),
+    minHeight: isPhone() ? globalHeight("10%") : globalHeight("13%"),
     minWidth: isWeb()
-      ? globalWidth("12%")
+      ? globalWidth("13%")
       : isTablet()
       ? globalWidth("25%")
       : globalWidth("35%"),
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     transform: "translateY(4px)",
   },
   text: {
-    color: Colors.font,
+    color: "navy",
     fontFamily: "headers",
     fontSize: isPhone() ? 12 : globalHeight("2%"),
     fontWeight: "bold",

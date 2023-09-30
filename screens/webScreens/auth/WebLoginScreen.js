@@ -125,90 +125,92 @@ const WebLoginScreen = (props) => {
         source={require("../../../assets/bg.jpeg")}
         style={styles.bg}
       >
-        <View style={styles.mainRow}>
-          <View style={styles.leftView}>
-            <View style={styles.topRow}>
-              <Image
-                source={require("../../../assets/icon.png")}
-                style={styles.logo}
-              />
-              <View style={styles.buttonsRow}>
-                <Button
-                  title="ABOUT"
-                  titleStyle={styles.buttonTitle}
-                  buttonStyle={styles.button}
-                  onPress={() => {}}
+        <View style={styles.overlay}>
+          <View style={styles.mainRow}>
+            <View style={styles.leftView}>
+              <View style={styles.topRow}>
+                <Image
+                  source={require("../../../assets/icon.png")}
+                  style={styles.logo}
                 />
-                <Button
-                  title="REQUEST DEMO"
-                  titleStyle={styles.buttonTitle}
-                  buttonStyle={styles.button}
-                  onPress={() => {}}
+                <View style={styles.buttonsRow}>
+                  <Button
+                    title="ABOUT"
+                    titleStyle={styles.buttonTitle}
+                    buttonStyle={styles.button}
+                    onPress={() => {}}
+                  />
+                  <Button
+                    title="REQUEST DEMO"
+                    titleStyle={styles.buttonTitle}
+                    buttonStyle={styles.button}
+                    onPress={() => {}}
+                  />
+                </View>
+              </View>
+              <Image
+                source={require("../../../assets/vectors/leftCircle.png")}
+                style={{ ...styles.vector, ...{ marginLeft: -10 } }}
+              />
+              <Animated.View
+                style={[
+                  styles.loginContainer,
+                  {
+                    transform: [
+                      { translateY: loginHeight },
+                      { translateX: loginWidth },
+                    ],
+                  },
+                ]}
+              >
+                <LoginItem
+                  animateRegisterationUp={animateRegisterationUp}
+                  animateForgetIn={animateForgetIn}
+                  navigation={props.navigation}
+                />
+              </Animated.View>
+              <Animated.View
+                style={[
+                  styles.loginContainer,
+                  { transform: [{ translateX: forgotXValue }] },
+                ]}
+              >
+                <AntDesign
+                  name="close"
+                  size={35}
+                  color={Colors.primary}
+                  onPress={returnLogin}
+                  style={{
+                    fontSize: wp("1.6%"),
+                    fontWeight: "bold",
+                    marginLeft: 15,
+                  }}
+                />
+                <ForgotPassword returnLogin={returnLogin} />
+              </Animated.View>
+
+              <View style={styles.circleContainer}>
+                <Image
+                  source={require("../../../assets/vectors/rightCircle.png")}
+                  style={{
+                    ...styles.vector,
+                    ...{ marginRight: -wp("0.3%"), zIndex: -500 },
+                  }}
                 />
               </View>
+              <Animated.View
+                style={[
+                  styles.registerationView,
+                  { transform: [{ translateY: registerationHeight }] },
+                ]}
+              >
+                <RegisterationComponent
+                  animteRegisterationDown={animteRegisterationDown}
+                />
+              </Animated.View>
             </View>
-            <Image
-              source={require("../../../assets/vectors/leftCircle.png")}
-              style={{ ...styles.vector, ...{ marginLeft: -10 } }}
-            />
-            <Animated.View
-              style={[
-                styles.loginContainer,
-                {
-                  transform: [
-                    { translateY: loginHeight },
-                    { translateX: loginWidth },
-                  ],
-                },
-              ]}
-            >
-              <LoginItem
-                animateRegisterationUp={animateRegisterationUp}
-                animateForgetIn={animateForgetIn}
-                navigation={props.navigation}
-              />
-            </Animated.View>
-            <Animated.View
-              style={[
-                styles.loginContainer,
-                { transform: [{ translateX: forgotXValue }] },
-              ]}
-            >
-              <AntDesign
-                name="close"
-                size={35}
-                color={Colors.primary}
-                onPress={returnLogin}
-                style={{
-                  fontSize: wp("1.6%"),
-                  fontWeight: "bold",
-                  marginLeft: 15,
-                }}
-              />
-              <ForgotPassword returnLogin={returnLogin} />
-            </Animated.View>
-
-            <View style={styles.circleContainer}>
-              <Image
-                source={require("../../../assets/vectors/rightCircle.png")}
-                style={{
-                  ...styles.vector,
-                  ...{ marginRight: -wp("0.3%"), zIndex: -500 },
-                }}
-              />
-            </View>
-            <Animated.View
-              style={[
-                styles.registerationView,
-                { transform: [{ translateY: registerationHeight }] },
-              ]}
-            >
-              <RegisterationComponent
-                animteRegisterationDown={animteRegisterationDown}
-              />
-            </Animated.View>
+            <RightContainer navigation={props.navigation} />
           </View>
-          <RightContainer />
         </View>
       </ImageBackground>
     </View>
@@ -296,6 +298,10 @@ const styles = StyleSheet.create({
     width: wp("30%"),
     alignSelf: "center",
     marginLeft: 15,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.3)",
   },
 });
 

@@ -27,6 +27,8 @@ const SplashScreen = (props) => {
   const [canNavigate, setCanNavigate] = useState(false);
   const dispatch = useDispatch();
 
+  console.log({ progress, isLoggedIn });
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setProgress(1); // Set progress to 100% after 3 seconds
@@ -50,15 +52,11 @@ const SplashScreen = (props) => {
             if (!user.emailVerified) {
               props.navigation.navigate("Verify");
             } else {
-              if (Platform.OS === "web") {
-                props.navigation.navigate("Main");
-              } else {
-                props.navigation.navigate("Home");
-              }
+              props.navigation.navigate("Home");
             }
           } else {
             if (!isLoggedIn) {
-              props.navigation.navigate("Login"); // Navigate to the "Login" page
+              props.navigation.navigate("Main"); // Navigate to the "Login" page
             }
           }
         } catch (error) {
@@ -83,7 +81,7 @@ const SplashScreen = (props) => {
         if (Platform.OS === "web") {
           props.navigation.navigate("Main");
         } else {
-          props.navigation.navigate("Login");
+          props.navigation.navigate("Main");
         }
       }
     }

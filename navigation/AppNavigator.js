@@ -34,18 +34,17 @@ const AppNavigator = () => {
       Intro: "intro",
       Main: {
         screens: {
+          Login: "login",
           "STAP™": "main_home",
           Documentation: "documentation",
           About: "about",
           "Why STAP™": "why",
           Developers: "developers",
           Pricing: "pricing",
-          Payment: "payment/:packageId",
+          Payment: "payment/:packageId/:type",
           Request: "request_demo",
         },
       },
-
-      Login: "login",
       Verify: "verify_email_address",
       Home: {
         screens: {
@@ -73,6 +72,16 @@ const AppNavigator = () => {
               },
               add_member: {
                 path: "/team/invite-new-member/:businessId",
+              },
+            },
+          },
+          packages: {
+            screens: {
+              Pricing: {
+                path: "/packages/pricing-details",
+              },
+              Payment: {
+                path: "/packages/payment/:packageId/:type",
               },
             },
           },

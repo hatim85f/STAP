@@ -16,6 +16,7 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
   Fontisto,
+  Entypo,
 } from "@expo/vector-icons";
 import { StyleSheet, Image, ScrollView } from "react-native";
 
@@ -36,6 +37,7 @@ import { TeamNavigator } from "./TeamNavigator";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import SettingsScreen from "../screens/settings/SettingsScreen";
 import { isTablet, isWeb } from "../constants/device";
+import { PaymentNav } from "./PaymentNav";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -109,7 +111,7 @@ export const MainDrawerNavigator = () => {
                     if (Platform.OS === "web") {
                       // Use web-specific navigation logic here
                       // For example, you can use window.location.href to redirect to the login page
-                      window.location.href = "/main_home";
+                      window.location.href = "/login";
                     } else {
                       // Use mobile-specific navigation logic here
                       props.navigation.navigate("Login");
@@ -264,6 +266,24 @@ export const MainDrawerNavigator = () => {
             return (
               <MaterialIcons
                 name="people-alt"
+                size={24}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="packages"
+        component={PaymentNav}
+        options={{
+          ...defaultNavOptions,
+          title: "Packages",
+          headerTitle: "Packages",
+          drawerIcon: ({ focused }) => {
+            return (
+              <Entypo
+                name="price-tag"
                 size={24}
                 color={focused ? "white" : "black"}
               />

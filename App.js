@@ -27,6 +27,7 @@ export default function App(props) {
             ? require("./assets/fonts/monts.ttf")
             : require("./assets/fonts/second.ttf"),
         numbers: require("./assets/fonts/numbers.ttf"),
+        "open-sans": require("./assets/fonts/open.ttf"),
       });
       setAppIsReady(true); // Set appIsReady to true after the font has loaded
     };
