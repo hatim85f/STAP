@@ -1,4 +1,4 @@
-import { Easing, StyleSheet, TouchableOpacity, Animated } from "react-native";
+import { Easing, StyleSheet, Pressable, Animated } from "react-native";
 import React, { useEffect, useRef } from "react";
 
 import { Entypo } from "@expo/vector-icons";
@@ -36,11 +36,11 @@ const Chevron = (props) => {
   };
 
   return (
-    <TouchableOpacity onPress={callPress}>
-      <Animated.View style={{ transform: [{ rotate: rotationInterpolate }] }}>
+    <Pressable onPress={callPress}>
+      <Animated.View style={{ transform: `rotate(${rotationInterpolate})` }}>
         <Entypo name="chevron-small-down" size={30} color="black" />
       </Animated.View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

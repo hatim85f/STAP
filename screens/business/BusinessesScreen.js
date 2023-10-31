@@ -8,7 +8,7 @@ import {
   View,
   Modal,
   Alert,
-  TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
@@ -211,8 +211,6 @@ const BusinessesScreen = (props) => {
     }
   };
 
-  console.log(business);
-
   return (
     <View style={styles.container}>
       {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
@@ -225,7 +223,7 @@ const BusinessesScreen = (props) => {
                 <Card style={styles.businessContainer} key={index}>
                   <View style={styles.businessHeader}>
                     <Text style={styles.businessName}>{item.businessName}</Text>
-                    <TouchableOpacity
+                    <Pressable
                       onPress={() => {
                         setSelectedBusiness(item);
                         setOpenModal(true);
@@ -236,7 +234,7 @@ const BusinessesScreen = (props) => {
                         size={iconSizes()}
                         color="white"
                       />
-                    </TouchableOpacity>
+                    </Pressable>
                   </View>
                   <BusinessItem
                     placeholder="Edit Business Description"
@@ -392,15 +390,13 @@ const BusinessesScreen = (props) => {
             </BusinessItem>
             <View style={styles.rowOfModal}>
               <Text style={styles.textOfModal}>Delete Business</Text>
-              <TouchableOpacity
-                onPress={() => deleteBusiness(selectedBusiness._id)}
-              >
+              <Pressable onPress={() => deleteBusiness(selectedBusiness._id)}>
                 <MaterialIcons
                   name="delete-sweep"
                   size={iconSizes()}
                   color="#ff0055"
                 />
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </View>
           <Button

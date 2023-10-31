@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View, Pressable } from "react-native";
 import { Button, CheckBox } from "react-native-elements";
 import {
   MaterialCommunityIcons,
@@ -10,7 +10,7 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
@@ -23,6 +23,7 @@ import Colors from "../../constants/Colors";
 
 import * as productsActions from "../../store/products/productsActions";
 import { isWeb } from "../../constants/device";
+import numberWithComa from "../../components/helpers/numberWithComa";
 
 const AddProductScreen = (props) => {
   const { businessId } = props.route.params;
@@ -37,6 +38,7 @@ const AddProductScreen = (props) => {
   const [maximumDiscount, setMaximumDiscount] = useState(null);
   const [minimumDiscount, setMinimumDiscount] = useState(null);
   const [category, setCategory] = useState("");
+  const [quantity, setQuantity] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -59,7 +61,7 @@ const AddProductScreen = (props) => {
         minimumDiscount,
         maximumDiscount,
         category,
-        productType
+        quantity
       )
     ).then(() => {
       setIsLoading(false);
@@ -78,12 +80,12 @@ const AddProductScreen = (props) => {
   return (
     <View style={styles.container}>
       {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
-      <TouchableOpacity
+      <Pressable
         onPress={() => props.navigation.navigate("main_products_nav")}
         style={styles.touchable}
       >
         <AntDesign name="arrowleft" size={35} color={Colors.primary} />
-      </TouchableOpacity>
+      </Pressable>
       <HeaderText text="Add Product" />
       <Card style={styles.card}>
         <ScrollView
@@ -186,6 +188,19 @@ const AddProductScreen = (props) => {
             onChangeText={(text) => setDescription(text)}
             rightIcon={() => (
               <Foundation name="comment" size={24} color={Colors.font} />
+            )}
+          />
+          <MainInput
+            label="Available Qunatity"
+            style={styles.input}
+            value={quantity}
+            onChangeText={(text) => setQuantity(text)}
+            rightIcon={() => (
+              <MaterialCommunityIcons
+                name="numeric"
+                size={24}
+                color={Colors.font}
+              />
             )}
           />
           <View style={styles.checkboxContainer}>

@@ -7,7 +7,6 @@ import {
   Platform,
   Image,
 } from "react-native";
-import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../../constants/Colors";
 import * as membershipActions from "../../store/membership/MembershipActions";

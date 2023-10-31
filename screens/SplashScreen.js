@@ -27,8 +27,6 @@ const SplashScreen = (props) => {
   const [canNavigate, setCanNavigate] = useState(false);
   const dispatch = useDispatch();
 
-  console.log({ progress, isLoggedIn });
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       setProgress(1); // Set progress to 100% after 3 seconds
@@ -50,7 +48,7 @@ const SplashScreen = (props) => {
             const { user } = parsedUserDetails;
 
             if (!user.emailVerified) {
-              props.navigation.navigate("Verify");
+              window.location.href = "/verify_email_address";
             } else {
               props.navigation.navigate("Home");
             }

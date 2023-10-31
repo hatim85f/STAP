@@ -8,7 +8,7 @@ import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import { isTablet, isWeb } from "../../constants/device";
 
 const PricingCard = (props) => {
-  const { pricingPackage } = props;
+  const { pricingPackage, isUpgrade, oldPackageId } = props;
   const [priceShow, setPriceShow] = useState("Monthly");
 
   const {

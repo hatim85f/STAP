@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Platform, ScrollView } from "react-native";
-import { Avatar, Button, Switch } from "react-native-elements";
+import { Button, Switch } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import Card from "../../components/Card";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 
 import * as settingsActions from "../../store/settings/settingsActions";
-import DropDownPicker from "react-native-dropdown-picker";
 import Colors from "../../constants/Colors";
 import MainInput from "../../components/MainInput";
 import AsyncStorage from "@react-native-async-storage/async-storage";

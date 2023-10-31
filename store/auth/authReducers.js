@@ -1,4 +1,6 @@
 import {
+  CHANGE_EMAIL,
+  CHANGE_PROFILE_PICTURE,
   CLEAR_ERROR,
   CODE_SUCCESS,
   COUNTRIES_CODES,
@@ -20,6 +22,8 @@ const initialState = {
   errorMessage: "",
   isLoggedIn: false,
   profile: {},
+  stripeSubscriptions: [],
+  payments: [],
   verificationSuccess: false,
 };
 
@@ -43,11 +47,27 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         profile: action.profile,
+        stripeSubscriptions: action.stripeSubscription,
+        payments: action.payments,
       };
     case COUNTRIES_CODES:
       return {
         ...state,
         countriesCodes: action.countriesCodes,
+      };
+    case CHANGE_PROFILE_PICTURE:
+      const newUser = { ...state.user };
+      newUser.profilePicture = action.profilePicture;
+      return {
+        ...state,
+        user: newUser,
+      };
+    case CHANGE_EMAIL:
+      const newEmailUser = { ...state.user };
+      newEmailUser.email = action.email;
+      return {
+        ...state,
+        user: newEmailUser,
       };
     case VERIFY_CODE:
       return {

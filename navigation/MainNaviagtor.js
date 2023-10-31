@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import VerifyEmailScreen from "../screens/VerifyEmailScreen";
 import { MainNavigator } from "./HomeNavigator";
 import { Platform } from "react-native";
+import TermsAndConditions from "../screens/terms/TermsAndConditions";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -40,6 +41,14 @@ export const FullAppNavigator = () => {
         name="Verify"
         component={VerifyEmailScreen}
         options={{
+          headerShown: false,
+        }}
+      />
+      <MainAppNav.Screen
+        name="Terms"
+        component={TermsAndConditions}
+        options={{
+          title: "Terms and Conditions",
           headerShown: false,
         }}
       />

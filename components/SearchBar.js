@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Avatar, Button, Input } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { globalHeight, globalWidth } from "../constants/globalWidth";
 import * as authActions from "../store/auth/authActions";
 import { FontAwesome } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { isWeb } from "../constants/device";
 
 const SearchBar = (props) => {
-  const { user, token } = useSelector((state) => state.auth);
+  const { user, token, profile } = useSelector((state) => state.auth);
 
   const [isAm, setIsAm] = useState(true);
   const [time, setTime] = useState(new Date());
@@ -73,9 +72,9 @@ const SearchBar = (props) => {
           />
         </View>
       </View>
-      <TouchableOpacity style={styles.notification} onPress={() => {}}>
+      <Pressable style={styles.notification} onPress={() => {}}>
         <FontAwesome name="bell" size={globalWidth("2%")} color="#000" />
-      </TouchableOpacity>
+      </Pressable>
       <View style={styles.profile}>
         <Avatar
           avatarStyle={styles.avatar}

@@ -7,7 +7,7 @@ import {
   Image,
   Animated,
   Easing,
-  TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { height, width } from "../../constants/dimensions";
 import Colors from "../../constants/Colors";
@@ -33,8 +33,6 @@ const AppVerifyEmail = (props) => {
   const fourthCode = useRef();
 
   const dispatch = useDispatch();
-
-  console.log(verificationSuccess);
 
   const requestCode = () => {
     setIsLoading(true);
@@ -184,9 +182,9 @@ const AppVerifyEmail = (props) => {
                   !codeFourthDigit
                 }
               />
-              <TouchableOpacity onPress={requestCode}>
+              <Pressable onPress={requestCode}>
                 <Text style={styles.link}>Resend Code</Text>
-              </TouchableOpacity>
+              </Pressable>
             </>
           )}
         </View>

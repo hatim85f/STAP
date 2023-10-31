@@ -1,7 +1,12 @@
 import React from "react";
-import { Modal, StyleSheet, Text, View, Platform } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  Pressable,
+} from "react-native";
 import { globalWidth } from "../../constants/globalWidth";
 import Card from "../Card";
 
@@ -11,11 +16,11 @@ const AddProduct = (props) => {
     <Modal visible={openModal} animationType="slide">
       <View style={styles.innerContainer}>
         <Card style={styles.container}>
-          <TouchableOpacity onPress={closeModal} style={{ height: 500 }}>
+          <Pressable onPress={closeModal} style={{ height: 500 }}>
             <Text style={styles.cancel}>Cancel</Text>
             <Text style={styles.cancel}>Cancel</Text>
             <Text style={styles.cancel}>Cancel</Text>
-          </TouchableOpacity>
+          </Pressable>
         </Card>
       </View>
     </Modal>

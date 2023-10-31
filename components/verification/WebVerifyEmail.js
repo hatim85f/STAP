@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ImageBackground, Image } from "react-native";
-import { Button } from "react-native-elements";
 
-import { useDispatch, useSelector } from "react-redux";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import { height, width } from "../../constants/dimensions";
 import Colors from "../../constants/Colors";

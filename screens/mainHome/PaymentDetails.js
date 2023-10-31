@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
-import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../../constants/Colors";
-import MainInput from "../../components/MainInput";
-import { MaterialIcons, Feather } from "@expo/vector-icons";
-import * as authActions from "../../store/auth/authActions";
-import Loader from "../../components/Loader";
 import { isWeb } from "../../constants/device";
 import { globalHeight } from "../../constants/globalWidth";
 import PaymentDetailsComponent from "../../components/pricing/PaymentDetailsComponent";
@@ -51,8 +46,6 @@ const PaymentDetails = (props) => {
       setShowLogin(false);
     }
   };
-
-  console.log(packageId);
 
   return (
     <View style={styles.container}>

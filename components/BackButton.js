@@ -1,19 +1,18 @@
 import React from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
-import { Text } from "react-native";
+import { Pressable, Text } from "react-native";
 import { StyleSheet } from "react-native";
 
 const BackButton = (props) => {
   const { route } = props;
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => props.navigation.navigate(route)}
       style={styles.touchable}
     >
       <AntDesign name="arrowleft" size={35} color={Colors.primary} />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

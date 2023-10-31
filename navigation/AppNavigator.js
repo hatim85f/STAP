@@ -46,12 +46,43 @@ const AppNavigator = () => {
         },
       },
       Verify: "verify_email_address",
+      Terms: {
+        path: "/terms_and_conditions",
+      },
       Home: {
         screens: {
-          Profile: "profile",
+          Account: {
+            screens: {
+              Profile: {
+                path: "/profile",
+              },
+              Upgrade: {
+                path: "/profile/upgrade-details/:packageId",
+              },
+              Upgrade_Payment: {
+                path: "/profile/upgrade-payment/:packageId/:type",
+              },
+              Make_Upgrade: {
+                path: "/profile/make-upgrade/:packageId/:type/:payment",
+              },
+            },
+          },
           Dashboard: "dashboard",
           businesses: "businesses",
           add_businesses: "add_businesses",
+          clients: {
+            screens: {
+              Clients: {
+                path: "/clients/show-clients",
+              },
+              addClients: {
+                path: "/clients/add-clients/:businessId",
+              },
+              clientEdit: {
+                path: "/clients/edit-clients/:clientId",
+              },
+            },
+          },
           products: {
             screens: {
               main_products_nav: {
@@ -62,6 +93,16 @@ const AppNavigator = () => {
               },
               edit_product: {
                 path: "/products/edit-product/:productId/:businessId",
+              },
+            },
+          },
+          target: {
+            screens: {
+              target_show: {
+                path: "/target/target-show/:productId/:businessId",
+              },
+              target_add: {
+                path: "/target/target-add/:productId/:businessId",
               },
             },
           },
@@ -83,8 +124,15 @@ const AppNavigator = () => {
               Payment: {
                 path: "/packages/payment/:packageId/:type",
               },
+              Make_Payment: {
+                path: "/packages/complete-payment/:packageId/:type/:email",
+              },
+              Test_Payment: {
+                path: "/packages/test-payment",
+              },
             },
           },
+
           settings: {
             path: "/settings",
           },

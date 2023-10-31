@@ -4,11 +4,13 @@ import Colors from "../../../constants/Colors";
 import { Link, useLinkTo, useNavigation } from "@react-navigation/native";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import MenuButton from "../../../components/webComponents/menu/MenuButton";
+import { useSelector } from "react-redux";
 const WebHomeScreen = (props) => {
+  const { user } = useSelector((state) => state.auth);
   return (
     <View style={styles.container}>
       <MenuButton navigation={props.navigation} />
-      <Text style={styles.header}>WebHomeScreen</Text>
+      <Text style={styles.header}>Home Screen </Text>
     </View>
   );
 };

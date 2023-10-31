@@ -199,7 +199,7 @@ const AppLoginScreen = () => {
         <Animated.View
           style={[
             styles.registerationView,
-            { transform: [{ translateY: registerationHeight }] },
+            { transform: `translateY(${registerationHeight})` },
           ]}
         >
           <RegisterationComponent
@@ -209,7 +209,7 @@ const AppLoginScreen = () => {
         <Animated.View
           style={[
             styles.forgotContainer,
-            { transform: [{ translateY: forgotXValue }] },
+            { transform: `translateY(${forgotXValue})` },
           ]}
         >
           <Ionicons

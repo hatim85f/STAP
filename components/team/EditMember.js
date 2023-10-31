@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    marginTop: globalWidth("5%"),
   },
   profile: {
     width: 100,

@@ -60,7 +60,7 @@ export const addBusiness = (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-atuh-token": token,
+        "x-auth-token": token,
       },
       body: JSON.stringify({
         businessLogo,

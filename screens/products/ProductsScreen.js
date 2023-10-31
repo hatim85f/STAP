@@ -33,6 +33,31 @@ const ProductsScreen = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        let storedUserDetails;
+        if (Platform.OS === "web") {
+          storedUserDetails = window.localStorage.getItem("userDetails");
+        } else {
+          storedUserDetails = await AsyncStorage.getItem("userDetails");
+        }
+
+        if (storedUserDetails) {
+          const parsedUserDetails = JSON.parse(storedUserDetails);
+
+          if (parsedUserDetails.user) {
+            dispatch(authActions.getUserIn(parsedUserDetails));
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [dispatch]);
+
+  useEffect(() => {
     if (token) {
       dispatch(businessActions.getUserBusiness());
     }
@@ -40,7 +65,7 @@ const ProductsScreen = (props) => {
 
   // preparing list for selection
   const businessList = useMemo(() => {
-    const list = [];
+    const list = [{ label: "All Businesses", value: null }];
     business.map((item) => {
       list.push({
         label: item.business.businessName,
@@ -64,10 +89,8 @@ const ProductsScreen = (props) => {
   // getting business Products upon selecting a business
 
   useEffect(() => {
-    if (businessValue) {
-      dispatch(productsActions.getBusinessProducts(businessValue));
-    }
-  }, [businessValue]);
+    dispatch(productsActions.getBusinessProducts());
+  }, [dispatch]);
 
   // check if user selected business before navigating him to products screen
 
@@ -119,9 +142,13 @@ const ProductsScreen = (props) => {
           textStyle={styles.dropText}
           dropDownContainerStyle={styles.dropListStyle}
         />
-        {businessValue && products.length > 0 && (
+        {products && products.length > 0 && (
           <ProductsShow
-            products={products}
+            products={
+              businessValue
+                ? products.filter((a) => a.businessId === businessValue)
+                : products
+            }
             businessId={businessValue}
             navigation={props.navigation}
           />

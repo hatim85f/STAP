@@ -8,22 +8,21 @@ export const EDIT_PRODUCT = "EDIT_PRODUCT";
 
 //getting all products for certain business
 
-export const getBusinessProducts = (businessId) => {
+export const getBusinessProducts = () => {
   return async (dispatch, getState) => {
-    const { token } = getState().auth;
+    const { token, user } = getState().auth;
 
-    const response = await fetch(
-      `${mainLink}/api/products?businessId=${businessId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": token,
-        },
-      }
-    );
+    const response = await fetch(`${mainLink}/api/products/${user._id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+    });
 
     const resData = await response.json();
+
+    console.log(resData);
 
     dispatch({
       type: GET_PRODUCTS,
@@ -45,7 +44,8 @@ export const addProduct = (
   imageURL,
   minimumDiscount,
   maximumDiscount,
-  category
+  category,
+  quantity
 ) => {
   return async (dispatch, getState) => {
     const { user, token } = getState().auth;
@@ -57,6 +57,7 @@ export const addProduct = (
         "x-auth-token": token,
       },
       body: JSON.stringify({
+        userId: user._id,
         businessId,
         productName,
         productNickName,
@@ -69,6 +70,7 @@ export const addProduct = (
         minimumDiscount,
         maximumDiscount,
         category,
+        quantity,
       }),
     });
 
@@ -94,6 +96,7 @@ export const addProduct = (
         minimumDiscount,
         maximumDiscount,
         category,
+        quantity,
       },
     });
   };
@@ -112,7 +115,8 @@ export const editProduct = (
   imageURL,
   minimumDiscount,
   maximumDiscount,
-  category
+  category,
+  quantity
 ) => {
   return async (dispatch, getState) => {
     const { token } = getState().auth;
@@ -136,6 +140,7 @@ export const editProduct = (
         minimumDiscount,
         maximumDiscount,
         category,
+        quantity,
       }),
     });
 
@@ -162,6 +167,7 @@ export const editProduct = (
         minimumDiscount,
         maximumDiscount,
         category,
+        quantity,
       },
     });
   };

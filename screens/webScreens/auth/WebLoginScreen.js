@@ -11,7 +11,6 @@ import {
 import { height, width } from "../../../constants/dimensions";
 import Colors from "../../../constants/Colors";
 import { Button } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -81,14 +80,14 @@ const WebLoginScreen = (props) => {
         toValue: -wp("100%"), // Fly the element out to the left
         duration: 800,
         useNativeDriver: true,
-        easing: EasingNode.linear,
+        easing: Easing.linear,
       }),
     ]).start(() => {
       Animated.timing(forgotXValue, {
         toValue: 0,
         duration: 500,
         useNativeDriver: true,
-        easing: EasingNode.linear,
+        easing: Easing.linear,
       }).start();
     });
   };
@@ -107,14 +106,14 @@ const WebLoginScreen = (props) => {
         toValue: -wp("100%"), // Fly the element out to the left
         duration: 800,
         useNativeDriver: true,
-        easing: EasingNode.linear,
+        easing: Easing.linear,
       }),
     ]).start(() => {
       Animated.timing(loginWidth, {
         toValue: 0,
         duration: 500,
         useNativeDriver: true,
-        easing: EasingNode.linear,
+        easing: Easing.linear,
       }).start();
     });
   };

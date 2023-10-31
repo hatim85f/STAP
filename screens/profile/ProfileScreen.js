@@ -4,27 +4,51 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   Easing,
   Image,
   Animated,
+  LayoutAnimation,
 } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 
-import { globalHeight, globalWidth } from "../../constants/globalWidth";
-import HeaderText from "../../components/HeaderText";
-import Card from "../../components/Card";
 import Colors from "../../constants/Colors";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import { isWeb, isPhone, isTablet } from "../../constants/device";
+import Card from "../../components/Card";
+import SubscriptionDetails from "../../components/subscription/SubscriptionDetails";
+import HeaderText from "../../components/HeaderText";
+import { globalHeight, globalWidth } from "../../constants/globalWidth";
+
+import Chevron from "../../components/Chevron";
+import ContactInformation from "../../components/profile/ContactInformation";
+import UserBusinesses from "../../components/profile/UserBusinesses";
+import UserPayments from "../../components/profile/UserPayments";
+import UserPackage from "../../components/profile/UserPackage";
+
 import * as authActions from "../../store/auth/authActions";
-import { ScrollView } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
+import { iconSizes } from "../../constants/sizes";
+import AnimatedChevron from "../../components/AnimatedChevron";
+import uploadImageFn from "../../components/helpers/uploadImageFn";
+import WebAlert from "../../components/webAlert/WebAlert";
+import Loader from "../../components/Loader";
 
 const ProfileScreen = (props) => {
-  const { user, profile } = useSelector((state) => state.auth);
+  const { profile, payments, user } = useSelector((state) => state.auth);
+
+  const [currentIndex, setCurrentIndex] = useState(null);
+  const [itemOpen, setItemOpen] = useState(-1);
+  const [profileURL, setProfileURL] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const codeContainerHeight = useRef(
     new Animated.Value(-globalHeight("200%"))
@@ -60,19 +84,20 @@ const ProfileScreen = (props) => {
     fetchUserDetails();
   }, [dispatch]);
 
+  const isFocused = useIsFocused();
+
   // getting user profile
   useEffect(() => {
-    dispatch(authActions.getProfile());
-  }, [dispatch]);
+    if (isFocused) dispatch(authActions.getProfile());
+  }, [dispatch, isFocused]);
 
-  // seding verification code to mail
+  // sending verification code to mail
   const verifyEmail = () => {
     dispatch(authActions.verifyEmail());
 
     Animated.timing(codeContainerHeight, {
       toValue: 0,
       duration: 1500,
-      useNativeDriver: true,
       easing: Easing.linear,
     }).start();
   };
@@ -86,7 +111,6 @@ const ProfileScreen = (props) => {
     Animated.timing(codeContainerHeight, {
       toValue: -globalHeight("200%"),
       duration: 1500,
-      useNativeDriver: true,
       easing: Easing.linear,
     }).start();
   };
@@ -97,12 +121,14 @@ const ProfileScreen = (props) => {
     Animated.timing(codeContainerHeight, {
       toValue: -globalHeight("200%"),
       duration: 1500,
-      useNativeDriver: true,
       easing: Easing.linear,
     }).start();
   };
 
   const verifyPhone = () => {};
+
+  const editMail = () => {};
+  const editPhone = () => {};
 
   const iconSize = isWeb()
     ? globalWidth("2%")
@@ -110,84 +136,111 @@ const ProfileScreen = (props) => {
     ? globalWidth("5%")
     : globalWidth("6%");
 
+  const changeProfilePicture = () => {
+    setIsLoading(true);
+    dispatch(authActions.changeProfilePicture(profileURL)).then(() => {
+      setSelectedImage("");
+      dispatch(authActions.getProfile());
+      setShowAlert(false);
+      setIsLoading(false);
+    });
+  };
+
+  const onImageSelected = (imageUri) => {
+    setSelectedImage(imageUri);
+    setShowAlert(true);
+  };
+
+  const userList = [
+    {
+      title: "Contact Information",
+      element: () => (
+        <ContactInformation
+          email={profile.email}
+          phone={profile.phone}
+          emailVerified={profile.emailVerified}
+          phoneVerified={profile.phoneVerified}
+          verifyEmail={verifyEmail}
+          verifyPhone={verifyPhone}
+          editMail={editMail}
+          editPhone={editPhone}
+        />
+      ),
+    },
+    {
+      title: "Businesses",
+      element: () => <UserBusinesses business={profile.business} />,
+    },
+    {
+      title: "Subscription Details",
+      element: () => (
+        <UserPackage profile={profile} navigation={props.navigation} />
+      ),
+    },
+    {
+      title: "Payment History",
+      element: () => <UserPayments payment={payments} profile={profile} />,
+    },
+  ];
+
+  if (isLoading) {
+    return <Loader center />;
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView scrollEnabled scrollEventThrottle={16}>
         {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
         <View style={styles.innerContainer}>
-          <Image
-            source={{ uri: profile.profilePicture }}
-            style={styles.profile}
-          />
+          <View style={styles.imageContainer}>
+            <Image
+              source={{ uri: profile.profilePicture }}
+              style={styles.profile}
+            />
+            <TouchableOpacity
+              onPress={() =>
+                uploadImageFn({
+                  imageName: profile.userName,
+                  getURL: setProfileURL,
+                  subFolder: "profile/",
+                  onImageSelected: onImageSelected,
+                })()
+              }
+              style={styles.cameraContainer}
+            >
+              <FontAwesome name="camera" size={28} color="#888" />
+            </TouchableOpacity>
+          </View>
           <HeaderText text={profile.userName} />
           <Text style={styles.position}>{profile.designation}</Text>
           <View style={{ height: 30 }} />
-          <Card style={styles.contentRow}>
-            <View style={styles.icon}>
-              <MaterialIcons name="email" size={iconSize} color={Colors.font} />
-              <Text style={styles.data}>{profile.email}</Text>
-            </View>
-            <View style={styles.verifyBox}>
-              {profile.emailVerified ? (
-                <Text
-                  style={[
-                    styles.verified,
-                    { color: "green", textDecorationLine: "none" },
-                  ]}
-                >
-                  {" "}
-                  (Verified){" "}
-                </Text>
-              ) : (
-                <TouchableOpacity onPress={verifyEmail} style={styles.smallRow}>
-                  <Text style={styles.verified}> Verify Mail </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </Card>
-          <Card style={styles.contentRow}>
-            <View style={styles.icon}>
-              <MaterialIcons
-                name="phone-android"
-                size={iconSize}
-                color={Colors.font}
-              />
-              <Text style={styles.data}>{profile.phone}</Text>
-            </View>
-            <View style={styles.verifyBox}>
-              {profile.phoneVerified ? (
-                <View style={styles.smallRow}>
-                  <Text style={styles.verified}> (Verified) </Text>
-                  <MaterialIcons name="done" size={iconSize} color="green" />
-                </View>
-              ) : (
-                <TouchableOpacity onPress={verifyPhone} style={styles.smallRow}>
-                  <Text style={styles.verified}> Verify Phone </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </Card>
-          {profile.business &&
-            profile.business.length > 0 &&
-            profile.business.map((business, index) => {
+          <View style={styles.profileDetails}>
+            {userList.map((item, index) => {
               return (
-                <View style={styles.businessContainer} key={index}>
-                  <Text style={styles.number}> {index + 1} </Text>
-                  <Card style={styles.cardRow}>
-                    <Image
-                      source={{ uri: business.businessLogo }}
-                      style={styles.logo}
-                    />
-                    <Text style={styles.data}>{business.businessName}</Text>
-                    <Text style={[styles.data, { color: Colors.font }]}>
-                      {" "}
-                      {business.numberOfEmployees}{" "}
-                      {business.numberOfEmployees > 1 ? "Users" : "User"}{" "}
-                    </Text>
-                  </Card>
+                <View style={styles.itemContainer}>
+                  <Pressable
+                    onPress={() => {
+                      LayoutAnimation.configureNext(
+                        LayoutAnimation.Presets.easeInEaseOut
+                      );
+                      setItemOpen(itemOpen === index ? -1 : index);
+                      setCurrentIndex(index === currentIndex ? null : index);
+                    }}
+                    style={styles.itemHeader}
+                  >
+                    <View style={{ justifyContent: "center" }}>
+                      <Text style={styles.itemTitle}>{item.title}</Text>
+                    </View>
+                    <AnimatedChevron isOpen={index === currentIndex} />
+                  </Pressable>
+
+                  {currentIndex === index && (
+                    <View style={styles.itemContent}>{item.element()}</View>
+                  )}
                 </View>
               );
             })}
+          </View>
         </View>
         <Animated.View
           style={[
@@ -195,9 +248,9 @@ const ProfileScreen = (props) => {
             { transform: [{ translateY: codeContainerHeight }] },
           ]}
         >
-          <TouchableOpacity onPress={cancelVerification}>
+          <Pressable onPress={cancelVerification}>
             <AntDesign name="closesquare" size={iconSize} color="white" />
-          </TouchableOpacity>
+          </Pressable>
           <Input
             label="Enter Code"
             onChangeText={(text) => setMailCode(text)}
@@ -215,6 +268,18 @@ const ProfileScreen = (props) => {
         </Animated.View>
         <View style={{ height: 60 }} />
       </ScrollView>
+      <WebAlert
+        title="Change Profile Picture"
+        showAlert={showAlert}
+        message="By Clicking Confirm you will change your profile picture"
+        onCancel={() => {
+          setSelectedImage("");
+          setShowAlert(false);
+        }}
+        onOk={changeProfilePicture}
+        okText="Confirm"
+        cancelText="Cancel"
+      />
     </View>
   );
 };
@@ -232,6 +297,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderColor: "#6a6b6c",
     borderWidth: isWeb() ? 1 : 0,
+  },
+  imageContainer: {
+    position: "relative",
   },
   profile: {
     height: isWeb()
@@ -252,54 +320,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 15,
   },
-  contentRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 10,
-    alignSelf: "center",
-    padding: 10,
-    borderWidth: 0,
-    borderRadius: 8,
-    height: globalHeight("8%"),
-    width: isWeb() ? "70%" : "90%",
-  },
-  icon: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "60%",
-    paddingHorizontal: isWeb() ? 10 : 0,
-  },
-  data: {
-    marginLeft: 5,
-    fontFamily: "headers",
-    color: Colors.primary,
-    fontSize: isWeb()
-      ? globalWidth("1.5%")
-      : isTablet()
-      ? globalWidth("3%")
-      : globalWidth("4%"),
-  },
-  verified: {
-    fontFamily: "headers",
-    fontSize: isWeb()
-      ? globalWidth("1.5%")
-      : isTablet()
-      ? globalWidth("3%")
-      : globalWidth("4%"),
-  },
-
-  verified: {
-    fontFamily: "headers",
-    color: "blue",
-    textDecorationColor: "blue",
-    textDecorationLine: "underline",
-    fontSize: isWeb()
-      ? globalWidth("1%")
-      : isTablet()
-      ? globalWidth("2%")
-      : globalWidth("3%"),
+  cameraContainer: {
+    position: "absolute",
+    bottom: 0,
+    right: isTablet() ? globalWidth("40%") : globalWidth("32%"),
+    backgroundColor: "white", // Background color of the button
+    padding: 8, // Adjust the padding as needed
+    borderRadius: 50, // To make it circular
   },
   position: {
     textAlign: "center",
@@ -310,50 +337,6 @@ const styles = StyleSheet.create({
       ? globalWidth("2%")
       : globalWidth("3%"),
     color: Colors.font,
-  },
-  businessContainer: {
-    width: isWeb() ? "70%" : "90%",
-    alignSelf: "center",
-    marginTop: 10,
-  },
-  number: {
-    fontFamily: "numbers",
-    fontSize: isWeb()
-      ? globalWidth("2%")
-      : isTablet()
-      ? globalWidth("4%")
-      : globalWidth("5.5%"),
-  },
-  logo: {
-    width: isWeb()
-      ? globalWidth("4%")
-      : isTablet()
-      ? globalWidth("9%")
-      : globalWidth("10%"),
-    height: isWeb()
-      ? globalWidth("4%")
-      : isTablet()
-      ? globalWidth("9%")
-      : globalWidth("10%"),
-    borderRadius: isWeb()
-      ? globalWidth("2%")
-      : isTablet()
-      ? globalWidth("4.5%")
-      : globalWidth("7.5%"),
-    borderColor: "navy",
-    borderWidth: 2.5,
-  },
-  cardRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 10,
-    alignSelf: "center",
-    padding: 10,
-    borderWidth: 0,
-    borderRadius: 8,
-    height: globalHeight("10%"),
-    width: "100%",
   },
   codeContainer: {
     position: "absolute",
@@ -399,6 +382,32 @@ const styles = StyleSheet.create({
       : Platform.isPad
       ? globalWidth("4%")
       : globalWidth("5.5%"),
+  },
+  itemContainer: {
+    width: "90%",
+    justifyContent: "center",
+    flexGrow: 1,
+    alignSelf: "center",
+    borderColor: "#000",
+    borderWidth: 1,
+    backgroundColor: Colors.lightBG,
+    marginTop: globalHeight("0.3%"),
+    borderRadius: 10,
+  },
+  itemHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 5,
+    height: globalHeight("7%"),
+  },
+  itemTitle: {
+    fontFamily: "headers",
+    fontSize: isWeb()
+      ? globalWidth("1.2%")
+      : isTablet()
+      ? globalWidth("2.5%")
+      : globalWidth("4%"),
+    color: Colors.font,
   },
 });
 

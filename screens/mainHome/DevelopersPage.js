@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import Colors from "../../constants/Colors";
 import { isWeb } from "../../constants/device";
 import { globalWidth } from "../../constants/globalWidth";
@@ -114,7 +114,7 @@ export const developersPageOptions = (navData) => {
     },
     headerLeft: () => {
       return (
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             navData.navigation.navigate("Login");
           }}
@@ -123,7 +123,7 @@ export const developersPageOptions = (navData) => {
             source={require("../../assets/icon.png")}
             style={styles.icon}
           />
-        </TouchableOpacity>
+        </Pressable>
       );
     },
   };

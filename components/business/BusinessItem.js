@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-
-import { TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 
 import { Feather } from "@expo/vector-icons";
 import { Avatar, CheckBox, Input } from "react-native-elements";
@@ -25,12 +23,9 @@ const BusinessItem = (props) => {
   return (
     <View style={styles.descriptionContainer}>
       {!props.hideEditButton && (
-        <TouchableOpacity
-          onPress={handlePress}
-          style={{ alignSelf: "flex-end" }}
-        >
+        <Pressable onPress={handlePress} style={{ alignSelf: "flex-end" }}>
           <Feather name="edit" size={24} color="black" />
-        </TouchableOpacity>
+        </Pressable>
       )}
       {props.children}
       {!props.imageUpload && !props.check && isEditing && (
@@ -42,9 +37,9 @@ const BusinessItem = (props) => {
           labelStyle={styles.label}
           rightIcon={() => {
             return (
-              <TouchableOpacity onPress={submitEditedValue}>
+              <Pressable onPress={submitEditedValue}>
                 <Text style={styles.submitText}>Submit</Text>
-              </TouchableOpacity>
+              </Pressable>
             );
           }}
         />
@@ -56,11 +51,11 @@ const BusinessItem = (props) => {
             getURL={(data) => setEditedValue(data)}
             subFolder="businesses_logo/"
           />
-          <TouchableOpacity onPress={submitEditedValue}>
+          <Pressable onPress={submitEditedValue}>
             <Text style={[styles.submitText, { textAlign: "center" }]}>
               Submit
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </>
       )}
       {props.check && isEditing && (
@@ -81,11 +76,11 @@ const BusinessItem = (props) => {
             />
             <Text style={styles.checkTitle}>Services</Text>
           </View>
-          <TouchableOpacity onPress={submitEditedValue}>
+          <Pressable onPress={submitEditedValue}>
             <Text style={[styles.submitText, { textAlign: "center" }]}>
               Submit
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       )}
     </View>

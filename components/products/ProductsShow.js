@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native-gesture-handler";
 import { Image } from "react-native";
-import { Avatar } from "react-native-elements";
+import { Avatar, Button } from "react-native-elements";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
 import numberWithComma from "../helpers/numberWithComa";
@@ -101,7 +101,7 @@ const ProductsShow = (props) => {
     } else {
       setNeededProducts(products);
     }
-  }, [selectedCategories]);
+  }, [selectedCategories, products]);
 
   if (isLoading) {
     return <Loader center />;
@@ -116,6 +116,7 @@ const ProductsShow = (props) => {
         horizontal={true}
         showsHorizontalScrollIndicator={isWeb() ? true : false}
         contentContainerStyle={{
+          minWidth: globalWidth("90%"),
           alignItems: "center",
           flexWrap: "wrap",
           marginTop: 10,
@@ -138,15 +139,15 @@ const ProductsShow = (props) => {
                 setSelectedCategories([...selectedCategories, category]);
               }
             }}
-            style={[
-              {
+            style={{
+              ...styles.categoriesBtn,
+              ...{
                 backgroundColor: selectedCategories.includes(category)
                   ? Colors.font
                   : "white",
-                borderWidth: selectedCategories.includes(category) ? 1 : 0,
+                borderWidth: selectedCategories.includes(category) ? 0 : 1,
               },
-              styles.categoriesBtn,
-            ]}
+            }}
           >
             <Text
               style={[
@@ -166,6 +167,9 @@ const ProductsShow = (props) => {
       <FlatList
         data={neededProducts}
         keyExtractor={(item) => item._id}
+        showsHorizontalScrollIndicator={false}
+        style={{ minWidth: "80%" }}
+        numColumns={4}
         renderItem={({ item }) => {
           return (
             <View style={styles.itemContainer}>
@@ -173,7 +177,6 @@ const ProductsShow = (props) => {
                 onPress={() => editItem(item._id)}
                 style={{
                   alignItems: "flex-end",
-                  marginBottom: 5,
                   cursor: "pointer",
                 }}
               >
@@ -181,17 +184,24 @@ const ProductsShow = (props) => {
               </TouchableOpacity>
               <Card style={styles.card}>
                 <View style={styles.mainRow}>
-                  <View style={{ width: "20%" }}>
+                  <View style={{ width: "20%", alignItems: "center" }}>
                     <Image
                       source={{ uri: item.imageURL }}
                       style={styles.image}
                     />
                   </View>
-                  <View style={{ width: "30%" }}>
-                    <Text style={styles.title}>{item.productNickName}</Text>
-                  </View>
-                  <View style={{ width: "30%" }}>
-                    <Text style={styles.title}>
+                  <Text
+                    style={[styles.title, { marginTop: globalHeight("2%") }]}
+                  >
+                    {item.productNickName}
+                  </Text>
+                  <View style={{ width: "80%" }}>
+                    <Text
+                      style={[
+                        styles.title,
+                        { textAlign: "center", color: "#000", marginTop: 10 },
+                      ]}
+                    >
                       {" "}
                       Price :{" "}
                       <Text style={styles.numbers}>
@@ -200,15 +210,28 @@ const ProductsShow = (props) => {
                       <Text style={styles.code}>{item.currencyCode}</Text>
                     </Text>
                   </View>
+                </View>
+
+                <View
+                  style={{
+                    justifyContent: "flex-end",
+                    flex: 1,
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <Text style={styles.description}>{item.description}</Text>
                   <TouchableOpacity
                     onPress={() => deleteItem(item._id, item.productName)}
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      alignItems: "flex-end",
+                    }}
                   >
                     <MaterialCommunityIcons
                       name="delete-sweep"
                       size={
                         isWeb()
-                          ? globalWidth("4%")
+                          ? globalWidth("2.2%")
                           : isTablet()
                           ? globalWidth("6%")
                           : globalWidth("8%")
@@ -218,7 +241,36 @@ const ProductsShow = (props) => {
                     />
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.description}> {item.description} </Text>
+                <Text
+                  style={[styles.title, { textAlign: "center", marginTop: 10 }]}
+                >
+                  {" "}
+                  Availability: {numberWithComma(item.quantity)}{" "}
+                </Text>
+                <View style={styles.lowerView}>
+                  <Image
+                    source={{ uri: item.businessLogo }}
+                    style={[
+                      styles.image,
+                      {
+                        width: globalWidth("3%"),
+                        height: globalWidth("3%"),
+                        borderRadius: globalWidth("1.5%"),
+                      },
+                    ]}
+                  />
+                  <Text style={[styles.title, { marginLeft: 10 }]}>
+                    {item.businessName}
+                  </Text>
+                </View>
+                <Button
+                  buttonStyle={styles.addTargetBtn}
+                  title="Add Target"
+                  titleStyle={styles.addTargetBtnTitle}
+                  onPress={() => {
+                    window.location.href = `/target/target-add/${item._id}/${item.businessId}`;
+                  }}
+                />
               </Card>
             </View>
           );
@@ -232,24 +284,24 @@ const ProductsShow = (props) => {
 const styles = StyleSheet.create({
   container: {
     zIndex: -100,
+    alignItems: "center",
   },
   itemContainer: {
     borderBottomColor: Colors.font,
     borderBottomWidth: 1,
-    width: isWeb() ? globalWidth("80%") : globalWidth("90%"),
+    width: isWeb() ? globalWidth("18%") : globalWidth("90%"),
+    marginHorizontal: isWeb() ? globalWidth("1%") : globalWidth("5%"),
     marginTop: 10,
     padding: 3,
   },
   mainRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     marginTop: 10,
     flexWrap: "wrap",
   },
   title: {
     fontSize: isWeb()
-      ? globalWidth("1.5%")
+      ? globalWidth("0.8%")
       : isTablet()
       ? globalWidth("3%")
       : isTablet()
@@ -266,7 +318,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
     fontSize: isWeb()
-      ? globalWidth("1.5%")
+      ? globalWidth("1%")
       : isTablet()
       ? globalWidth("3%")
       : isTablet()
@@ -279,11 +331,15 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 10,
     marginBottom: 10,
+    minHeight: globalHeight("55%"),
   },
   image: {
-    height: isWeb() ? globalWidth("10%") : globalWidth("10%"),
-    width: isWeb() ? globalWidth("8.8%") : globalWidth("12.5%"),
-    marginLeft: 5,
+    height: globalWidth("7%"),
+    width: globalWidth("7%"),
+    borderRadius: globalWidth("3.5%"),
+    borderColor: Colors.font,
+    borderWidth: 1.5,
+    // marginLeft: 5,
   },
   categoriesBtn: {
     padding: 5,
@@ -296,7 +352,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOpacity: 0.26,
     elevation: 5,
-    width: isWeb() ? globalWidth("20%") : globalWidth("40%"),
+    width: isWeb() ? globalWidth("10%") : globalWidth("40%"),
     height: isWeb() ? globalWidth("3%") : globalWidth("10%"),
     justifyContent: "center",
     alignItems: "center",
@@ -304,13 +360,41 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: isWeb()
-      ? globalWidth("1.5%")
+      ? globalWidth("1.2%")
       : isTablet()
       ? globalWidth("3%")
       : isTablet()
       ? globalWidth("2.5%")
       : globalWidth("4%"),
     fontFamily: "headers",
+  },
+  lowerView: {
+    borderTopColor: Colors.primary,
+    borderTopWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+    padding: 10,
+  },
+  avatar: {
+    marginRight: 10,
+    borderColor: Colors.font,
+    borderWidth: 1.5,
+    width: globalWidth("3%"),
+  },
+  addTargetBtn: {
+    backgroundColor: Colors.primary,
+    borderRadius: 5,
+    width: "100%",
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+  },
+  addTargetBtnTitle: {
+    fontFamily: "headers",
+    fontSize: globalWidth("1%"),
+    color: "white",
   },
 });
 

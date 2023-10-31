@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, Platform, Alert, Image } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, Text, View, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Card from "../../components/Card";
 import {
@@ -17,12 +17,9 @@ import MainInput from "../../components/MainInput";
 import Colors from "../../constants/Colors";
 
 import * as businessActions from "../../store/business/businessActions";
-import * as authActions from "../../store/auth/authActions";
 
 import UploadImage from "../../components/helpers/UploadImages";
 import Loader from "../../components/Loader";
-import MenuButton from "../../components/webComponents/menu/MenuButton";
-import HeaderText from "../../components/HeaderText";
 import WebAddingScreen from "./WebAddingScreen";
 
 import * as settingsActions from "../../store/settings/settingsActions";
@@ -99,7 +96,7 @@ const AddNewBusinessScreen = (props) => {
       setSelectedCurrency("");
       setIsLoading(false);
 
-      props.navigation.navigate("Dashboard");
+      window.location.href("/dashboard");
     });
   };
 

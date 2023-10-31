@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader";
@@ -23,8 +23,6 @@ const WebVerifyComponent = (props) => {
   const fourthCode = useRef();
 
   const dispatch = useDispatch();
-
-  console.log(verificationSuccess);
 
   const requestCode = async () => {
     setIsLoading(true);
@@ -149,9 +147,9 @@ const WebVerifyComponent = (props) => {
               !codeFourthDigit
             }
           />
-          <TouchableOpacity onPress={requestCode}>
+          <Pressable onPress={requestCode}>
             <Text style={styles.link}>Resend Code</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       )}
     </View>

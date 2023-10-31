@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View, Pressable } from "react-native";
 import { Button, CheckBox, Header } from "react-native-elements";
 import {
   MaterialCommunityIcons,
@@ -10,7 +10,7 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import MenuButton from "../../components/webComponents/menu/MenuButton";
@@ -43,6 +43,7 @@ const EditProductScreen = (props) => {
   const [maximumDiscount, setMaximumDiscount] = useState(0);
   const [minimumDiscount, setMinimumDiscount] = useState(0);
   const [category, setCategory] = useState("");
+  const [quantity, setQuantity] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -89,6 +90,7 @@ const EditProductScreen = (props) => {
       setMaximumDiscount(product.maximumDiscount);
       setMinimumDiscount(product.minimumDiscount);
       setCategory(product.category ? product.category : "");
+      setQuantity(product.quantity ? product.quantity : 0);
     }
 
     return () => {
@@ -111,7 +113,8 @@ const EditProductScreen = (props) => {
         imageUrl,
         minimumDiscount,
         maximumDiscount,
-        category
+        category,
+        quantity
       )
     ).then(() => {
       setIsLoading(false);
@@ -131,12 +134,12 @@ const EditProductScreen = (props) => {
   return (
     <View style={styles.container}>
       {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
-      <TouchableOpacity
+      <Pressable
         onPress={() => props.navigation.navigate("main_products_nav")}
         style={styles.touchable}
       >
         <AntDesign name="arrowleft" size={35} color={Colors.primary} />
-      </TouchableOpacity>
+      </Pressable>
       <HeaderText
         style={{ alignSelf: "center" }}
         text={`Editing ${productName}`}
@@ -242,6 +245,19 @@ const EditProductScreen = (props) => {
             onChangeText={(text) => setDescription(text)}
             rightIcon={() => (
               <Foundation name="comment" size={24} color={Colors.font} />
+            )}
+          />
+          <MainInput
+            label="Available Qunatity"
+            style={styles.input}
+            value={numberWithComa(quantity)}
+            onChangeText={(text) => setQuantity(text)}
+            rightIcon={() => (
+              <MaterialCommunityIcons
+                name="numeric"
+                size={24}
+                color={Colors.font}
+              />
             )}
           />
           <View style={styles.checkboxContainer}>

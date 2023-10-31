@@ -1,12 +1,5 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Platform,
-  Alert,
-} from "react-native";
+import { StyleSheet, View, Pressable, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import BackButton from "../../components/BackButton";
 import {
@@ -341,7 +334,7 @@ const AddMemberScreen = (props) => {
                 secureTextEntry={hidePassword}
                 rightIcon={() => {
                   return (
-                    <TouchableOpacity
+                    <Pressable
                       onPress={() => setHidePassword(!hidePassword)}
                       style={{ cursor: "pointer" }}
                     >
@@ -350,7 +343,7 @@ const AddMemberScreen = (props) => {
                       ) : (
                         <FontAwesome name="eye" size={24} color="black" />
                       )}
-                    </TouchableOpacity>
+                    </Pressable>
                   );
                 }}
               />
@@ -369,7 +362,7 @@ const AddMemberScreen = (props) => {
                 onFocus={() => setConfirmedPasswordMatch(true)}
                 rightIcon={() => {
                   return (
-                    <TouchableOpacity
+                    <Pressable
                       onPress={() => setHidePassword(!hidePassword)}
                       style={{ cursor: "pointer" }}
                     >
@@ -378,7 +371,7 @@ const AddMemberScreen = (props) => {
                       ) : (
                         <FontAwesome name="eye" size={24} color="black" />
                       )}
-                    </TouchableOpacity>
+                    </Pressable>
                   );
                 }}
               />

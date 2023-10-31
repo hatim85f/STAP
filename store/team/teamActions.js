@@ -27,6 +27,7 @@ export const inviteMember = (
         "x-auth-token": token,
       },
       body: JSON.stringify({
+        userId: user._id,
         email,
         password,
         userName,

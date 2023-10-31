@@ -174,6 +174,7 @@ const styles = StyleSheet.create({
     zIndex: -100,
     marginTop: globalHeight("5%"),
     alignItems: "center",
+    overflow: "scroll",
   },
   mainCard: {
     marginVertical: globalHeight("0.5%"),
@@ -235,13 +236,15 @@ const styles = StyleSheet.create({
   },
   editView: {
     position: "absolute",
-    height: globalHeight("100%"),
+    height: globalHeight("70%"),
     width: Platform.OS === "web" ? globalWidth("60%") : globalWidth("98%"),
     backgroundColor: "#8363d6",
     top: -globalHeight("10%"),
     bottom: 0,
     borderRadius: 10,
     padding: 25,
+    flex: 1,
+    zIndex: 100,
   },
 });
 

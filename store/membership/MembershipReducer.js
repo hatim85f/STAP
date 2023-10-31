@@ -1,8 +1,9 @@
-import { GET_PACKAGES } from "./MembershipActions";
+import { ADD_MEMBERSHIP, GET_PACKAGES } from "./MembershipActions";
 
 const intialState = {
   packages: [],
   activePackageId: null,
+  membership: null,
 };
 
 export const membershipReducer = (state = intialState, action) => {
@@ -11,6 +12,11 @@ export const membershipReducer = (state = intialState, action) => {
       return {
         ...state,
         packages: action.packages,
+      };
+    case ADD_MEMBERSHIP:
+      return {
+        ...state,
+        membership: action.membership,
       };
     default:
       return state;

@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
-import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
-import { Entypo } from "@expo/vector-icons";
 import * as membershipActions from "../../store/membership/MembershipActions";
-import Colors from "../../constants/Colors";
 import PricingCard from "../../components/pricing/PricingCard";
 
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import { ScrollView } from "react-native";
-import { isWeb } from "../../constants/device";
 import Loader from "../../components/Loader";
 
 const PricingDetails = (props) => {

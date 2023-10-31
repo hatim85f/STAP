@@ -19,7 +19,7 @@ import {
   Entypo,
 } from "@expo/vector-icons";
 import { StyleSheet, Image, ScrollView } from "react-native";
-
+import { Ionicons } from "@expo/vector-icons";
 import { logOut } from "../store/auth/authActions";
 import { View } from "react-native";
 import { Platform } from "react-native";
@@ -38,6 +38,8 @@ import ProfileScreen from "../screens/profile/ProfileScreen";
 import SettingsScreen from "../screens/settings/SettingsScreen";
 import { isTablet, isWeb } from "../constants/device";
 import { PaymentNav } from "./PaymentNav";
+import { ClientsNavigation } from "./ClientsNavigation";
+import { TargetNavigator } from "./TargetNavigator";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -167,11 +169,11 @@ export const MainDrawerNavigator = () => {
       initialRouteName="Dashboard"
     >
       <MainDrawer.Screen
-        name="Profile"
+        name="Account"
         component={ProfileScreen}
         options={{
           ...defaultNavOptions,
-          title: "Profile",
+          title: "Account",
           headerTitle: "Profile",
           drawerIcon: ({ focused }) => {
             return (
@@ -189,7 +191,8 @@ export const MainDrawerNavigator = () => {
         component={HomeScreen}
         options={{
           ...defaultNavOptions,
-          headerTitle: "Dashoboard", // adding heraderTitle for mobile only name not web
+          title: "Dashboard",
+          headerTitle: "Dashoboard",
           drawerIcon: ({ focused }) => {
             return (
               <MaterialCommunityIcons
@@ -238,6 +241,24 @@ export const MainDrawerNavigator = () => {
         }}
       />
       <MainDrawer.Screen
+        name="clients"
+        component={ClientsNavigation}
+        options={{
+          ...defaultNavOptions,
+          title: "Clients",
+          headerTitle: "Clients",
+          drawerIcon: ({ focused }) => {
+            return (
+              <MaterialIcons
+                name="nature-people"
+                size={24}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
         name="products"
         component={MainProductNavigator}
         options={{
@@ -249,6 +270,24 @@ export const MainDrawerNavigator = () => {
               <Icon
                 name="package"
                 size={hp("2.5%")}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="target"
+        component={TargetNavigator}
+        options={{
+          ...defaultNavOptions,
+          title: "Target",
+          headerTitle: "Target",
+          drawerIcon: ({ focused }) => {
+            return (
+              <Ionicons
+                name="ios-analytics"
+                size={24}
                 color={focused ? "white" : "black"}
               />
             );

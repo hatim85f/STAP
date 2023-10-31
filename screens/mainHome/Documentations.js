@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
+  Pressable,
   Animated,
   FlatList,
   ScrollView,
@@ -88,7 +88,7 @@ const Documentation = (props) => {
           ]}
         >
           {data.map(({ name }, i) => (
-            <TouchableOpacity
+            <Pressable
               key={i}
               onPress={() => setSelectedIndex(i === selectedIndex ? null : i)}
               style={{
@@ -106,7 +106,7 @@ const Documentation = (props) => {
               >
                 {name}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </View>
       )}
@@ -286,7 +286,7 @@ export const documentationOptions = (navData) => {
     },
     headerLeft: () => {
       return (
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             navData.navigation.navigate("Login");
           }}
@@ -295,7 +295,7 @@ export const documentationOptions = (navData) => {
             source={require("../../assets/icon.png")}
             style={styles.icon}
           />
-        </TouchableOpacity>
+        </Pressable>
       );
     },
   };

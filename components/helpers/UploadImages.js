@@ -19,7 +19,7 @@ const UploadImage = (props) => {
   const { imageName, getURL, disabled, subFolder } = props;
   const [selectedImage, setSelectedImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(null);
 
   const handleImgePcik = async () => {
     try {

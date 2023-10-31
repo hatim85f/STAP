@@ -4,7 +4,7 @@ import {
   Text,
   Image,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   Linking,
 } from "react-native";
 import Colors from "../../constants/Colors";
@@ -62,32 +62,26 @@ const AboutScreen = (props) => {
         </Text>
         <Text style={styles.version}>Version 1.0.0</Text>
         <Text style={styles.contact}>Contact Information:</Text>
-        <TouchableOpacity
-          onPress={() => openLink("mailto:info@codexpandit.com")}
-        >
+        <Pressable onPress={() => openLink("mailto:info@codexpandit.com")}>
           <Text style={styles.link}>info@codexpandit.com (Company Email)</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => openLink("https://www.codexpandit.com")}
-        >
+        </Pressable>
+        <Pressable onPress={() => openLink("https://www.codexpandit.com")}>
           <Text style={styles.link}>www.codexpandit.com (Company Website)</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => openLink("https://wa.me/+971561452526")}
-        >
+        </Pressable>
+        <Pressable onPress={() => openLink("https://wa.me/+971561452526")}>
           <Text style={styles.link}>+971561452526 (Company WhatsApp)</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => openLink("mailto:info@stap-crm.com")}>
+        </Pressable>
+        <Pressable onPress={() => openLink("mailto:info@stap-crm.com")}>
           <Text style={styles.link}>
             info@stap-crm.com (STAP Customer Service Email)
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </Pressable>
+        <Pressable
           onPress={() => props.navigation.navigate("Home")}
           style={styles.backButton}
         >
           <Text style={styles.buttonText}>Back</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
@@ -183,7 +177,7 @@ export const aboutScreenOptions = (navData) => {
     },
     headerLeft: () => {
       return (
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             navData.navigation.navigate("Login");
           }}
@@ -192,7 +186,7 @@ export const aboutScreenOptions = (navData) => {
             source={require("../../assets/icon.png")}
             style={styles.icon}
           />
-        </TouchableOpacity>
+        </Pressable>
       );
     },
   };

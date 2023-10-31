@@ -89,6 +89,9 @@ const styles = StyleSheet.create({
     height: hp("5%"),
     width: wp("8%"),
     backgroundColor: "transaprent",
+    borderColor: "white",
+    borderWidth: 1.5,
+    borderRadius: 10,
   },
   title: {
     color: "white",

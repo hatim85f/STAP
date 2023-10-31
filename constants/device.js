@@ -9,8 +9,6 @@ import {
 // if width is less than 600, it's a phone
 // export it and will be used as if device.isTablet() in other files
 
-console.log(Dimensions.get("window").width);
-
 export function isTablet() {
   const dim = Dimensions.get("screen");
   return dim.width >= 600 && dim.width < 960;

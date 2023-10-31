@@ -44,6 +44,9 @@
     "web": {
       "favicon": "./assets/favicon.png",
       "googleServicesFile": "./google-services.json"
+    },
+    "extra": {
+      "stripePublishKey": "STRIPE_PUBLISH_KEY"
     }
   }
 }

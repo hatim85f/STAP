@@ -1,7 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, Platform, Alert, Image } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import Card from "../../components/Card";
+import { StyleSheet, Text, View, Platform } from "react-native";
 import {
   Fontisto,
   MaterialIcons,
@@ -17,7 +15,6 @@ import MainInput from "../../components/MainInput";
 import Colors from "../../constants/Colors";
 
 import * as businessActions from "../../store/business/businessActions";
-import * as authActions from "../../store/auth/authActions";
 
 import UploadImage from "../../components/helpers/UploadImages";
 import Loader from "../../components/Loader";
@@ -26,7 +23,6 @@ import MenuButton from "../../components/webComponents/menu/MenuButton";
 
 import * as settingsActions from "../../store/settings/settingsActions";
 import DropDownPicker from "react-native-dropdown-picker";
-import { set } from "react-native-reanimated";
 
 const WebAddingScreen = (props) => {
   const { currencyList } = useSelector((state) => state.settings);
@@ -104,6 +100,8 @@ const WebAddingScreen = (props) => {
   useEffect(() => {
     dispatch(settingsActions.getCurrencyList());
   }, [dispatch]);
+
+  console.log(businessName, "businessName");
 
   useEffect(() => {
     const updatedList = [...new Set(currencyList)];

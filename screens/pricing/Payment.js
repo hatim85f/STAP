@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Platform, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Button, CheckBox } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +16,7 @@ import { ScrollView } from "react-native";
 const Payment = (props) => {
   const { packageId, type } = props.route.params;
   const { packages } = useSelector((state) => state.membership);
+  const { user } = useSelector((state) => state.auth);
 
   // states
   const [packageType, setPackageType] = useState("");
@@ -31,6 +26,7 @@ const Payment = (props) => {
   const [packageFeatures, setPackageFeatures] = useState([]);
   const [packageLimits, setPackageLimits] = useState([]);
   const [packagePrices, setPackagePrices] = useState([]);
+  const [statmentToShow, setStatmentToShow] = useState("");
 
   const dispatch = useDispatch();
 
@@ -119,11 +115,29 @@ const Payment = (props) => {
     if (type === "Yearly") {
       setPackageType("Yearly");
     } else {
-      setPackageType("Yearly");
+      setPackageType("Monthly");
     }
   }, [type]);
 
-  console.log(packagePrice);
+  // setting price of package to be displayed in the screen
+  useEffect(() => {
+    setIsLoading(true);
+    if (packages.length > 0) {
+      const neededPackage = packages.find((item) => item._id === packageId);
+      if (packageType === "Monthly") {
+        setStatmentToShow({
+          label: "Monthly Package Rent",
+          value: neededPackage?.price.monthly,
+        });
+      } else {
+        setStatmentToShow({
+          label: "Yearly Package Rent",
+          value: neededPackage?.price.yearly,
+        });
+      }
+    }
+    setIsLoading(false);
+  }, [packageType, packageDetails]);
 
   if (isLoading) {
     return <Loader center />;
@@ -131,25 +145,25 @@ const Payment = (props) => {
 
   // submitting the package to the server
   const submitHandler = () => {
-    // props.navigation.navigate("PaymentMethod", {
-    //   packageId: packageId,
-    //   type: packageType,
-    // });
+    props.navigation.navigate("Make_Payment", {
+      packageId: packageId,
+      type: packageType,
+      email: user.email,
+      payment: packagePrice,
+    });
     console.log("submitting");
   };
-
-  console.log(packageDetails ? packagePrices : null);
 
   return (
     <View style={styles.container}>
       {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
       {Platform.OS !== "web" && (
-        <TouchableOpacity
+        <Pressable
           onPress={() => props.navigation.goBack()}
           style={{ marginTop: 5 }}
         >
           <AntDesign name="arrowleft" size={24} color={Colors.primary} />
-        </TouchableOpacity>
+        </Pressable>
       )}
       <ScrollView scrollEnabled scrollEventThrottle={16}>
         {packageDetails && (
@@ -161,7 +175,7 @@ const Payment = (props) => {
               what you will get
             </Text>
             <View style={styles.packageTypeButtons}>
-              <TouchableOpacity
+              <Pressable
                 style={[
                   styles.packageTypeButton,
                   packageType === "Monthly" && styles.activePackageType,
@@ -176,8 +190,8 @@ const Payment = (props) => {
                 >
                   Monthly
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              </Pressable>
+              <Pressable
                 style={[
                   styles.packageTypeButton,
                   packageType === "Yearly" && styles.activePackageType,
@@ -192,7 +206,7 @@ const Payment = (props) => {
                 >
                   Yearly
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
 
             <View style={styles.packageDetails}>
@@ -220,7 +234,15 @@ const Payment = (props) => {
                   // package features
                   packageFeatures?.map((item, index) => {
                     return (
-                      <View style={styles.items} key={index}>
+                      <View
+                        style={[
+                          styles.rowItems,
+                          {
+                            width: isWeb() ? "40%" : isTablet() ? "70%" : "80%",
+                          },
+                        ]}
+                        key={index}
+                      >
                         {item.value && (
                           <View style={styles.rowItems} key={index}>
                             <Text style={styles.itemList}>{item.label}</Text>
@@ -242,7 +264,7 @@ const Payment = (props) => {
                   packageLimits?.map((item, index) => {
                     return (
                       <View style={styles.items} key={index}>
-                        {item.value && (
+                        {item.value > 0 && (
                           <View
                             style={[
                               styles.rowItems,
@@ -250,8 +272,8 @@ const Payment = (props) => {
                                 width: isWeb()
                                   ? "75%"
                                   : isTablet()
-                                  ? "70%"
-                                  : "90%",
+                                  ? "85%"
+                                  : "120%",
                               },
                             ]}
                             key={index}
@@ -259,7 +281,9 @@ const Payment = (props) => {
                             <Text style={[styles.itemList, { lineHeight: 50 }]}>
                               {item.label}
                             </Text>
-                            <Text style={styles.itemNuber}>{item.value}</Text>
+                            <Text style={styles.itemNuber}>
+                              {item.value > 100 ? "Unlimited" : item.value}
+                            </Text>
                           </View>
                         )}
                       </View>
@@ -273,7 +297,7 @@ const Payment = (props) => {
                   packagePrices?.map((item, index) => {
                     return (
                       <View style={styles.items} key={index}>
-                        {item.value && (
+                        {item.value > 0 && (
                           <View
                             style={[
                               styles.rowItems,
@@ -281,8 +305,8 @@ const Payment = (props) => {
                                 width: isWeb()
                                   ? "75%"
                                   : isTablet()
-                                  ? "70%"
-                                  : "100%",
+                                  ? "80%"
+                                  : "120%",
                               },
                             ]}
                             key={index}
@@ -300,9 +324,26 @@ const Payment = (props) => {
                     );
                   })
                 }
+                <View
+                  style={[
+                    styles.rowItems,
+                    {
+                      width: isWeb() ? "30%" : isTablet() ? "50%" : "75%",
+                    },
+                  ]}
+                >
+                  <Text style={[styles.itemList, { lineHeight: 50 }]}>
+                    {statmentToShow.label}
+                  </Text>
+                  <Text style={styles.itemNuber}>
+                    {" "}
+                    {statmentToShow.value} ${" "}
+                    {packageType === "Monthly" ? "/ month" : "/ year"}
+                  </Text>
+                </View>
               </View>
               <Button
-                title={`Pay ${packagePrice} $`}
+                title={`Pay ${numberWithComa(parseInt(packagePrice))} $`}
                 onPress={submitHandler}
                 buttonStyle={styles.buttonStyle}
                 titleStyle={styles.titleStyle}
@@ -358,17 +399,14 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   rowItemsContainer: {
-    flexDirection: isWeb() ? "row" : "column",
-    flexWrap: "wrap",
     borderTopColor: Colors.primary,
     borderTopWidth: 1.5,
     // justifyContent: "space-around",
   },
   items: {
-    flexDirection: "column",
-    flexWrap: "wrap",
-
-    width: isWeb() ? "50%" : "60%",
+    flexDirection: "row",
+    // flexWrap: "wrap",
+    width: isWeb() ? "40%" : "60%",
   },
   rowItems: {
     width: isWeb() ? "80%" : isTablet() ? "80%" : "100%",

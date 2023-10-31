@@ -1,5 +1,12 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Animated,
+} from "react-native";
 
 import InputsContainer from "./InputsContainer";
 import CustomInput from "../Input/Input";
@@ -15,7 +22,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Colors from "../../../constants/Colors";
-import Animated from "react-native-reanimated";
+
 import { TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import * as authActions from "../../../store/auth/authActions";

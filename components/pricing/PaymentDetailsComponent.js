@@ -118,9 +118,7 @@ const PaymentDetailsComponent = (props) => {
     }
   }, [packageType, totalMonthlyPrice, totalYearlyPrice, packageDetails]);
 
-  const submit = () => {
-    console.log("submit");
-  };
+  const submit = () => {};
 
   if (isLoading) {
     return <Loader center />;

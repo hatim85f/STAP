@@ -42,8 +42,6 @@ const ChangeContactPerson = (props) => {
     }
   }, [team]);
 
-  console.log(team);
-
   return (
     <View style={styles.descriptionContainer}>
       {!props.hideEditButton && (

@@ -171,8 +171,6 @@ const AppLoginScreen = (props) => {
     }
   };
 
-  console.log(biometricStatus);
-
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <View style={styles.innerContainer}>

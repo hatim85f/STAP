@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
-  TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { Avatar, Button, SocialIcon } from "react-native-elements";
 import { globalWidth, globalHeight } from "../../constants/globalWidth";
@@ -17,7 +17,6 @@ import { Platform } from "react-native";
 import Colors from "../../constants/Colors";
 
 const MainHome = (props) => {
-  console.log(globalWidth("100%"));
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -77,18 +76,18 @@ const MainHome = (props) => {
             </View>
           )}
           <View style={styles.appLinks}>
-            <TouchableOpacity onPress={() => {}} style={styles.linkItem}>
+            <Pressable onPress={() => {}} style={styles.linkItem}>
               <Image
                 source={require("../../assets/vectors/google.png")}
                 style={styles.links}
               />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}} style={styles.linkItem}>
+            </Pressable>
+            <Pressable onPress={() => {}} style={styles.linkItem}>
               <Image
                 source={require("../../assets/vectors/apple.png")}
                 style={styles.links}
               />
-            </TouchableOpacity>
+            </Pressable>
           </View>
           <Button
             title="Login or Signup"

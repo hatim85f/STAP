@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Avatar, Button } from "react-native-elements";
 import { fontSize, iconSize } from "../constants/sizes";
 import { globalHeight, globalWidth } from "../constants/globalWidth";
@@ -39,7 +39,7 @@ const HomePageIcon = (props) => {
   const iconSource = icons[props.icon];
 
   return (
-    <TouchableOpacity
+    <Pressable
       style={[styles.container, isPressed && styles.buttonPressed]}
       activeOpacity={1}
       onPress={handlePress}
@@ -53,7 +53,7 @@ const HomePageIcon = (props) => {
       )}
 
       <Text style={styles.text}> {props.title} </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

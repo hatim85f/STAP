@@ -1,29 +1,35 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { Platform } from "react-native";
-import WebHomeScreen from "../webScreens/home/WebHomeScreen";
-import AppHomeScreen from "../appScreens/home/AppHomeScreen";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Button } from "react-native-elements";
+import { useDispatch, useSelector } from "react-redux";
+import MenuButton from "../../components/webComponents/menu/MenuButton";
+import Colors from "../../constants/Colors";
 
 const HomeScreen = (props) => {
-  const { token } = useSelector((state) => state.auth);
+  return (
+    <View style={styles.container}>
+      <MenuButton navigation={props.navigation} />
+      <Text style={styles.header}>HomeScreen Screen</Text>
+    </View>
+  );
+};
 
-  useEffect(() => {
-    if (!token) {
-      props.navigation.navigate("Main");
-    }
-  }, [token]);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  header: {
+    textAlign: "center",
+    color: Colors.primary,
+    fontSize: 40,
+  },
+});
 
-  console.log(token);
-
-  if (Platform.OS === "web") {
-    return <WebHomeScreen navigation={props.navigation} />;
-  } else {
-    return <AppHomeScreen navigation={props.navigation} />;
-  }
+export const HomeScreenOptions = (navData) => {
+  return {
+    headerTitle: "HomeScreen",
+  };
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({});

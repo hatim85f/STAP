@@ -14,6 +14,8 @@ export const VERIFY_CODE = "VERIFY_CODE";
 export const GET_USER_IN = "GET_USER_IN";
 export const GET_PROFILE = "GET_PROFILE";
 export const CODE_SUCCESS = "CODE_SUCCESS";
+export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
+export const CHANGE_EMAIL = "CHANGE_EMAIL";
 
 export const login = (email, password) => {
   return async (dispatch) => {
@@ -279,6 +281,8 @@ export const getProfile = () => {
     dispatch({
       type: GET_PROFILE,
       profile: resData.userProfile[0],
+      stripeSubscription: resData.subscriptionIds,
+      payments: resData.userPayment,
     });
   };
 };
@@ -327,8 +331,6 @@ export const confirmCode = (code) => {
         const parsedUserDetails = JSON.parse(userDetails);
 
         parsedUserDetails.user.emailVerified = true;
-
-        console.log(JSON.stringify(parsedUserDetails));
 
         await AsyncStorage.setItem(
           "userDetails",
@@ -401,7 +403,6 @@ export const biometricLogin = (userId) => {
       token: resData.token,
     };
 
-    console.log(userData, "we are in");
     await AsyncStorage.setItem("userDetails", JSON.stringify(userData));
 
     if (Platform.OS === "web") {
@@ -430,6 +431,136 @@ export const biometricLogin = (userId) => {
     dispatch({
       type: GET_PROFILE,
       profile: profileData.userProfile[0],
+    });
+  };
+};
+
+export const changeProfilePicture = (profilePicture) => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(
+      `${mainLink}/api/profile/changeProfilePicture/${user._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token,
+        },
+        body: JSON.stringify({ profilePicture }),
+      }
+    );
+
+    const resData = await response.json();
+
+    if (response.ok) {
+      const userDetails = await AsyncStorage.getItem("userDetails");
+      if (userDetails) {
+        const parsedUserDetails = JSON.parse(userDetails);
+
+        parsedUserDetails.user.profilePicture = profilePicture;
+
+        await AsyncStorage.setItem(
+          "userDetails",
+          JSON.stringify(parsedUserDetails)
+        );
+      }
+    }
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+
+    dispatch({
+      type: CHANGE_PROFILE_PICTURE,
+      profilePicture,
+    });
+  };
+};
+
+export const changePhone = (newPhone) => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(
+      `${mainLink}/api/profile/changePhone/${user._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token,
+        },
+        body: JSON.stringify({ phone: newPhone }),
+      }
+    );
+
+    const resData = await response.json();
+
+    if (response.ok) {
+      const userDetails = await AsyncStorage.getItem("userDetails");
+      if (userDetails) {
+        const parsedUserDetails = JSON.parse(userDetails);
+
+        parsedUserDetails.user.phone = newPhone;
+
+        await AsyncStorage.setItem(
+          "userDetails",
+          JSON.stringify(parsedUserDetails)
+        );
+      }
+    }
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+  };
+};
+
+export const changeEmail = (newEmail, password) => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(
+      `${mainLink}/api/profile/changeEmail/${user._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token,
+        },
+        body: JSON.stringify({ newEmail, password }),
+      }
+    );
+
+    const resData = await response.json();
+
+    if (response.ok) {
+      const userDetails = await AsyncStorage.getItem("userDetails");
+      if (userDetails) {
+        const parsedUserDetails = JSON.parse(userDetails);
+
+        parsedUserDetails.user.email = newEmail;
+
+        await AsyncStorage.setItem(
+          "userDetails",
+          JSON.stringify(parsedUserDetails)
+        );
+      }
+    }
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+
+    dispatch({
+      type: CHANGE_EMAIL,
+      newEmail,
     });
   };
 };
