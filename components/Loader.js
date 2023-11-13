@@ -19,7 +19,7 @@ const Loader = (props) => {
         },
       ]}
     >
-      <ActivityIndicator color={Colors.primary} size={"large"} />
+      <ActivityIndicator color={Colors.primary} size={100} />
       {props.message && <Text style={styles.message}>Processing Payment</Text>}
       {props.loadingMessage && (
         <Text style={styles.message}>{props.loadingMessage}</Text>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
-    marginTop: 10,
+    marginTop: 30,
     fontFamily: "headers",
     color: Colors.font,
   },

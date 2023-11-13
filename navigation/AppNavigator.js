@@ -99,10 +99,16 @@ const AppNavigator = () => {
           target: {
             screens: {
               target_show: {
-                path: "/target/target-show/:productId/:businessId",
+                path: "/target/target-show/",
               },
               target_add: {
-                path: "/target/target-add/:productId/:businessId",
+                path: "/target/target-add/:productIndex",
+              },
+              item_target: {
+                path: "/target/item-target/:product",
+              },
+              target_distribution: {
+                path: "/target/target-distribution/:product/:year",
               },
             },
           },

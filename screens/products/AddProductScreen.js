@@ -144,7 +144,7 @@ const AddProductScreen = (props) => {
             )}
           />
           <MainInput
-            label="Cost Price"
+            label="Cost Price (CIF)"
             style={styles.input}
             value={costPrice}
             onChangeText={(text) => setCostPrice(text)}

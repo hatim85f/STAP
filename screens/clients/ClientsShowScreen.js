@@ -61,7 +61,9 @@ const ClientsShowScreen = (props) => {
       return;
     }
 
-    window.location.href = `/clients/add-clients/${businessId}`;
+    props.navigation.navigate("addClinets", {
+      businessId: businessId,
+    });
   };
 
   return (

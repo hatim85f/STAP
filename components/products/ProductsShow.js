@@ -268,7 +268,9 @@ const ProductsShow = (props) => {
                   title="Add Target"
                   titleStyle={styles.addTargetBtnTitle}
                   onPress={() => {
-                    window.location.href = `/target/target-add/${item._id}/${item.businessId}`;
+                    window.location.href = `/target/target-add/${products.findIndex(
+                      (a) => a._id === item._id
+                    )}`;
                   }}
                 />
               </Card>

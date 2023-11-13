@@ -14,6 +14,7 @@ import * as productsActions from "../../store/products/productsActions";
 
 import HeaderText from "../../components/HeaderText";
 import ProductsShow from "../../components/products/ProductsShow";
+import Loader from "../../components/Loader";
 
 const ProductsScreen = (props) => {
   const { userType } = useSelector((state) => state.auth.user);
@@ -24,6 +25,7 @@ const ProductsScreen = (props) => {
   const [open, setOpen] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
   const [businessValue, setBusinessValue] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // getting user businesses to show them a list of their businesses to select from them
   // with an option of selecting them all
@@ -89,7 +91,10 @@ const ProductsScreen = (props) => {
   // getting business Products upon selecting a business
 
   useEffect(() => {
-    dispatch(productsActions.getBusinessProducts());
+    setIsLoading(true);
+    dispatch(productsActions.getBusinessProducts()).then(() => {
+      setIsLoading(false);
+    });
   }, [dispatch]);
 
   // check if user selected business before navigating him to products screen
@@ -111,6 +116,10 @@ const ProductsScreen = (props) => {
       }
     }
   };
+
+  if (isLoading) {
+    return <Loader loadingMessage="Getting Products Details Ready" center />;
+  }
 
   return (
     <View style={styles.container}>

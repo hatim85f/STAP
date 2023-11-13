@@ -7,6 +7,7 @@ import { teamReducer } from "./team/teamReducer";
 import { settingsReducer } from "./settings/settingsReducer";
 import { membershipReducer } from "./membership/MembershipReducer";
 import { clientReducer } from "./clients/cleintReducer";
+import { targetReducer } from "./target/targetReducer";
 
 const mainStore = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const mainStore = configureStore({
     settings: settingsReducer,
     membership: membershipReducer,
     clients: clientReducer,
+    target: targetReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),
