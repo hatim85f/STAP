@@ -12,6 +12,7 @@ import Colors from "../../constants/Colors";
 import Loader from "../../components/Loader";
 import ShowTeamDetails from "../../components/team/ShowTeamDetails";
 import { isWeb, isTablet } from "../../constants/device";
+import TabBarNavigator from "../../components/tabBar/TabBarNavigator";
 
 const TeamDetailsScreen = (props) => {
   const { team } = useSelector((state) => state.team);
@@ -81,6 +82,7 @@ const TeamDetailsScreen = (props) => {
           }
         />
       )}
+      <TabBarNavigator route="team-details" />
     </View>
   );
 };
@@ -88,7 +90,7 @@ const TeamDetailsScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: globalHeight("100%"),
+    // height: globalHeight("100%"),
     backgroundColor: "white",
   },
   innerContainer: {

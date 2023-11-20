@@ -1,14 +1,19 @@
 import {
   ADD_PHASING,
   ADD_TARGET,
+  BUSINESS_TARGETS,
+  GET_INDIVIDUAL_TARGET,
   GET_PHASING,
   GET_TARGETS,
+  GET_TEAM_TARGET,
 } from "./targetActions";
 
 const initialState = {
   target: [],
   phasing: [],
   teamTarget: [],
+  userTarget: [],
+  businessTargets: [],
 };
 
 export const targetReducer = (state = initialState, action) => {
@@ -32,6 +37,21 @@ export const targetReducer = (state = initialState, action) => {
       return {
         ...state,
         target: [...state.target, action.target],
+      };
+    case GET_INDIVIDUAL_TARGET:
+      return {
+        ...state,
+        userTarget: action.userTarget,
+      };
+    case GET_TEAM_TARGET:
+      return {
+        ...state,
+        teamTarget: action.teamTarget,
+      };
+    case BUSINESS_TARGETS:
+      return {
+        ...state,
+        businessTargets: action.businessTargets,
       };
     default:
       return state;

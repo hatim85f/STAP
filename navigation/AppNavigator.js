@@ -120,6 +120,15 @@ const AppNavigator = () => {
               add_member: {
                 path: "/team/invite-new-member/:businessId",
               },
+              individual_target: {
+                path: "/team/individual-target/",
+              },
+              indiviudal_sales: {
+                path: "/team/individual-sales/",
+              },
+              individual_achievement: {
+                path: "/team/individual-achievement/",
+              },
             },
           },
           packages: {
