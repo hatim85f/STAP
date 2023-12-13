@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
-import BusinessSelection from "../../components/BusinessSelection";
-import { Platform } from "react-native";
-import MenuButton from "../../components/webComponents/menu/MenuButton";
+
 import { isTablet, isWeb } from "../../constants/device";
 import { globalWidth } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
-import * as clientsActions from "../../store/clients/clientsActions";
-import * as authActions from "../../store/auth/authActions";
+
 import ClientsShow from "../../components/clients/ClientsShow";
 import WebAlert from "../../components/webAlert/WebAlert";
+import BusinessSelection from "../../components/BusinessSelection";
+import MenuButton from "../../components/webComponents/menu/MenuButton";
+
+import * as clientsActions from "../../store/clients/clientsActions";
+import * as authActions from "../../store/auth/authActions";
+import * as businessActions from "../../store/business/businessActions";
 
 const ClientsShowScreen = (props) => {
   const { clients } = useSelector((state) => state.clients);
   const { user, token } = useSelector((state) => state.auth);
+  const { userBusiness } = useSelector((state) => state.business);
 
   const [selectedBusiness, setSelectedBusiness] = useState(null);
   const [businessId, setBusinessId] = useState();
@@ -54,7 +58,7 @@ const ClientsShowScreen = (props) => {
   }, [dispatch]);
 
   const navigateToAdd = () => {
-    if (!businessId) {
+    if (!businessId && user.userType === "Business Owner") {
       setShowAlert(true);
       setErrorMessage("To Add Clients, you need to Select Business First");
 
@@ -62,9 +66,18 @@ const ClientsShowScreen = (props) => {
     }
 
     props.navigation.navigate("addClinets", {
-      businessId: businessId,
+      businessId:
+        user.userType === "Business Owner"
+          ? businessId
+          : userBusiness.businessId,
     });
   };
+
+  useEffect(() => {
+    if (user.userType !== "Business Owner") {
+      dispatch(businessActions.getEmployeeBusiness());
+    }
+  }, [user.userType, dispatch]);
 
   return (
     <View style={styles.container}>

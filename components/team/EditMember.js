@@ -101,7 +101,7 @@ const EditMember = (props) => {
       <View style={styles.switchContainer}>
         <Text style={styles.authText}>
           Authorize {member.firstName}
-          {Platform.OS === "web" ? "to manage Sales and team" : ""}
+          {Platform.OS === "web" ? " to manage Sales and team" : ""}
         </Text>
         <Switch
           value={isAuthorized}

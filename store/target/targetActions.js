@@ -8,6 +8,7 @@ export const GET_TARGETS = "GET_TARGETS";
 export const GET_TEAM_TARGET = "GET_TEAM_TARGET";
 export const GET_INDIVIDUAL_TARGET = "GET_INDIVIDUAL_TARGET";
 export const BUSINESS_TARGETS = "BUSINESS_TARGETS";
+export const DELETE_PHASING = "DELETE_PHASING";
 
 export const getPhasing = () => {
   return async (dispatch, getState) => {
@@ -22,6 +23,8 @@ export const getPhasing = () => {
     });
 
     const resData = await response.json();
+
+    console.log(resData);
 
     dispatch({
       type: GET_PHASING,
@@ -42,6 +45,17 @@ export const addTarget = (
 ) => {
   return async (dispatch, getState) => {
     const { user, token } = getState().auth;
+
+    console.log({
+      productId,
+      businessId,
+      targetUnits,
+      productPrice,
+      targetType,
+      phasing,
+      phasingData,
+      startPeriod,
+    });
 
     const response = await fetch(`${mainLink}/api/targets`, {
       method: "POST",
@@ -64,16 +78,17 @@ export const addTarget = (
 
     const resData = await response.json();
 
+    console.log(resData);
+
     dispatch({
       type: ERROR,
       error: resData.error ? resData.error : "Done",
       errorMessage: resData.message,
     });
 
-    dispatch({
-      type: ADD_TARGET,
-      target: resData.target,
-    });
+    const year = new Date(startPeriod).getFullYear();
+
+    getTarget(year)(dispatch, getState);
   };
 };
 
@@ -220,6 +235,94 @@ export const businessTargets = (year) => {
     dispatch({
       type: BUSINESS_TARGETS,
       businessTargets: resData.finalBusinessTarget,
+    });
+  };
+};
+
+export const deleteTarget = (id, year) => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/targets/${id}/${year}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+        "user-id": user._id,
+      },
+    });
+
+    const resData = await response.json();
+
+    console.log(resData);
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+
+    getTarget(year)(dispatch, getState);
+  };
+};
+
+export const addPhasing = (phasingData, name) => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/phasing`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+        "user-id": user._id,
+      },
+      body: JSON.stringify({
+        userId: user._id,
+        phasingData,
+        name,
+      }),
+    });
+
+    const resData = await response.json();
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+
+    getPhasing()(dispatch, getState);
+  };
+};
+
+export const deletePhasing = (id) => {
+  return async (dispatch, getState) => {
+    const { token, user } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/phasing`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+        "user-id": user._id,
+      },
+      body: JSON.stringify({
+        phasingId: id,
+      }),
+    });
+
+    const resData = await response.json();
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+
+    dispatch({
+      type: DELETE_PHASING,
+      phasingId: id,
     });
   };
 };

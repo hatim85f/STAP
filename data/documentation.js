@@ -94,29 +94,82 @@ const data = [
     route: "Guide on setting targets for products and sales teams",
     steps: [
       {
-        step: "Navigating to the Target Section",
-        details: ["How to access the target management section."],
-      },
-      {
-        step: "Product Targets",
+        step: "Option 1: Individual Target Setting",
         details: [
-          "Setting targets for each product, specifying the sales goals and assigning them to team members.",
+          "Navigate to the Products section.",
+          "Select the product for which you want to add a target.",
+          "Choose whether to keep the cost price the same or change it.",
+          "Add the start period for the target.",
+          "Set the target units for the corresponding product.",
+          "Select the target period: Monthly, Quarterly, Yearly.",
+          "Choose phasing data or distribute the target equally across months.",
+          "Select the target type: Monthly, Quarterly, Yearly, Bulk.",
         ],
       },
       {
-        step: "Monthly Phasing (Optional)",
+        step: "Option 2: Bulk Target Upload",
         details: [
-          "Explaining how to distribute targets over months or keep them uniform across the year.",
+          "Navigate to the Target section in the drawer menu.",
+          "Click on 'Upload Target'.",
+          "On the target upload page, you'll see a table of all your items.",
+          "Set Starting Period which will be the same for all items.",
+          "For each item, add target units, cost price, and select the target type.",
+          "Choose phasing data or distribute the target equally across months.",
+          "Submit the target for all items at once.",
+          "Bulk target upload is the best option for adding targets for a samll number of units",
         ],
       },
       {
-        step: "Service Targets (If Applicable)",
-        details: ["How to add targets for services or specify target values."],
+        step: "Viewing Targets",
+        details: [
+          "Navigate to the Target section.",
+          "Select the year to view all target details for each item.",
+          "Delete specific product targets if needed.",
+          "To edit, either delete and add a new target or repeat the steps for the same product.",
+          "Click on 'Target Details' to see monthly details for a selected item.",
+        ],
       },
       {
-        step: "Viewing Target Details",
+        step: "Distributing Targets to Team Members",
         details: [
-          "Accessing and reviewing the details of product and team targets.",
+          "Navigate to the Target Details page for a selected item.",
+          "If a 'Divide' sign is present, click on it.",
+          "Navigate to a screen to distribute the target to team members.",
+          "Add a percentage for each team member to distribute the target, this will set the total year target as percentage added to each team member and also will distribute the target monthly for the member as per the selected phasing when added the target startly.",
+        ],
+      },
+      {
+        step: "Alternative: Team Section Details",
+        details: [
+          "Navigate to the Team section.",
+          "In the Bottom Bar menu Select the year and choose 'Monthly' to see monthly targets for team members.",
+          "Choose 'Target' to see yearly target values for all employees.",
+          "Click on a team member to view detailed target data per item yearly and monthly.",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Phasing",
+    route: "Manage and view phasing details",
+    steps: [
+      {
+        step: "Viewing Phasing Details",
+        details: [
+          "Navigate to the Phasing section.",
+          "View the list of added phases with an option to delete.",
+          "To edit, delete the existing phase and add a new one.",
+        ],
+      },
+      {
+        step: "Adding New Phasing Data",
+        details: [
+          "Navigate to the Phasing section in the drawer menu.",
+          "Click on the 'Add New Phasing Data' button.",
+          "In the modal, set a name for the phasing.",
+          "Add a percentage for each month; the total should equal 100%.",
+          "This allows different targeting phases per item, such as seasonal or equal distribution.",
+          "Save the phasing data.",
         ],
       },
     ],

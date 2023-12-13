@@ -5,6 +5,7 @@ export const ADD_BUSINESS = "ADD_BUSINESS";
 export const GET_USER_BUSINESSES = "GET_USER_BUSINESSES";
 export const EDIT_BUSINESS = "EDIT_BUSINESS";
 export const DELETE_BUSINESS = "DELETE_BUSINESS";
+export const GET_EMPLOYEE_BUSINESSES = "GET_EMPLOYEE_BUSINESSES";
 
 export const getUserBusiness = () => {
   return async (dispatch, getState) => {
@@ -209,6 +210,30 @@ export const deleteBusiness = (businessId) => {
     dispatch({
       type: DELETE_BUSINESS,
       payload: businessId,
+    });
+  };
+};
+
+export const getEmployeeBusiness = () => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(
+      `${mainLink}/api/business/employee/${user._id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token,
+        },
+      }
+    );
+
+    const resData = await response.json();
+
+    dispatch({
+      type: GET_EMPLOYEE_BUSINESSES,
+      payload: resData.userBusiness,
     });
   };
 };

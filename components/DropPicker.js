@@ -27,7 +27,7 @@ const DropPicker = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={props.dropContainerStyle}>
+      <View style={[props.dropContainerStyle, styles.dropContainerStyle]}>
         <DropDownPicker
           open={open}
           value={showingValue}
@@ -51,6 +51,10 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: globalHeight("1%"),
     zIndex: 100,
+  },
+  dropContainerStyle: {
+    width: globalWidth("75%"),
+    alignSelf: "center",
   },
   listStyle: {
     backgroundColor: "white",

@@ -8,7 +8,7 @@ const IndividualAchievementScreen = (props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>IndividualAchievementScreen Screen</Text>
-      <TabBarNavigator route="individual-achievement" />
+      <TabBarNavigator route="individual-achievement" flex={1} />
     </View>
   );
 };

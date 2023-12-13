@@ -8,7 +8,7 @@ const IndividualSalesScreen = (props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>IndividualSalesScreen Screen</Text>
-      <TabBarNavigator route="individual-sales" />
+      <TabBarNavigator route="individual-sales" flex={1} />
     </View>
   );
 };

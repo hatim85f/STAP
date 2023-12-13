@@ -8,7 +8,7 @@ const BackButton = (props) => {
   const { route } = props;
   return (
     <Pressable
-      onPress={() => props.navigation.navigate(route)}
+      onPress={() => (window.location.href = route)}
       style={styles.touchable}
     >
       <AntDesign name="arrowleft" size={35} color={Colors.primary} />

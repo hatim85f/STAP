@@ -90,12 +90,12 @@ const TeamDetailsScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // height: globalHeight("100%"),
+    height: globalHeight("100%"),
     backgroundColor: "white",
   },
   innerContainer: {
     flex: 1,
-    // zIndex: -100,
+    zIndex: -100,
   },
   buttonStyle: {
     backgroundColor: "#fff",

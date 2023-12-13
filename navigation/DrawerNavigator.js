@@ -17,6 +17,8 @@ import {
   MaterialIcons,
   Fontisto,
   Entypo,
+  AntDesign,
+  FontAwesome5,
 } from "@expo/vector-icons";
 import { StyleSheet, Image, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -40,6 +42,10 @@ import { isTablet, isWeb } from "../constants/device";
 import { PaymentNav } from "./PaymentNav";
 import { ClientsNavigation } from "./ClientsNavigation";
 import { TargetNavigator } from "./TargetNavigator";
+import { PhasingNav } from "./PhasingNavigator";
+import { UploadTargetNavigator } from "./UploadTargetNavigator";
+import { OrderingMainNavigator } from "./OrderingNavigator";
+import { SalesNavigator } from "./SalesNavigator";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -149,11 +155,14 @@ export const MainDrawerNavigator = () => {
         drawerType: "front",
         drawerStyle: {
           paddingTop: hp("3%"),
+          paddingBottom: hp("3%"),
         },
+
         drawerAllowFontScaling: true,
         headerShown: false,
         drawerIcon: { focused: true },
         drawerActiveBackgroundColor: Colors.primary,
+
         drawerLabelStyle: {
           fontSize: isTablet() ? wp("3%") : isWeb() ? wp("1%") : wp("4%"),
         },
@@ -276,6 +285,7 @@ export const MainDrawerNavigator = () => {
           },
         }}
       />
+
       <MainDrawer.Screen
         name="target"
         component={TargetNavigator}
@@ -287,6 +297,60 @@ export const MainDrawerNavigator = () => {
             return (
               <Ionicons
                 name="ios-analytics"
+                size={24}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="target_phasing"
+        component={PhasingNav}
+        options={{
+          ...defaultNavOptions,
+          title: "Phasing",
+          headerTitle: "Phasing",
+          drawerIcon: ({ focused }) => {
+            return (
+              <MaterialCommunityIcons
+                name="ladder"
+                size={24}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="ordering"
+        component={OrderingMainNavigator}
+        options={{
+          ...defaultNavOptions,
+          title: "Ordering",
+          headerTitle: "Ordering",
+          drawerIcon: ({ focused }) => {
+            return (
+              <Ionicons
+                name="md-receipt-outline"
+                size={24}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="sales"
+        component={SalesNavigator}
+        options={{
+          ...defaultNavOptions,
+          title: "Sales",
+          headerTitle: "Sales",
+          drawerIcon: ({ focused }) => {
+            return (
+              <FontAwesome5
+                name="money-check"
                 size={24}
                 color={focused ? "white" : "black"}
               />

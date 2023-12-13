@@ -4,7 +4,7 @@ import { Button, Icon } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import { globalWidth } from "../../constants/globalWidth";
+import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import Chart from "../charts/Chart";
 import CustomChart from "../charts/Chart";
 import { ScrollView } from "react-native";
@@ -24,8 +24,6 @@ const PhasingModal = (props) => {
     }));
   });
 
-  console.log(phasing);
-
   return (
     <Modal visible={isVisible} animationType="slide">
       <View style={styles.header}>
@@ -41,18 +39,8 @@ const PhasingModal = (props) => {
             props.closeModal();
           }}
         />
-        <TouchableOpacity onPress={() => {}} style={styles.addingHeader}>
-          <View style={styles.innerAdd}>
-            <Ionicons
-              name="md-add-circle-sharp"
-              size={globalWidth("10%")}
-              color={Colors.primary}
-            />
-            <Text style={styles.addingText}>Add New Phasing</Text>
-          </View>
-        </TouchableOpacity>
       </View>
-      <Text>Hello</Text>
+
       <ScrollView scrollEnabled scrollEventThrottle={16}>
         <View style={styles.container}>
           {phasing &&
@@ -65,10 +53,13 @@ const PhasingModal = (props) => {
                     series={[
                       {
                         name: transformedData[index].x,
-                        data: transformedData[index].map((entry) => entry.y),
+                        data: transformedData[index].map(
+                          (entry) => parseInt(entry.y).toFixed(2) + "%"
+                        ),
                       },
                     ]}
                   />
+                  <Text style={styles.titleText}>{item.phasingName}</Text>
                   <TouchableOpacity
                     onPress={() => {
                       setSelectedPahsing(item._id);
@@ -138,6 +129,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 5,
+  },
+  titleText: {
+    textAlign: "center",
+    fontFamily: "headers",
+    fontSize: globalWidth("1.25%"),
+    color: Colors.font,
+  },
+  phasingContainer: {
+    width: globalWidth("75%"),
+    alignSelf: "center",
+    marginBottom: globalHeight("5%"),
+    borderWidth: 1.5,
+    borderColor: Colors.font,
+    borderRadius: 10,
+    padding: 10,
   },
 });
 

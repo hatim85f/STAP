@@ -205,7 +205,9 @@ const ProductsShow = (props) => {
                       {" "}
                       Price :{" "}
                       <Text style={styles.numbers}>
-                        {numberWithComma(item.sellingPrice)}
+                        {numberWithComma(
+                          item.sellingPrice ? item.sellingPrice : 0
+                        )}
                       </Text>{" "}
                       <Text style={styles.code}>{item.currencyCode}</Text>
                     </Text>
@@ -216,7 +218,6 @@ const ProductsShow = (props) => {
                   style={{
                     justifyContent: "flex-end",
                     flex: 1,
-                    alignItems: "flex-end",
                   }}
                 >
                   <Text style={styles.description}>{item.description}</Text>
@@ -245,7 +246,8 @@ const ProductsShow = (props) => {
                   style={[styles.title, { textAlign: "center", marginTop: 10 }]}
                 >
                   {" "}
-                  Availability: {numberWithComma(item.quantity)}{" "}
+                  Availability:{" "}
+                  {numberWithComma(item.quantity ? item.quantity : 0)}{" "}
                 </Text>
                 <View style={styles.lowerView}>
                   <Image
@@ -319,13 +321,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
     marginBottom: 10,
-    fontSize: isWeb()
-      ? globalWidth("1%")
-      : isTablet()
-      ? globalWidth("3%")
-      : isTablet()
-      ? globalWidth("2.5%")
-      : globalWidth("4%"),
+    fontSize: globalWidth("1%"),
     color: "#000",
   },
   card: {

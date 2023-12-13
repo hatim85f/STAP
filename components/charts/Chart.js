@@ -41,7 +41,7 @@ const CustomChart = (props) => {
           options={options}
           series={series}
           type="bar"
-          width={globalWidth("100%")}
+          width={globalWidth("60%")}
           height={globalHeight("30%")}
         />
       </div>
@@ -50,10 +50,15 @@ const CustomChart = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   header: {},
   cahrt: {
-    width: "100%",
+    width: globalWidth("60%"),
+    alignSelf: "center",
   },
 });
 

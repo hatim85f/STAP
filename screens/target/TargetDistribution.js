@@ -91,25 +91,12 @@ const TargetDistribution = (props) => {
   }, [product, teamDetails]);
 
   const submitTarget = () => {
-    if (progress > 1) {
-      Alert.alert("Error", "Target cannot be more than 100%", [
-        { text: "Okay" },
-      ]);
-      return;
-    }
     setIsLoading(true);
     dispatch(targetActions.addTeamTarget(teamDetails, year)).then(() => {
       setIsLoading(false);
       closeModal();
     });
   };
-
-  console.log({
-    progress,
-    year,
-    units: product.target.totalUnits,
-    value: product.target.totalValue,
-  });
 
   return (
     <Modal visible={visible} animationType="slide">
@@ -121,7 +108,7 @@ const TargetDistribution = (props) => {
           <Avatar
             source={{ uri: product.imageURL }}
             rounded
-            size={globalWidth("8%")}
+            size={globalWidth("5%")}
             avatarStyle={styles.avatarStyle}
           />
           <Text style={styles.name}>{product.productNickName}</Text>
@@ -237,7 +224,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 10,
     color: Colors.font,
-    fontSize: isTablet() ? globalWidth("3%") : globalWidth("4%"),
+    fontSize: globalWidth("1.5%"),
     fontFamily: "headers",
     width: globalWidth("80%"),
     alignSelf: "center",
@@ -247,12 +234,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  avatarStyle: {
-    borderColor: Colors.primary,
-    borderWidth: 1,
-  },
+
   name: {
-    fontSize: globalWidth("1.5%"),
+    fontSize: globalWidth("1.25%"),
     fontFamily: "headers",
     color: Colors.font,
     marginTop: 10,
@@ -260,7 +244,7 @@ const styles = StyleSheet.create({
   card: {
     borderWidth: 1.5,
     marginTop: 5,
-    width: globalWidth("80%"),
+    width: globalWidth("60%"),
     alignSelf: "center",
     flexDirection: "row",
     justifyContent: "space-between",

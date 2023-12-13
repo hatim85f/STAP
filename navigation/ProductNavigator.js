@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ProductsScreen from "../screens/products/ProductsScreen";
 import AddProductScreen from "../screens/products/AddProductScreen";
 import EditProductScreen from "../screens/products/EditProductScreen";
+import UploadExcel from "../screens/products/UploadExcel";
 
 const ProductNavigator = createStackNavigator();
 
@@ -30,6 +31,14 @@ export const MainProductNavigator = () => {
         options={{
           title: "Edit Product",
           headerTitle: "Edit Product",
+        }}
+      />
+      <ProductNavigator.Screen
+        name="add_excel"
+        component={UploadExcel}
+        options={{
+          title: "Upload Excel",
+          headerTitle: "Upload Excel",
         }}
       />
     </ProductNavigator.Navigator>

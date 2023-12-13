@@ -2,6 +2,7 @@ import {
   ADD_PHASING,
   ADD_TARGET,
   BUSINESS_TARGETS,
+  DELETE_PHASING,
   GET_INDIVIDUAL_TARGET,
   GET_PHASING,
   GET_TARGETS,
@@ -52,6 +53,11 @@ export const targetReducer = (state = initialState, action) => {
       return {
         ...state,
         businessTargets: action.businessTargets,
+      };
+    case DELETE_PHASING:
+      return {
+        ...state,
+        phasing: state.phasing.filter((item) => item._id !== action.id),
       };
     default:
       return state;

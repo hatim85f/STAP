@@ -4,11 +4,13 @@ import {
   ADD_BUSINESS,
   DELETE_BUSINESS,
   EDIT_BUSINESS,
+  GET_EMPLOYEE_BUSINESSES,
   GET_USER_BUSINESSES,
 } from "./businessActions";
 
 const initialState = {
   business: [],
+  userBusiness: {},
 };
 
 export const businessReducer = (state = initialState, action) => {
@@ -41,6 +43,11 @@ export const businessReducer = (state = initialState, action) => {
         business: state.business.filter(
           (x) => x.business._id !== action.payload
         ),
+      };
+    case GET_EMPLOYEE_BUSINESSES:
+      return {
+        ...state,
+        userBusiness: action.payload,
       };
     default:
       return state;

@@ -172,6 +172,7 @@ const TargetAddScreen = (props) => {
     { label: "Monthly", value: "Monthly" },
     { label: "Quarterly", value: "Quarterly" },
     { label: "Yearly", value: "Yearly" },
+    { label: "Bulk", value: "Bulk" },
   ];
 
   useEffect(() => {
@@ -248,7 +249,7 @@ const TargetAddScreen = (props) => {
               onChangeText={(text) => setProductPrice(text)}
               label="Change Cost Price"
               keyboardType="numeric"
-              value={productPrice && numberWithComa(productPrice)}
+              value={productPrice && productPrice}
               returnKeyLabel="Done"
               labelStyle={{ color: "#000", textAlign: "center" }}
               style={{ textAlign: "center" }}
@@ -357,7 +358,7 @@ const TargetAddScreen = (props) => {
                       {
                         color:
                           targetType === item.value ? "white" : Colors.primary,
-                        fontSize: globalWidth("1.2%"),
+                        fontSize: globalWidth("1%"),
                       },
                     ]}
                   >

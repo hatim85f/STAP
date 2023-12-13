@@ -22,7 +22,6 @@ const AnimatedChevron = (props) => {
       toValue: isOpen ? 1 : 0,
       duration: 300,
       easing: Easing.linear,
-      useNativeDriver: true,
     }).start();
   }, [isOpen]);
 

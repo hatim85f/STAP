@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import { Avatar } from "react-native-elements";
 
-import { FontAwesome5 } from "@expo/vector-icons";
-import { FlatList } from "react-native-gesture-handler";
+import { FontAwesome5, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import numberWithComa from "../../components/helpers/numberWithComa";
 
 import Card from "../../components/Card";
@@ -21,6 +27,7 @@ import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import { Platform } from "react-native";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import TargetDistribution from "./TargetDistribution";
+import WebAlert from "../../components/webAlert/WebAlert";
 
 const TargetShowScreen = (props) => {
   const { target } = useSelector((state) => state.target);
@@ -29,6 +36,9 @@ const TargetShowScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [loadingMessage, setLoadingMessage] = useState("Loading Target");
 
   const dispatch = useDispatch();
 
@@ -65,13 +75,17 @@ const TargetShowScreen = (props) => {
   }, [dispatch, selectedYear]);
 
   if (isLoading) {
-    return (
-      <Loader
-        loadingMessage={`Loading ${selectedYear ? selectedYear : ""} Target`}
-        center
-      />
-    );
+    return <Loader loadingMessage={loadingMessage} center />;
   }
+
+  const deleteTarget = () => {
+    setIsLoading(true);
+    setLoadingMessage("Deleting Target");
+    dispatch(targetActions.deleteTarget(selectedId, selectedYear)).then(() => {
+      setIsLoading(false);
+      setShowAlert(false);
+    });
+  };
 
   const avatarSize = isWeb()
     ? globalWidth("6%")
@@ -80,6 +94,8 @@ const TargetShowScreen = (props) => {
     : globalWidth("20%");
 
   // console.log(target);
+
+  console.log(target);
 
   if (target === undefined || (target && target.length === 0)) {
     return (
@@ -93,6 +109,25 @@ const TargetShowScreen = (props) => {
           showingValue={selectedYear}
           isOpened={(data) => setIsOpened(data)}
         />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <Pressable
+            onPress={() => props.navigation.navigate("upload_target")}
+            style={styles.uploadContainer}
+          >
+            <AntDesign
+              name="upload"
+              size={globalWidth("3%")}
+              color={Colors.primary}
+            />
+            <Text style={styles.uploadText}>Upload Target Manually</Text>
+          </Pressable>
+        </View>
       </View>
     );
   }
@@ -108,69 +143,88 @@ const TargetShowScreen = (props) => {
         showingValue={selectedYear}
         isOpened={(data) => setIsOpened(data)}
       />
-      {target && target.length > 0 && !isOpened && (
-        <View style={styles.listContainer}>
-          {target.map((item, index) => {
-            return (
-              <View style={styles.itemContainer} key={index}>
-                <Card style={styles.detailsContainer}>
-                  <View style={styles.avatarContainer}>
-                    <Avatar
-                      source={{ uri: item.imageURL }}
-                      rounded
-                      size={avatarSize}
-                      avatarStyle={[styles.avatarStyle]}
-                    />
-                  </View>
+      <ScrollView scrollEnabled={true} scrollEventThrottle={16}>
+        {target && target.length > 0 && !isOpened && (
+          <View style={styles.listContainer}>
+            {target.map((item, index) => {
+              return (
+                <View style={styles.itemContainer} key={index}>
+                  <Card style={styles.detailsContainer}>
+                    <View style={styles.avatarContainer}>
+                      <Avatar
+                        source={{ uri: item.imageURL }}
+                        rounded
+                        size={avatarSize}
+                        avatarStyle={[styles.avatarStyle]}
+                      />
+                    </View>
 
-                  <TouchableOpacity
-                    style={styles.btnContainer}
-                    onPress={() => setSelectedItem(item)}
-                  >
-                    <FontAwesome5
-                      name="divide"
-                      size={globalWidth("1.2%")}
-                      color={Colors.primary}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                      props.navigation.navigate("item_target", {
-                        product: item,
-                        year: selectedYear,
-                      })
-                    }
-                    style={styles.dataContainer}
-                  >
-                    <Text style={styles.name}> {item.productNickName} </Text>
-                    <Text style={styles.name}>
-                      {" "}
-                      {numberWithComa(parseInt(item.costPrice))}{" "}
-                      {item.currencyCode}{" "}
-                    </Text>
-                    <Text style={styles.name}>{item.category} </Text>
-                    <Text style={styles.details}>
-                      Target :{" "}
-                      <Text style={styles.number}>
-                        {isNaN(item.target.totalUnits)
-                          ? "0.00"
-                          : numberWithComa(parseInt(item.target.totalUnits))}
+                    <TouchableOpacity
+                      style={styles.btnContainer}
+                      onPress={() => setSelectedItem(item)}
+                    >
+                      <FontAwesome5
+                        name="divide"
+                        size={globalWidth("1.2%")}
+                        color={Colors.primary}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        props.navigation.navigate("item_target", {
+                          product: item,
+                          year: selectedYear,
+                        })
+                      }
+                      style={styles.dataContainer}
+                    >
+                      <Text style={styles.name}> {item.productNickName} </Text>
+                      <Text style={styles.name}>
+                        {" "}
+                        {numberWithComa(parseInt(item.costPrice))}{" "}
+                        {item.currencyCode}{" "}
                       </Text>
-                    </Text>
-                    <Text style={styles.details}>
-                      Value :{" "}
-                      <Text style={styles.number}>
-                        {numberWithComa(parseInt(item.target.totalValue))}{" "}
-                        {item.currencyCode}
+                      <Text style={styles.name}>{item.category} </Text>
+                      <Text style={styles.details}>
+                        Target :{" "}
+                        <Text style={styles.number}>
+                          {isNaN(item.target.totalUnits)
+                            ? "0.00"
+                            : numberWithComa(parseInt(item.target.totalUnits))}
+                        </Text>
                       </Text>
-                    </Text>
-                  </TouchableOpacity>
-                </Card>
-              </View>
-            );
-          })}
-        </View>
-      )}
+                      <Text style={styles.details}>
+                        Value :{" "}
+                        <Text style={styles.number}>
+                          {numberWithComa(parseInt(item.target.totalValue))}{" "}
+                          {item.currencyCode}
+                        </Text>
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setSelectedId(item.productId);
+                        setShowAlert(true);
+                      }}
+                      style={{
+                        alignItems: "flex-end",
+                        paddingRight: globalWidth("2%"),
+                      }}
+                    >
+                      <MaterialIcons
+                        name="delete-sweep"
+                        size={globalWidth("2.5%")}
+                        color="#ff0055"
+                      />
+                    </TouchableOpacity>
+                  </Card>
+                </View>
+              );
+            })}
+          </View>
+        )}
+        <View style={{ height: globalHeight("10%") }} />
+      </ScrollView>
       {target && target.length > 0 && selectedItem && (
         <View style={styles.distributionModal}>
           <TargetDistribution
@@ -181,6 +235,18 @@ const TargetShowScreen = (props) => {
           />
         </View>
       )}
+      <WebAlert
+        showAlert={showAlert}
+        title="Delete Target"
+        message="Are you sure you want to delete this target?"
+        okText="Yes"
+        cancelText="No"
+        onCancel={() => {
+          setShowAlert(false);
+          setSelectedId(null);
+        }}
+        onOk={deleteTarget}
+      />
     </View>
   );
 };
@@ -195,6 +261,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   listContainer: {
+    marginTop: globalHeight("5%"),
     height: globalHeight("80%"),
     width: globalWidth("95%"),
     flexDirection: "row",
@@ -202,6 +269,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     alignSelf: "center",
+    marginBottom: globalHeight("10%"),
   },
   itemContainer: {
     width: "20%",
@@ -209,6 +277,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: globalWidth("1%"),
     marginLeft: globalWidth("1%"),
+    marginTop: globalHeight("8%"),
   },
   imageContainer: {
     // width: "100%",
@@ -229,6 +298,7 @@ const styles = StyleSheet.create({
     borderRadius: "50%",
     borderColor: Colors.primary,
     borderWidth: 2.5,
+    backgroundColor: "white",
   },
 
   detailsContainer: {
@@ -258,6 +328,17 @@ const styles = StyleSheet.create({
   btnContainer: {
     width: "80%",
     alignItems: "flex-end",
+  },
+  uploadText: {
+    fontFamily: "headers",
+    color: Colors.font,
+    fontSize: globalWidth("1.1%"),
+    textAlign: "center",
+    marginTop: globalHeight("1%"),
+  },
+  uploadContainer: {
+    cursor: "pointer",
+    alignItems: "center",
   },
 });
 

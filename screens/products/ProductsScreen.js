@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { View, Text, StyleSheet, Platform, Alert } from "react-native";
-import { Button } from "react-native-elements";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  Alert,
+  Pressable,
+} from "react-native";
+import { Avatar, Button } from "react-native-elements";
 import { useSelector, useDispatch } from "react-redux";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -151,6 +158,19 @@ const ProductsScreen = (props) => {
           textStyle={styles.dropText}
           dropDownContainerStyle={styles.dropListStyle}
         />
+        {businessValue && (
+          <Pressable
+            onPress={() => {
+              window.location.href = `/products/upload-excel/${businessValue}`;
+            }}
+          >
+            <Avatar
+              source={require("../../assets/vectors/excel_icon.png")}
+              size={globalWidth("6%")}
+            />
+          </Pressable>
+        )}
+        {/* // <FileUpload /> */}
         {products && products.length > 0 && (
           <ProductsShow
             products={

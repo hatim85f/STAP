@@ -94,8 +94,12 @@ const AppNavigator = () => {
               edit_product: {
                 path: "/products/edit-product/:productId/:businessId",
               },
+              add_excel: {
+                path: "/products/upload-excel/:businessId",
+              },
             },
           },
+
           target: {
             screens: {
               target_show: {
@@ -109,6 +113,39 @@ const AppNavigator = () => {
               },
               target_distribution: {
                 path: "/target/target-distribution/:product/:year",
+              },
+              business_target: {
+                path: "/target/business-target/:businessId/:year/:value",
+              },
+              upload_target: {
+                path: "/target/upload-target/",
+              },
+            },
+          },
+          target_phasing: {
+            screens: {
+              phasing: {
+                path: "/target/phasing/",
+              },
+            },
+          },
+          ordering: {
+            screens: {
+              order_creation: {
+                path: "/ordering/order-creation/",
+              },
+              orders_show: {
+                path: "/ordering/orders-show/",
+              },
+              single_order_details: {
+                path: "/ordering/orders-details/:details/:status:/startDate/:endDate",
+              },
+            },
+          },
+          sales: {
+            screens: {
+              upload_sales: {
+                path: "/sales/sales-upload/",
               },
             },
           },
@@ -128,6 +165,21 @@ const AppNavigator = () => {
               },
               individual_achievement: {
                 path: "/team/individual-achievement/",
+              },
+              member_target_data: {
+                path: "/team/member-target-data/:index/:year",
+              },
+              monthly_target: {
+                path: "/team/monthly-target/",
+              },
+              monthly_achievement: {
+                path: "/team/monthly-achievement/",
+              },
+              monthly_sales: {
+                path: "/team/monthly-sales/",
+              },
+              monthly_container: {
+                path: "/team/monthly-container/",
               },
             },
           },
