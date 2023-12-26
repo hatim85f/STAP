@@ -4,12 +4,20 @@ import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import { globalWidth } from "../../constants/globalWidth";
+import * as DocumentPicker from "expo-document-picker";
 import Colors from "../../constants/Colors";
 import * as XLSX from "sheetjs-style";
+import { readExcel } from "../excelUpload/excelService";
 
 const ExcelIcons = (props) => {
-  const { upload, download, header, sheetName, templateName, secondData } =
-    props;
+  const { getData, header, sheetName, templateName, secondData } = props;
+
+  const [uploadedData, setUploadedData] = useState(null);
+  const [finalData, setfinalData] = useState([]);
+
+  useEffect(() => {
+    finalData && finalData.length > 0 && getData(finalData);
+  }, [finalData]);
 
   const addFormulas = (worksheet, data) => {
     // Add formulas to columns D, G, and H
@@ -18,11 +26,11 @@ const ExcelIcons = (props) => {
       const formulaD = `VLOOKUP(${productCellRef},Data!A:D,2,FALSE)`;
       worksheet[`D${rowIndex + 1}`] = { t: "n", f: formulaD }; // +1 because header is in the first row
 
-      const formulaG = `VLOOKUP(${productCellRef},Data!A:D,3,FALSE)`;
-      worksheet[`G${rowIndex + 1}`] = { t: "n", f: formulaG };
+      const formulaI = `VLOOKUP(${productCellRef},Data!A:D,3,FALSE)`;
+      worksheet[`I${rowIndex + 1}`] = { t: "n", f: formulaI };
 
-      const formulaH = `VLOOKUP(${productCellRef},Data!A:D,4,FALSE)`;
-      worksheet[`H${rowIndex + 1}`] = { t: "n", f: formulaH };
+      const formulaJ = `VLOOKUP(${productCellRef},Data!A:D,4,FALSE)`;
+      worksheet[`J${rowIndex + 1}`] = { t: "n", f: formulaJ };
     }
   };
 
@@ -91,9 +99,103 @@ const ExcelIcons = (props) => {
     XLSX.writeFile(workbook, `${templateName}.xlsx`);
   };
 
+  const readFile = (e) => {
+    const promise = new Promise((resolve, reject) => {
+      const file = e.target.files[0];
+
+      const fileReader = new FileReader();
+
+      fileReader.readAsArrayBuffer(file);
+
+      fileReader.onload = (e) => {
+        const bufferArray = e.target.result;
+
+        const wb = XLSX.read(bufferArray, { type: "buffer" });
+
+        const wsName = wb.SheetNames[0];
+        const ws = wb.Sheets[wsName];
+
+        const data = XLSX.utils.sheet_to_json(ws, {
+          raw: false, // Ensure dates are parsed as date objects
+          dateNF: "yyyy-mm-ddTHH:mm:ss.SSSZ", // Specify the expected date format
+        });
+
+        // Convert all date strings to ISO format
+        const formattedData = data.map((item) => {
+          const parsedDate = new Date(item.date);
+
+          return {
+            ...item,
+            date: isValidDate(parsedDate) ? parsedDate.toISOString() : null,
+          };
+        });
+
+        function isValidDate(date) {
+          return date instanceof Date && !isNaN(date);
+        }
+
+        resolve(formattedData);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+
+    promise.then((d) => {
+      console.log(d);
+      setUploadedData(d);
+    });
+  };
+
+  useEffect(() => {
+    const transformedData =
+      uploadedData &&
+      uploadedData.length > 0 &&
+      uploadedData.map((item) => {
+        const {
+          "Product Name": productName,
+          "Client Name": clientName,
+          Quantity: quantity,
+          "Product ID": productId,
+          Date: date,
+          Price: productPrice,
+          Status: status,
+          Bonus: bonus,
+          "Bonus Type": bonusType,
+          "Business ID": businessId,
+        } = item;
+
+        // Convert the date from numeric representation to JavaScript Date object
+        const parsedDate = new Date((date - 25569) * 86400 * 1000);
+
+        return {
+          productName,
+          clientName,
+          quantity,
+          productId,
+          date: typeof date === "number" ? parsedDate : date,
+          productPrice,
+          status,
+          bonus,
+          bonusType,
+          businessId,
+        };
+      });
+
+    setfinalData(transformedData);
+  }, [uploadedData]);
+
+  console.log(finalData);
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={upload} style={styles.button}>
+      <TouchableOpacity
+        onPress={() => {
+          document.getElementById("sheet").click();
+        }}
+        style={styles.button}
+      >
         <FontAwesome name="upload" size={globalWidth("2.5%")} color="#008000" />
         <Text style={styles.text}>Upload Sales</Text>
       </TouchableOpacity>
@@ -105,6 +207,15 @@ const ExcelIcons = (props) => {
         />
         <Text style={styles.text}>Download Template</Text>
       </TouchableOpacity>
+      <input
+        type="file"
+        id="sheet"
+        onChange={(e) => {
+          readFile(e);
+        }}
+        accept=".csv, .xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+        style={{ visibility: "hidden", display: "none" }}
+      />
     </View>
   );
 };
@@ -117,8 +228,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: Colors.font,
+    borderColor: "#008000",
     padding: globalWidth("0.25%"),
+    marginTop: globalWidth("2%"),
   },
   text: {
     textAlign: "center",

@@ -9,6 +9,7 @@ import { membershipReducer } from "./membership/MembershipReducer";
 import { targetReducer } from "./target/targetReducer";
 import { ordersReducer } from "./orders/ordersReducer";
 import { clientReducer } from "./clients/cleintReducer";
+import { salesReducer } from "./sales/salesReducer";
 
 const mainStore = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const mainStore = configureStore({
     target: targetReducer,
     orders: ordersReducer,
     clients: clientReducer,
+    sales: salesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),

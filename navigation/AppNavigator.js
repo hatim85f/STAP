@@ -144,8 +144,17 @@ const AppNavigator = () => {
           },
           sales: {
             screens: {
+              main: {
+                path: "/sales",
+              },
               upload_sales: {
                 path: "/sales/sales-upload/",
+              },
+              sales_show: {
+                path: "/sales/sales-show/",
+              },
+              contribute: {
+                path: "/sales/contribute/",
               },
             },
           },

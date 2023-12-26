@@ -40,6 +40,7 @@ const DropPicker = (props) => {
           style={styles.listStyle}
           textStyle={styles.dropText}
           dropDownContainerStyle={styles.dropListStyle}
+          containerStyle={props.mainListStyle}
         />
       </View>
     </View>

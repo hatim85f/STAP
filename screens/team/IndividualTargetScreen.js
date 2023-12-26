@@ -11,7 +11,6 @@ import { Avatar } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 import * as XLSX from "sheetjs-style";
-import * as FileSaver from "file-saver";
 
 import { years } from "../../components/helpers/years";
 import DropPicker from "../../components/DropPicker";
@@ -28,13 +27,14 @@ import * as authActions from "../../store/auth/authActions";
 import * as targetActions from "../../store/target/targetActions";
 import { ActivityIndicator } from "react-native";
 import { Image } from "react-native";
+import Loader from "../../components/Loader";
 
 const IndividualTargetScreen = (props) => {
   const { teamTarget, businessTargets } = useSelector((state) => state.target);
 
   const [selectedYear, setSelectedYear] = useState(2024);
   const [isOpened, setIsOpened] = useState(false);
-  const [teamTargetValue, setTeamTargetValue] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -65,8 +65,11 @@ const IndividualTargetScreen = (props) => {
 
   useEffect(() => {
     if (selectedYear) {
+      setIsLoading(true);
       dispatch(targetActions.getTeamTarget(selectedYear));
-      dispatch(targetActions.businessTargets(selectedYear));
+      dispatch(targetActions.businessTargets(selectedYear)).then(() => {
+        setIsLoading(false);
+      });
     }
   }, [dispatch, selectedYear]);
 
@@ -290,6 +293,10 @@ const IndividualTargetScreen = (props) => {
       console.error("Error exporting to Excel:", error);
     }
   };
+
+  if (isLoading) {
+    return <Loader loadingMessage="Loading Target  ..." center />;
+  }
 
   if (!selectedYear || teamTarget.length === 0) {
     return (

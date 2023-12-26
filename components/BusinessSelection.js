@@ -93,9 +93,10 @@ const BusinessSelection = (props) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
+    zIndex: 100,
   },
   innerContainer: {
-    width: isWeb() ? "50%" : "95%",
+    width: isWeb() ? "75%" : "95%",
     marginTop: 10,
     alignItems: "center",
   },
