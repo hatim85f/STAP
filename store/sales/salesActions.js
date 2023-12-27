@@ -101,8 +101,6 @@ export const setIsFinal = (id) => {
     const startDate = window.localStorage.getItem("startDate");
     const endDate = window.localStorage.getItem("endDate");
 
-    console.log(startDate, endDate);
-
     const response = await fetch(`${mainLink}/api/sales/set_final/${id}`, {
       method: "PUT",
       headers: {
@@ -123,5 +121,43 @@ export const setIsFinal = (id) => {
     });
 
     getSales(startDate, endDate);
+  };
+};
+
+export const addMemberSales = (
+  selectedMember,
+  salesData,
+  version,
+  startPeriod,
+  endPeriod
+) => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/user-sales`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+      body: JSON.stringify({
+        userId: selectedMember,
+        versionName: version,
+        salesData,
+        startDate: startPeriod,
+        endDate: endPeriod,
+        addingUser: user._id,
+      }),
+    });
+
+    const resData = await response.json();
+
+    console.log(resData);
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
   };
 };

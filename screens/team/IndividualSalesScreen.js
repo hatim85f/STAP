@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -8,23 +8,29 @@ import {
   Platform,
   TouchableOpacity,
   ScrollView,
+  Animated,
+  Easing,
+  ActivityIndicator,
 } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
-
+import { FontAwesome } from "@expo/vector-icons";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
 import TabBarNavigator from "../../components/tabBar/TabBarNavigator";
 import BusinessSelection from "../../components/BusinessSelection";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import Loader from "../../components/Loader";
+import TableComp from "../../components/TableComp";
+import CustomInput from "../../components/webComponents/Input/Input";
+import DateRangePicker from "../../components/DateRangePicker";
 
 import numberWithComa from "../../components/helpers/numberWithComa";
 
 import * as businessActions from "../../store/business/businessActions";
 import * as productsActions from "../../store/products/productsActions";
 import * as authActions from "../../store/auth/authActions";
-import TableComp from "../../components/TableComp";
+import * as salesActions from "../../store/sales/salesActions";
 
 const IndividualSalesScreen = (props) => {
   const { team } = useSelector((state) => state.team);
@@ -44,10 +50,18 @@ const IndividualSalesScreen = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
+  const [salesIsLoading, setSalesIsLoading] = useState(false);
 
-  const [allTeam, setAllTeam] = useState([]);
+  const [versionName, setVersionName] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [containerIsDown, setContainerIsDown] = useState(false);
 
   const dispatch = useDispatch();
+
+  const containerDateHeight = useRef(
+    new Animated.Value(-globalHeight("200%"))
+  ).current;
 
   // ==========================================GETTING USER LOGGED IN BACK IF LOGGED OUT =======================================
 
@@ -133,6 +147,7 @@ const IndividualSalesScreen = (props) => {
           userName: member.userName,
           profilePicture: member.profilePicture,
           sn: index + 1,
+          totalSalesValue: 0,
           salesData: selectedProducts.map((item, index) => {
             return {
               product: item._id,
@@ -161,7 +176,15 @@ const IndividualSalesScreen = (props) => {
 
       const newSalesData = [...newTeamList[memberIndex].salesData];
       newSalesData[index].salesQuantity = num;
-      newSalesData[index].totalValue = num * newSalesData[index].price;
+      newSalesData[index].totalValue = parseInt(
+        num * newSalesData[index].price
+      ).toFixed(2);
+
+      const allValues = newSalesData.map((x) => +x.totalValue);
+
+      const memberToalSales = allValues.reduce((a, b) => a + b, 0);
+
+      newTeamList[memberIndex].totalSalesValue = memberToalSales;
 
       newTeamList[memberIndex] = {
         ...newTeamList[memberIndex],
@@ -171,15 +194,91 @@ const IndividualSalesScreen = (props) => {
       return newTeamList;
     });
   };
+
+  const changePrice = (num, index) => {
+    setTeamList((prevTeamList) => {
+      const newTeamList = [...prevTeamList];
+      const memberIndex = newTeamList.findIndex(
+        (member) => member._id === selectedMember
+      );
+
+      const newSalesData = [...newTeamList[memberIndex].salesData];
+      newSalesData[index].price = parseInt(num);
+      newSalesData[index].totalValue = num * newSalesData[index].salesQuantity;
+
+      const memberToalSales = newSalesData.reduce(
+        (a, b) => a + b.totalValue,
+        0
+      );
+      newTeamList[memberIndex].totalSalesValue =
+        parseFloat(memberToalSales).toFixed(2);
+
+      newTeamList[memberIndex] = {
+        ...newTeamList[memberIndex],
+        salesData: newSalesData,
+      };
+
+      return newTeamList;
+    });
+  };
+
   const widthArr = [
     globalWidth("5%"),
-    globalWidth("30%"),
-    globalWidth("15%"),
-    globalWidth("15%"),
+    globalWidth("22.5%"),
+    globalWidth("12.5%"),
+    globalWidth("12.5%"),
+    globalWidth("12.5%"),
   ];
 
+  // ===================================================ANIMATE DATE BOX ===========================================================
+
+  const animateBoxIn = () => {
+    Animated.timing(containerDateHeight, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: false,
+      easing: Easing.linear,
+    }).start();
+    setContainerIsDown(true);
+  };
+
+  const animateBoxOut = () => {
+    Animated.timing(containerDateHeight, {
+      toValue: -globalHeight("200%"),
+      duration: 500,
+      useNativeDriver: false,
+      easing: Easing.linear,
+    }).start();
+    setContainerIsDown(false);
+  };
+
   const submit = () => {
-    setSelectedMember(null);
+    if (!containerIsDown) {
+      animateBoxIn();
+    } else {
+      setSalesIsLoading(true);
+      const memberSales = teamList.find(
+        (x) => x._id === selectedMember
+      ).salesData;
+      dispatch(
+        salesActions.addMemberSales(
+          selectedMember,
+          memberSales.map((x) => {
+            return {
+              product: x.product,
+              quantity: x.salesQuantity,
+              price: x.price,
+            };
+          }),
+          versionName,
+          startDate,
+          endDate
+        )
+      ).then(() => {
+        setSalesIsLoading(false);
+      });
+      animateBoxOut();
+    }
   };
 
   //  ========================================================RETURN JSX===================================================================
@@ -197,11 +296,29 @@ const IndividualSalesScreen = (props) => {
           getSelectedBusiness={(business) => setBusinessSelected(business)}
         />
       )}
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>
-          Total Sales: {teamCurrency}{" "}
-          <Text style={styles.num}>{numberWithComa(+totalTeamValue)}</Text>{" "}
-        </Text>
+      <View style={styles.rowContainer}>
+        <View style={styles.totalContainer}>
+          <Text style={styles.totalText}>
+            Total Team Sales: {teamCurrency}{" "}
+            {!isNaN(totalTeamValue) && (
+              <Text style={styles.num}>{numberWithComa(+totalTeamValue)}</Text>
+            )}
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            setBusinessId(null);
+            setSelectedMember(null);
+          }}
+          style={styles.returnBtn}
+        >
+          <FontAwesome
+            name="repeat"
+            size={globalWidth("1.5%")}
+            color={Colors.primary}
+          />
+          <Text style={styles.itemName}>Clear Data</Text>
+        </TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         {selectedTeam && selectedTeam.length > 0 && (
@@ -245,16 +362,20 @@ const IndividualSalesScreen = (props) => {
                       </TouchableOpacity>
                       <Text style={styles.memberName}>{item.userName}</Text>
                       <Text style={styles.itemNumber}>Total Sales</Text>
+                      {!isNaN(item.totalSalesValue) && (
+                        <Text style={styles.itemNumber}>
+                          {teamCurrency} {numberWithComa(item.totalSalesValue)}
+                        </Text>
+                      )}
                       <Text style={styles.itemNumber}>
-                        {teamCurrency}{" "}
-                        {numberWithComa(
-                          item.salesData && item.salesData.length > 0
-                            ? item.salesData.reduce(
-                                (a, b) => a + b.totalValue,
-                                0
-                              )
-                            : 0
-                        )}
+                        Contribute :{" "}
+                        {totalTeamValue
+                          ? (
+                              (+item.totalSalesValue / +totalTeamValue) *
+                              100
+                            ).toFixed(2)
+                          : 0}{" "}
+                        %{" "}
                       </Text>
                     </View>
                   );
@@ -269,6 +390,7 @@ const IndividualSalesScreen = (props) => {
                     tableHead={[
                       <Text style={styles.headerText}>SN</Text>,
                       <Text style={styles.headerText}>Product Name</Text>,
+                      <Text style={styles.headerText}> Price </Text>,
                       <Text style={styles.headerText}> Quantity </Text>,
                       <Text style={styles.headerText}> Total </Text>,
                     ]}
@@ -279,6 +401,14 @@ const IndividualSalesScreen = (props) => {
                         <Text style={styles.itemName}>
                           {x.productNickName}
                         </Text>,
+                        <Input
+                          style={styles.input}
+                          containerStyle={styles.containerStyle}
+                          onChangeText={(num) => changePrice(num, indx)}
+                          keyboardType="numeric"
+                          value={x.price.toString()}
+                          defaultValue={x.price.toString()}
+                        />,
                         <Input
                           style={styles.input}
                           containerStyle={styles.containerStyle}
@@ -299,13 +429,13 @@ const IndividualSalesScreen = (props) => {
                       "",
                       <Text style={styles.headerText}>Total</Text>,
                       "",
+                      "",
                       <Text style={styles.totalNumbers}>
                         {teamCurrency}{" "}
                         {numberWithComa(
                           teamList && teamList.length > 0
-                            ? teamList
-                                .find((x) => x._id === selectedMember)
-                                .salesData.reduce((a, b) => a + b.totalValue, 0)
+                            ? teamList.find((x) => x._id === selectedMember)
+                                .totalSalesValue
                             : 0
                         )}
                       </Text>,
@@ -313,12 +443,42 @@ const IndividualSalesScreen = (props) => {
                   />
                 )}
               </ScrollView>
-              <Button
-                buttonStyle={styles.buttonStyle}
-                title="Submit"
-                onPress={submit}
-                titleStyle={styles.titleStyle}
-              />
+              <Animated.View
+                style={[
+                  styles.inputsContainer,
+                  {
+                    transform: [{ translateY: containerDateHeight }],
+                  },
+                ]}
+              >
+                <CustomInput
+                  label="Version Name"
+                  value={versionName}
+                  onChangeText={(text) => setVersionName(text)}
+                />
+                <View style={styles.dateRow}>
+                  <View style={styles.dateContainer}>
+                    <DateRangePicker getDate={(date) => setStartDate(date)} />
+                    <Text style={styles.dateText}>Start Date</Text>
+                  </View>
+                  <View style={styles.dateContainer}>
+                    <DateRangePicker getDate={(date) => setEndDate(date)} />
+                    <Text style={styles.dateText}>Start Date</Text>
+                  </View>
+                </View>
+              </Animated.View>
+              {salesIsLoading ? (
+                <View style={styles.loaderContainer}>
+                  <ActivityIndicator size="large" color={Colors.primary} />
+                </View>
+              ) : (
+                <Button
+                  buttonStyle={styles.buttonStyle}
+                  title="Submit"
+                  onPress={submit}
+                  titleStyle={styles.titleStyle}
+                />
+              )}
             </View>
           </View>
         )}
@@ -494,6 +654,55 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "headers",
     textAlign: "center",
+  },
+  inputsContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: globalHeight("1%"),
+    position: "absolute",
+    backgroundColor: "white",
+    zIndex: 100,
+    height: globalHeight("60%"),
+    borderWidth: 1.5,
+    borderColor: Colors.primary,
+  },
+  dateRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "100%",
+  },
+  dateContainer: {
+    width: "40%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateText: {
+    fontSize: globalWidth("1%"),
+    fontWeight: "bold",
+    color: Colors.font,
+    fontFamily: "headers",
+    textAlign: "center",
+    marginVertical: globalHeight("1%"),
+  },
+  loaderContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: globalHeight("1.5%"),
+  },
+  rowContainer: {
+    width: globalWidth("60%"),
+    alignSelf: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  returnBtn: {
+    width: globalWidth("10%"),
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
