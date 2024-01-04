@@ -37,9 +37,16 @@ const DropPicker = (props) => {
           setItems={setItemValue}
           placeholder={placeholder ? placeholder : "Select an item"}
           placeholderStyle={{ color: "#6a6b6c" }}
-          style={styles.listStyle}
+          style={[
+            styles.listStyle,
+            props.dropContainerStyle,
+            { width: props.width },
+          ]}
           textStyle={styles.dropText}
-          dropDownContainerStyle={styles.dropListStyle}
+          dropDownContainerStyle={[
+            styles.dropListStyle,
+            { width: props.width },
+          ]}
           containerStyle={props.mainListStyle}
         />
       </View>
@@ -52,6 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: globalHeight("1%"),
     zIndex: 100,
+    backgroundColor: "white",
   },
   dropContainerStyle: {
     width: globalWidth("75%"),
@@ -80,7 +88,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
     width: Platform.OS === "web" ? "80%" : "95%",
     alignSelf: "center",
-    zIndex: 1000,
+    zIndex: 10000,
     elevation: 10,
   },
 });

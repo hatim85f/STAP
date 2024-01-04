@@ -4,6 +4,8 @@ import { mainLink } from "../mainLink";
 export const INVITE_MEMBER = "INVITE_MEMBER";
 export const EDIT_MEMBER = "EDIT_MEMBER";
 export const DELETE_MEMBER = "DELETE_MEMBER";
+export const FULL_TEAM_ACHIEVEMENT = "FULL_TEAM_ACHIEVEMENT";
+export const GET_MEMBER_SALES = "GET_MEMBER_SALES";
 
 export const inviteMember = (
   email,
@@ -132,6 +134,60 @@ export const deleteTeamMember = (memberId) => {
     dispatch({
       type: DELETE_MEMBER,
       memberId,
+    });
+  };
+};
+
+export const getFullTeamAchievement = (month, year) => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    console.log({ month, year });
+
+    const response = await fetch(
+      `${mainLink}/api/user-sales/team/ach/${user._id}/${month}/${year}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token,
+        },
+      }
+    );
+
+    const resData = await response.json();
+
+    console.log(resData.teamSales);
+
+    dispatch({
+      type: FULL_TEAM_ACHIEVEMENT,
+      fullTeamAch: resData.teamSales,
+    });
+  };
+};
+
+export const getMemberSales = (memberId, month, year) => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(
+      `${mainLink}/api/user-sales/ach/${memberId}/${month}/${year}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token,
+        },
+      }
+    );
+
+    const resData = await response.json();
+
+    console.log(resData);
+
+    dispatch({
+      type: GET_MEMBER_SALES,
+      memberSales: resData.memberSales,
     });
   };
 };

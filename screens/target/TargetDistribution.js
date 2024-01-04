@@ -191,7 +191,9 @@ const TargetDistribution = (props) => {
             })}
         </ScrollView>
         {isLoading ? (
-          <Loader />
+          <View style={{ marginTop: 10 }}>
+            <Loader />
+          </View>
         ) : (
           <Button
             title="Set Target"

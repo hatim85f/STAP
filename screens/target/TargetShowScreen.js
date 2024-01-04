@@ -151,24 +151,27 @@ const TargetShowScreen = (props) => {
                 <View style={styles.itemContainer} key={index}>
                   <Card style={styles.detailsContainer}>
                     <View style={styles.avatarContainer}>
-                      <Avatar
-                        source={{ uri: item.imageURL }}
-                        rounded
-                        size={avatarSize}
-                        avatarStyle={[styles.avatarStyle]}
-                      />
+                      <TouchableOpacity onPress={() => setSelectedItem(item)}>
+                        <Avatar
+                          source={{ uri: item.imageURL }}
+                          rounded
+                          size={avatarSize}
+                          avatarStyle={[styles.avatarStyle]}
+                        />
+                      </TouchableOpacity>
                     </View>
-
-                    <TouchableOpacity
-                      style={styles.btnContainer}
-                      onPress={() => setSelectedItem(item)}
-                    >
-                      <FontAwesome5
-                        name="divide"
-                        size={globalWidth("1.2%")}
-                        color={Colors.primary}
-                      />
-                    </TouchableOpacity>
+                    <View style={{ zIndex: 1000 }}>
+                      <TouchableOpacity
+                        style={styles.btnContainer}
+                        onPress={() => setSelectedItem(item)}
+                      >
+                        <FontAwesome5
+                          name="divide"
+                          size={globalWidth("1.2%")}
+                          color={Colors.primary}
+                        />
+                      </TouchableOpacity>
+                    </View>
                     <TouchableOpacity
                       onPress={() =>
                         props.navigation.navigate("item_target", {

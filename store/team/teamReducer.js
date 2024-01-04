@@ -1,8 +1,16 @@
 import { GET_USER_BUSINESSES } from "../business/businessActions";
-import { INVITE_MEMBER, EDIT_MEMBER, DELETE_MEMBER } from "./teamActions";
+import {
+  INVITE_MEMBER,
+  EDIT_MEMBER,
+  DELETE_MEMBER,
+  FULL_TEAM_ACHIEVEMENT,
+  GET_MEMBER_SALES,
+} from "./teamActions";
 
 const initialState = {
   team: [],
+  fullTeamAch: [],
+  memberSales: [],
 };
 
 export const teamReducer = (state = initialState, action) => {
@@ -24,10 +32,20 @@ export const teamReducer = (state = initialState, action) => {
         ...state,
         team: action.team,
       };
+    case GET_MEMBER_SALES:
+      return {
+        ...state,
+        memberSales: action.memberSales,
+      };
     case DELETE_MEMBER:
       return {
         ...state,
         team: state.team.filter((item) => item._id !== action.memberId),
+      };
+    case FULL_TEAM_ACHIEVEMENT:
+      return {
+        ...state,
+        fullTeamAch: action.fullTeamAch,
       };
     default:
       return state;

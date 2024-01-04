@@ -4,6 +4,7 @@ import {
   ADD_BUSINESS,
   DELETE_BUSINESS,
   EDIT_BUSINESS,
+  GET_BUSINESSES_DETAILS,
   GET_EMPLOYEE_BUSINESSES,
   GET_USER_BUSINESSES,
 } from "./businessActions";
@@ -11,6 +12,7 @@ import {
 const initialState = {
   business: [],
   userBusiness: {},
+  busiessesDetails: [],
 };
 
 export const businessReducer = (state = initialState, action) => {
@@ -19,6 +21,11 @@ export const businessReducer = (state = initialState, action) => {
       return {
         ...state,
         business: action.payload,
+      };
+    case GET_BUSINESSES_DETAILS:
+      return {
+        ...state,
+        busiessesDetails: action.payload,
       };
     case ADD_BUSINESS:
       return {

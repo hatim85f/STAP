@@ -230,7 +230,7 @@ const TargetAddScreen = (props) => {
       <View style={styles.lowerView}>
         <Text style={styles.header}>
           Cost Price (CIF): {product.currencyCode}{" "}
-          {productPrice ? numberWithComa(parseInt(productPrice)) : 0}{" "}
+          {productPrice ? numberWithComa(parseFloat(productPrice)) : 0}{" "}
         </Text>
       </View>
 
