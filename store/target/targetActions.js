@@ -46,17 +46,6 @@ export const addTarget = (
   return async (dispatch, getState) => {
     const { user, token } = getState().auth;
 
-    console.log({
-      productId,
-      businessId,
-      targetUnits,
-      productPrice,
-      targetType,
-      phasing,
-      phasingData,
-      startPeriod,
-    });
-
     const response = await fetch(`${mainLink}/api/targets`, {
       method: "POST",
       headers: {
@@ -285,6 +274,8 @@ export const addPhasing = (phasingData, name) => {
     });
 
     const resData = await response.json();
+
+    console.log(resData);
 
     dispatch({
       type: ERROR,

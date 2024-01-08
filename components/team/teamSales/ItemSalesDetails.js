@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -6,8 +6,10 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Easing,
+  Animated,
 } from "react-native";
-import { Button } from "react-native-elements";
+import { Button, Input } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import numberWithComa from "../../helpers/numberWithComa";
 import { Entypo } from "@expo/vector-icons";
@@ -16,11 +18,18 @@ import Colors from "../../../constants/Colors";
 import TableComp from "../../TableComp";
 import { Table, Row, Rows } from "react-native-table-component";
 
+import * as salesActions from "../../../store/sales/salesActions";
+
 const ItemSalesDetails = (props) => {
   const { sales, currencySymbol } = props;
 
   const [salesData, setSalesData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(null);
+  const [showEditContainer, setShowEditContainer] = useState(false);
+
+  const editontainerPosition = useRef(
+    new Animated.Value(globalWidth("200%"))
+  ).current;
 
   useEffect(() => {
     let itemSales = [];
@@ -61,6 +70,8 @@ const ItemSalesDetails = (props) => {
     }
   }, [sales]);
 
+  console.log(salesData);
+
   const AchievementArrow = ({ achievement }) => {
     if (achievement >= 85) {
       return <Entypo name="arrow-up" size={globalHeight("3%")} color="green" />;
@@ -91,26 +102,61 @@ const ItemSalesDetails = (props) => {
 
   const widthArr = [
     globalWidth("2.5%"),
+    globalWidth("15%"),
+    globalWidth("8%"),
+    globalWidth("8%"),
+    globalWidth("8%"),
+    globalWidth("8%"),
     globalWidth("10%"),
-    globalWidth("6%"),
-    globalWidth("6%"),
-    globalWidth("6%"),
-    globalWidth("6%"),
-    globalWidth("6.5%"),
   ];
 
-  const checkItem = (item) => {
-    console.log(
-      item.salesData.map((a, index) => [
-        index + 1,
-        a.productNickName,
-        numberWithComa(a.targetUnits.toFixed(0)),
-        numberWithComa(a.targetValue.toFixed(2)),
-        numberWithComa(a.quantity),
-        numberWithComa(a.salesValue.toFixed(2)),
-        a.achievement.toFixed(2) + "%",
-      ])
-    );
+  // ================================================================ANIMATING EDIT BUTTONS=====================================================
+
+  useEffect(() => {
+    if (showEditContainer) {
+      Animated.timing(editontainerPosition, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(editontainerPosition, {
+        toValue: -globalWidth("200%"),
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [showEditContainer]);
+
+  const changeQuantity = (num, index) => {
+    setShowEditContainer(true);
+    let newSalesData = [...salesData];
+    const item = newSalesData[currentIndex].salesData[index];
+
+    if (num === "") {
+      return;
+    } else {
+      item.quantity = parseInt(num);
+      item.salesValue = item.quantity * item.price;
+      item.achievement = (item.salesValue / item.targetValue) * 100;
+      const personSales = newSalesData[currentIndex].salesData
+        .map((a) => a.salesValue)
+        .reduce((a, b) => a + b, 0);
+      newSalesData[currentIndex].totalSales = parseInt(personSales).toFixed(1);
+      newSalesData[currentIndex].achievement =
+        (personSales / newSalesData[currentIndex].totalTarget) * 100;
+    }
+
+    setSalesData(newSalesData);
+  };
+
+  const dispatch = useDispatch();
+
+  const updateSalesData = (userSalesId, index) => {
+    dispatch(salesActions.editSalesData(userSalesId, salesData[currentIndex]));
+    setCurrentIndex(null);
+    setShowEditContainer(false);
   };
 
   return (
@@ -161,23 +207,41 @@ const ItemSalesDetails = (props) => {
                 <View
                   style={[styles.salesContainer, styles.lowerSalesContainer]}
                 >
-                  <View style={{ width: "5%" }}>
+                  <View style={{ width: "2.5%" }}>
                     <Text style={styles.number}> {index + 1}) </Text>
                   </View>
                   <View
                     style={[
                       styles.smallRow,
-                      { width: "40%", justifyContent: "center" },
+                      {
+                        width: "42.5%",
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                      },
                     ]}
                   >
-                    <Image
-                      source={{ uri: item.profilePicture }}
-                      style={styles.image}
-                    />
+                    <View
+                      style={{
+                        width: "5%",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Image
+                        source={{ uri: item.profilePicture }}
+                        style={styles.image}
+                      />
+                    </View>
                     <TouchableOpacity
                       onPress={() =>
                         setCurrentIndex(index === currentIndex ? null : index)
                       }
+                      style={{
+                        width: "37.5%",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        paddingLeft: "1%",
+                      }}
                     >
                       <Text style={styles.name}> {item.userName} </Text>
                     </TouchableOpacity>
@@ -230,7 +294,16 @@ const ItemSalesDetails = (props) => {
                               rowData.productNickName,
                               numberWithComa(rowData.targetUnits.toFixed(0)),
                               numberWithComa(rowData.targetValue.toFixed(2)),
-                              numberWithComa(rowData.quantity),
+                              <Input
+                                style={styles.input}
+                                containerStyle={styles.inputContainer}
+                                onChangeText={(num) =>
+                                  changeQuantity(num, index)
+                                }
+                                keyboardType="numeric"
+                                value={rowData.quantity.toString()}
+                                defaultValue={rowData.quantity.toString()}
+                              />,
                               numberWithComa(rowData.salesValue.toFixed(2)),
                               <View style={styles.smallRow}>
                                 <AchievementArrow
@@ -256,6 +329,25 @@ const ItemSalesDetails = (props) => {
                         );
                       })}
                     </Table>
+                    <Animated.View
+                      style={[
+                        styles.editButtonsContainer,
+                        { transform: [{ translateX: editontainerPosition }] },
+                      ]}
+                    >
+                      <Button
+                        title="Cancel"
+                        onPress={() => setShowEditContainer(false)}
+                        buttonStyle={styles.editBtn}
+                        titleStyle={styles.titleStyle}
+                      />
+                      <Button
+                        title="Submit Edit"
+                        onPress={() => updateSalesData(item.userSalesId, index)}
+                        buttonStyle={styles.editBtn}
+                        titleStyle={styles.titleStyle}
+                      />
+                    </Animated.View>
                   </View>
                 )}
               </View>
@@ -348,12 +440,53 @@ const styles = StyleSheet.create({
     height: globalHeight("5%"),
     // justifyContent: "center",
   },
+  mainInputContainer: {
+    width: globalWidth("4%"),
+    height: globalHeight("4%"),
+    marginVertical: globalHeight("1%"),
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "red",
+  },
+  input: {
+    width: globalWidth("4%"),
+    height: globalHeight("4%"),
+    alignSelf: "center",
+    marginVertical: globalHeight("1%"),
+    fontSize: globalWidth("1%"),
+    color: Colors.font,
+    fontFamily: "Poppins_400Regular",
+    textAlign: "center",
+    alignSelf: "center",
+  },
+  inputContainer: {
+    width: globalWidth("4%"),
+    height: globalHeight("5%"),
+    marginVertical: globalHeight("1%"),
+    alignSelf: "center",
+  },
+  editButtonsContainer: {
+    width: "60%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    marginVertical: globalHeight("1.5%"),
+    paddingVertical: globalHeight("1.5%"),
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+  },
+  editBtn: {
+    backgroundColor: Colors.primary,
+    width: globalWidth("10%"),
+    borderRadius: 10,
+  },
+  titleStyle: {
+    fontFamily: "open-sans-bold",
+    fontSize: globalWidth("0.8%"),
+    color: "white",
+  },
 });
-
-export const ItemSalesDetailsOptions = (navData) => {
-  return {
-    headerTitle: "ItemSalesDetails",
-  };
-};
 
 export default ItemSalesDetails;

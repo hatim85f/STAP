@@ -10,21 +10,18 @@ import {
 import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import * as salesActions from "../../store/sales/salesActions";
 
 import Loader from "../../components/Loader";
-import Card from "../../components/Card";
-
-import numberWithComa from "../../components/helpers/numberWithComa";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
 import TopBar from "./TopBar";
-import DropPicker from "../../components/DropPicker";
 import DatePickerLists from "../../components/DatePickerLists";
+import SalesShowComp from "./SalesShowComp";
+
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
-import SalesShowComp from "./SalesShowComp";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ShowSalesScreen = (props) => {
   const { sales } = useSelector((state) => state.sales);
@@ -38,7 +35,6 @@ const ShowSalesScreen = (props) => {
   // ==========================================GETTING SALES======================================================
 
   const dispatch = useDispatch();
-
   useEffect(() => {
     // store start date and end date in local storage
     async () => {

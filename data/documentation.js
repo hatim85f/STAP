@@ -305,26 +305,107 @@ const data = [
     ],
   },
   {
-    name: "Adding Sales",
-    route: "Explore how to add sales to your records",
+    name: "Add Sales Manually",
+    route: "Learn how to manually add sales to your records",
     steps: [
       {
-        step: "Navigating to the Sales Section",
-        details: ["Accessing the sales management section."],
-      },
-      {
-        step: "Manual Sales Entry",
+        step: "Navigate to Team Section",
         details: [
-          "Manually entering sales data, including item selection, quantity, client, bonuses, and special discounts.",
+          "Access the sales management section.",
+          "Navigate to the Team Section.",
         ],
       },
       {
-        step: "Uploading Sales Data (Advanced)",
-        details: ["Uploading sales data from an Excel sheet or file."],
+        step: "Select Sales from the Bottom Bar",
+        details: ["Choose the Sales option from the bottom bar menu."],
       },
       {
-        step: "Ordered Sales",
-        details: ["Viewing sales details generated from invoices."],
+        step: "Choose Business and User",
+        details: [
+          "Select your business name from the list.",
+          "Click on the user to whom you want to add sales.",
+        ],
+      },
+      {
+        step: "Fill in Sales Details",
+        details: [
+          "Fill the table with details like item selection, quantity, client, bonuses, and special discounts.",
+        ],
+      },
+      {
+        step: "Submit Sales Entry",
+        details: [
+          "Press the submit button to save the manually entered sales data.",
+        ],
+      },
+      {
+        step: "Set Sales Version",
+        details: [
+          "Assign a name to the sales version.",
+          "Set the start and end periods for this sales version.",
+        ],
+      },
+      {
+        step: "Allocate Sales to Targets",
+        details: [
+          "Specify the month against which the sales should be set.",
+          "Press submit to complete the process.",
+        ],
+      },
+      {
+        step: "Repeat for All Team Members and Businesses",
+        details: [
+          "Repeat the same process for all team members and businesses.",
+          "Optionally, assign someone from each business or team to handle this task.",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Upload Sales Excel Sheet",
+    route: "Learn how to upload sales data from an Excel sheet",
+    steps: [
+      {
+        step: "Navigate to Sales Section",
+        details: [
+          "Access the sales management section by navigating to the Sales Section.",
+        ],
+      },
+      {
+        step: "Select Upload Sales from the Top Bar Menu",
+        details: ["Choose the Upload Sales option from the top bar menu."],
+      },
+      {
+        step: "Download the Sales Sheet",
+        details: [
+          "If you don't have the sales sheet, download it from the provided link.",
+        ],
+      },
+      {
+        step: "Fill the Sheet on Your PC",
+        details: [
+          "Fill in the necessary sales data in the downloaded Excel sheet on your PC.",
+        ],
+      },
+      {
+        step: "Upload the Sheet",
+        details: ["Press the upload button and upload the filled sheet."],
+      },
+      {
+        step: "Set Start and End Dates",
+        details: [
+          "Specify the start and end dates for the uploaded sales data.",
+        ],
+      },
+      {
+        step: "Set Version Name",
+        details: [
+          "Assign a name to the sales version generated from the uploaded sheet.",
+        ],
+      },
+      {
+        step: "Submit Sales Data",
+        details: ["Press the submit button to complete the upload process."],
       },
     ],
   },
@@ -365,6 +446,209 @@ const data = [
         step: "Support",
         details: [
           "Where to find additional help, support, and resources for using STAP effectively.",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Add Sales Manually",
+    route: "Learn how to manually add sales to your records",
+    steps: [
+      {
+        step: "Navigate to Team Section",
+        details: [
+          "Access the sales management section.",
+          "Navigate to the Team Section.",
+        ],
+      },
+      {
+        step: "Select Sales from the Bottom Bar",
+        details: ["Choose the Sales option from the bottom bar menu."],
+      },
+      {
+        step: "Choose Business and User",
+        details: [
+          "Select your business name from the list.",
+          "Click on the user to whom you want to add sales.",
+        ],
+      },
+      {
+        step: "Fill in Sales Details",
+        details: [
+          "Fill the table with details like item selection, quantity, client, bonuses, and special discounts.",
+        ],
+      },
+      {
+        step: "Submit Sales Entry",
+        details: [
+          "Press the submit button to save the manually entered sales data.",
+        ],
+      },
+      {
+        step: "Set Sales Version",
+        details: [
+          "Assign a name to the sales version.",
+          "Set the start and end periods for this sales version.",
+        ],
+      },
+      {
+        step: "Allocate Sales to Targets",
+        details: [
+          "Specify the month against which the sales should be set.",
+          "Press submit to complete the process.",
+        ],
+      },
+      {
+        step: "Repeat for All Team Members and Businesses",
+        details: [
+          "Repeat the same process for all team members and businesses.",
+          "Optionally, assign someone from each business or team to handle this task.",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Upload Sales Excel Sheet",
+    route: "Learn how to upload sales data from an Excel sheet",
+    steps: [
+      {
+        step: "Navigate to Sales Section",
+        details: [
+          "Access the sales management section by navigating to the Sales Section.",
+        ],
+      },
+      {
+        step: "Select Upload Sales from the Top Bar Menu",
+        details: ["Choose the Upload Sales option from the top bar menu."],
+      },
+      {
+        step: "Download the Sales Sheet",
+        details: [
+          "If you don't have the sales sheet, download it from the provided link.",
+        ],
+      },
+      {
+        step: "Fill the Sheet on Your PC",
+        details: [
+          "Fill in the necessary sales data in the downloaded Excel sheet on your PC.",
+        ],
+      },
+      {
+        step: "Upload the Sheet",
+        details: ["Press the upload button and upload the filled sheet."],
+      },
+      {
+        step: "Set Start and End Dates",
+        details: [
+          "Specify the start and end dates for the uploaded sales data.",
+        ],
+      },
+      {
+        step: "Set Version Name",
+        details: [
+          "Assign a name to the sales version generated from the uploaded sheet.",
+        ],
+      },
+      {
+        step: "Submit Sales Data",
+        details: ["Press the submit button to complete the upload process."],
+      },
+    ],
+  },
+  {
+    name: "Check Your Sales (Added Manually)",
+    route: "Review and edit sales details added manually",
+    steps: [
+      {
+        step: "Navigate to Team Section",
+        details: [
+          "Access the sales management section.",
+          "Navigate to the Team Section.",
+        ],
+      },
+      {
+        step: "Select Achievement from the Bottom Bar",
+        details: ["Choose the Achievement option from the bottom bar menu."],
+      },
+      {
+        step: "Select Month and Year",
+        details: [
+          "Select the month and year for which you want to review sales details.",
+        ],
+      },
+      {
+        step: "Review and Edit Sales Details",
+        details: [
+          "Get all the sales details you added manually with different version names.",
+          "Press the version name to open the sales details for the team.",
+          "Press the user name to open the sales details for the person.",
+          "Edit the details and press submit when satisfied.",
+        ],
+      },
+      {
+        step: "Set as Final",
+        details: [
+          "Press 'Set as Final' for the version you want to consider as the final version.",
+        ],
+      },
+      {
+        step: "Important Note",
+        details: [
+          "Once you select a version as final, all other final versions, including those uploaded by Excel, will be considered non-final.",
+          "They will be changed and not calculated in your sales.",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Check Sales Uploaded by Excel",
+    route: "Review and finalize sales data uploaded from Excel",
+    steps: [
+      {
+        step: "Go to the Sales Section",
+        details: [
+          "Access the sales management section by navigating to the Sales Section.",
+        ],
+      },
+      {
+        step: "Select Sales Show from the Top Bar",
+        details: ["Choose the Sales Show option from the top bar menu."],
+      },
+      {
+        step: "Select Start and End Period",
+        details: [
+          "Select the start and end periods for which you want to review sales.",
+        ],
+      },
+      {
+        step: "Review Sales Details",
+        details: [
+          "Show the sales details, and if satisfied, select 'Set as Final'.",
+        ],
+      },
+      {
+        step: "Important Note",
+        details: [
+          "Once you select a version as final, all other final versions, including those uploaded by Excel, will be considered non-final.",
+          "They will be changed and not calculated in your sales.",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Ordered Sales",
+    route: "Explore details of sales generated from invoices",
+    steps: [
+      {
+        step: "Navigate to Sales Section",
+        details: [
+          "Access the sales management section by navigating to the Sales Section.",
+        ],
+      },
+      {
+        step: "View Sales Details",
+        details: [
+          "Explore details of sales generated from invoices in the Ordered Sales section.",
         ],
       },
     ],

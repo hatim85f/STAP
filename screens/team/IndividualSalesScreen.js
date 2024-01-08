@@ -373,7 +373,7 @@ const IndividualSalesScreen = (props) => {
                           ? (
                               (+item.totalSalesValue / +totalTeamValue) *
                               100
-                            ).toFixed(2)
+                            ).toFixed(0)
                           : 0}{" "}
                         %{" "}
                       </Text>

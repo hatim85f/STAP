@@ -1,5 +1,4 @@
-import moment from "moment";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,12 +6,11 @@ import {
   Platform,
   Image,
   TouchableOpacity,
-  Animated,
   FlatList,
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
 
 import DateAndYearPicker from "./DateAndYearPicker";
 import numberWithCommas from "../../helpers/numberWithComa";
@@ -25,6 +23,8 @@ import * as salesActions from "../../../store/sales/salesActions";
 import { months } from "../../helpers/months";
 import Colors from "../../../constants/Colors";
 import { globalHeight, globalWidth } from "../../../constants/globalWidth";
+
+import moment from "moment";
 
 // import { salesVersions } from "./draft";
 
@@ -149,11 +149,29 @@ const TeamOverview = (props) => {
     }
   };
 
+  // ===============================================DELETE SALES VERSION========================================================
+
+  const deleteSalesVersion = (versionName) => {
+    setIsLoading(true);
+    const salesVersion = salesVersions.find(
+      (version) => version.versionName === versionName
+    );
+
+    setLoadingMessage("Deleting Sales Version");
+
+    const salesIds = salesVersion.sales.map((sale) => sale.userSalesId);
+
+    dispatch(salesActions.deleteSalesVersion(salesIds)).then(() => {
+      setIsLoading(false);
+    });
+  };
+
   // ======================================================RETURN JSX=========================================================
 
   if (isLoading) {
     return <Loader center loadingMessage={loadingMessage} />;
   }
+
   return (
     <View style={styles.container}>
       <DateAndYearPicker
@@ -163,6 +181,9 @@ const TeamOverview = (props) => {
         month={selectedMonth}
         year={selectedYear}
       />
+      {salesVersions && salesVersions.length === 0 && (
+        <Text>{JSON.stringify(salesVersions.length)}</Text>
+      )}
       {!isOpened && salesVersions && salesVersions.length > 0 && (
         <View style={styles.headerContainer}>
           <View style={{ width: "5%" }}>
@@ -252,7 +273,7 @@ const TeamOverview = (props) => {
                   <View style={{ width: "10%" }}>
                     <Text style={styles.data}>
                       {item.currencySymbol}{" "}
-                      {numberWithCommas(item.totalTargetValue)}
+                      {numberWithCommas(item.totalTargetValue.toFixed(0))}
                     </Text>
                   </View>
 
@@ -331,21 +352,35 @@ const TeamOverview = (props) => {
                     currencySymbol={item.currencySymbol}
                   />
                 )}
-                <CheckBox
-                  checked={item.sales.every((sale) => sale.isFinal)}
-                  title="Set as Final"
-                  checkedTitle="Final Version"
-                  onPress={() => changeIsFinal(item.sales)}
-                  size={30}
-                  checkedColor={Colors.primary}
-                  uncheckedColor="#000"
-                  style={{
-                    cursor: "pointer",
-                    marginTop: globalHeight("2%"),
-                    backgroundColor: "red",
-                    elevation: 10,
-                  }}
-                />
+                <View style={styles.rowContainer}>
+                  <View style={{ width: "80%" }}>
+                    <CheckBox
+                      checked={item.sales.every((sale) => sale.isFinal)}
+                      title="Set as Final"
+                      checkedTitle="Final Version"
+                      onPress={() => changeIsFinal(item.sales)}
+                      size={30}
+                      checkedColor={Colors.primary}
+                      uncheckedColor="#000"
+                      style={{
+                        cursor: "pointer",
+                        marginTop: globalHeight("2%"),
+                        backgroundColor: "red",
+                        elevation: 10,
+                      }}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => deleteSalesVersion(item.versionName)}
+                    style={{ width: "5%" }}
+                  >
+                    <MaterialIcons
+                      name="delete-sweep"
+                      size={globalWidth("3%")}
+                      color="#ff0055"
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             );
           }}
@@ -476,6 +511,13 @@ const styles = StyleSheet.create({
     width: "35%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  rowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginTop: globalHeight("1%"),
   },
 });
 

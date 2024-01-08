@@ -9,8 +9,6 @@ import { globalHeight, globalWidth } from "../constants/globalWidth";
 const TableComp = (props) => {
   const { widthArr, tableHead, data, showTotal, totalData } = props;
 
-  console.log({ widthArr, tableHead, data, showTotal, totalData });
-
   return (
     <View
       style={{

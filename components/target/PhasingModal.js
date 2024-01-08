@@ -12,6 +12,8 @@ import { ScrollView } from "react-native";
 const PhasingModal = (props) => {
   const { isVisible, phasing, onSelectedPhasing } = props;
 
+  console.log(phasing);
+
   const [phasingDetails, setPhasingDetails] = useState([]);
   const [selectedPahsing, setSelectedPahsing] = useState("");
 
