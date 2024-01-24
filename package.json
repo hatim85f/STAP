@@ -76,7 +76,8 @@
     "stripe": "^13.9.0",
     "sweetalert2": "^11.7.31",
     "victory-native": "^36.6.12",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "@react-native-picker/picker": "2.4.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

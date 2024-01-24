@@ -175,7 +175,7 @@ const IndividualTargetScreen = (props) => {
 
         totalMonths.push("Total", ".", ".", ".", ".");
 
-        const loopNumber = totalMonths.length / 5;
+        const loopNumber = totalMonths?.length / 5;
 
         // create A2 cells
         let totalMonthsCells = [];
@@ -298,7 +298,7 @@ const IndividualTargetScreen = (props) => {
     return <Loader loadingMessage="Loading Target  ..." center />;
   }
 
-  if (!selectedYear || teamTarget.length === 0) {
+  if (!selectedYear || teamTarget?.length === 0) {
     return (
       <View style={styles.container}>
         <MenuButton navigation={props.navigation} />

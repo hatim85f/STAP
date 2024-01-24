@@ -219,6 +219,7 @@ const OrdersShowScreen = (props) => {
                           status: item.status,
                           startDate,
                           endDate,
+                          order_id: item._id,
                         })
                       }
                       style={styles.clientInfo}
@@ -260,7 +261,7 @@ const OrdersShowScreen = (props) => {
                                 item.status === "Pending"
                                   ? "orange"
                                   : item.status === "In Progress"
-                                  ? Colors.font
+                                  ? "skyblue"
                                   : item.status === "Completed"
                                   ? "green"
                                   : "#ff0055",

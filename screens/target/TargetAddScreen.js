@@ -153,7 +153,7 @@ const TargetAddScreen = (props) => {
         product._id,
         product.businessId,
         parseInt(targetUnits),
-        parseInt(productPrice),
+        parseFloat(productPrice),
         targetType,
         withPhasing,
         phasingData,

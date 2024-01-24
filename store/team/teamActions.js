@@ -138,34 +138,6 @@ export const deleteTeamMember = (memberId) => {
   };
 };
 
-export const getFullTeamAchievement = (month, year) => {
-  return async (dispatch, getState) => {
-    const { user, token } = getState().auth;
-
-    console.log({ month, year });
-
-    const response = await fetch(
-      `${mainLink}/api/user-sales/team/ach/${user._id}/${month}/${year}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": token,
-        },
-      }
-    );
-
-    const resData = await response.json();
-
-    console.log(resData.teamSales);
-
-    dispatch({
-      type: FULL_TEAM_ACHIEVEMENT,
-      fullTeamAch: resData.teamSales,
-    });
-  };
-};
-
 export const getMemberSales = (memberId, month, year) => {
   return async (dispatch, getState) => {
     const { user, token } = getState().auth;

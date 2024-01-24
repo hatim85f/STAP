@@ -23,10 +23,11 @@ const CustomChart = (props) => {
         opacity: 0.8,
       },
     },
-    colors: [Colors.primary],
+    colors: colors ? colors : [Colors.primary],
     plotOptions: {
       bar: {
         distributed: true,
+        columnWidth: "40%",
       },
     },
     xaxis: {
@@ -41,8 +42,8 @@ const CustomChart = (props) => {
           options={options}
           series={series}
           type="bar"
-          width={globalWidth("60%")}
-          height={globalHeight("30%")}
+          width={globalWidth("25%")}
+          height={globalHeight("20%")}
         />
       </div>
     </View>
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   },
   header: {},
   cahrt: {
-    width: globalWidth("60%"),
+    width: globalWidth("25%"),
     alignSelf: "center",
   },
 });

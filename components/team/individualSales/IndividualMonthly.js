@@ -6,6 +6,7 @@ import {
   Platform,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,97 +15,62 @@ import Loader from "../../Loader";
 import Colors from "../../../constants/Colors";
 
 import { globalHeight, globalWidth } from "../../../constants/globalWidth";
-import { months } from "../../helpers/months";
-import { years } from "../../helpers/years";
 
-import * as businessActions from "../../../store/business/businessActions";
-import * as authActions from "../../../store/auth/authActions";
-import * as teamActions from "../../../store/team/teamActions";
+import * as salesActions from "../../../store/sales/salesActions";
 
 import moment from "moment";
-import DateAndYearPicker from "../teamSales/DateAndYearPicker";
+
+import NativeContainer from "./NativeContainer";
+import AchievementChart from "../AchievementChart";
 
 const IndividualMonthly = (props) => {
-  const { team } = useSelector((state) => state.team);
+  const { memberAchievement } = useSelector((state) => state.sales);
 
   // ==============================================MANAGEMENT OF STATE====================================================
 
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const [isOpened, setIsOpened] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [monthNumber, setMonthNumber] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(
     moment(new Date()).format("YYYY")
   );
-  const [teamData, setTeamData] = useState([]);
 
-  // =============================================GETTING USER BACK=====================================================
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        let storedUserDetails;
-        if (Platform.OS === "web") {
-          storedUserDetails = window.localStorage.getItem("userDetails");
-        } else {
-          storedUserDetails = await AsyncStorage.getItem("userDetails");
-        }
-
-        if (storedUserDetails) {
-          const parsedUserDetails = JSON.parse(storedUserDetails);
-
-          if (parsedUserDetails.user) {
-            dispatch(authActions.getUserIn(parsedUserDetails));
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching user details:", error);
-      }
-    };
-
-    fetchUserDetails();
-  }, [dispatch]);
-
-  // =================================================GETTING TEAM MEMBERS=================================================
+  // ==========================================================GETTING DATA===============================================
 
   const dispatch = useDispatch();
-  useEffect(() => {
+
+  const search = () => {
     setIsLoading(true);
-    setLoadingMessage("Loading Data...");
-    dispatch(businessActions.getUserBusiness()).then(() => {
-      setIsLoading(false);
-    });
-  }, [dispatch]);
-
-  // ===========================================SETTING MONTH NUMBER=======================================================
-
-  useEffect(() => {
-    if (selectedMonth) {
-      const monthIndex = months.findIndex((month) => month === selectedMonth);
-      setMonthNumber(monthIndex + 1);
-    }
-  }, [selectedMonth, months]);
-
-  useEffect(() => {
-    if (team && team.length > 0) {
-      const teamData = team.map((t) => t.teamMembers).flat(1);
-      setTeamData(teamData);
-    }
-  }, [team]);
-
-  // ===========================================GETTING SALES DATA=========================================================
-
-  useEffect(() => {
-    setIsLoading(true);
-    setLoadingMessage("Loading Sales Data...");
+    setLoadingMessage("Getting Member's Sales...");
     dispatch(
-      teamActions.getFullTeamAchievement(monthNumber, selectedYear)
+      salesActions.getMemberAchievement(
+        selectedMember,
+        monthNumber,
+        selectedYear
+      )
     ).then(() => {
       setIsLoading(false);
+      setLoadingMessage("");
     });
-  }, [dispatch, monthNumber, selectedYear]);
+  };
 
-  console.log(teamData);
+  // ==========================================================HELPER FUNCTIONS===============================================
+
+  const secondColor = (achievement) => {
+    if (achievement <= 30) {
+      return "#FF0055";
+    } else if (achievement <= 50 && achievement > 30) {
+      return "#AB7E02";
+    } else if (achievement > 50 && achievement <= 75) {
+      return "#03FCDF";
+    } else {
+      return Colors.primary;
+    }
+  };
+
+  console.log(memberAchievement);
 
   // =========================================================RETURN JSX=============================================================
 
@@ -114,47 +80,75 @@ const IndividualMonthly = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.dateRow}>
-        <DateAndYearPicker
-          getMonth={(month) => setSelectedMonth(month)}
-          getYear={(year) => setSelectedYear(year)}
-          getIsOpened={(opened) => setIsOpened(opened)}
-          month={selectedMonth}
-          year={selectedYear}
-        />
-      </View>
-      <View style={styles.teamRow}>
-        {!isOpened &&
-          team &&
-          team.length > 0 &&
-          teamData.map((member, index) => {
-            return (
-              <TouchableOpacity style={styles.teamContainer} key={index}>
-                <Image
-                  source={{ uri: member.profilePicture }}
-                  style={styles.image}
-                />
-                <View style={styles.nameContainer}>
-                  <Text style={styles.name}>{member.userName} </Text>
-                  <Text style={styles.designation}> {member.designation} </Text>
+      <NativeContainer
+        getSelectedMonth={(month) => setSelectedMonth(month)}
+        getSelectedYear={(year) => setSelectedYear(year)}
+        getSelectedMember={(member) => setSelectedMember(member)}
+        search={search}
+      />
+      {memberAchievement && memberAchievement.length > 0 && (
+        <ScrollView
+          contentContainerStyle={styles.itemsContainer}
+          scrollEnabled
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.mainRow}>
+            {memberAchievement.map((item, index) => {
+              return (
+                <View style={styles.achContainer} key={index}>
+                  <AchievementChart
+                    details={[
+                      `${parseInt(item.totalSalesValue).toFixed(2)}`,
+                      `${parseInt(item.totalTargetValue).toFixed(2)}`,
+                    ]}
+                    name={item.userName}
+                    yaxisName="Value $"
+                    xaxisName=""
+                    image={item.profilePicture}
+                    totalSales={item.totalSalesValue}
+                    totalTarget={item.totalTargetValue}
+                    achievement={item.totalAchievement}
+                    secondColor={() => secondColor(item.totalAchievement)}
+                    currencySymbol={item.currencySymbol}
+                    height={globalHeight("35%")}
+                    width={globalWidth("20%")}
+                    secondLine={`${item.designation} - ${item.businessName}`}
+                  />
                 </View>
-              </TouchableOpacity>
-            );
-          })}
-      </View>
-      <Text>
-        Then here will show in the boxes every one sales vs target and
-        achievement{" "}
-      </Text>
-      <Text>
-        {" "}
-        When the user presses to individual he can see his own details{" "}
-      </Text>
-      <Text>Manager will see all the team and so the admin</Text>
-      <Text>
-        But normal user will see his own sales only while he can see the team in
-        the team section but his own team only
-      </Text>
+              );
+            })}
+          </View>
+          <View style={styles.smallRow}>
+            {memberAchievement &&
+              memberAchievement.length > 0 &&
+              memberAchievement[0].salesData.map((product, indx) => {
+                return (
+                  <View style={styles.smallAchContainer} key={indx}>
+                    <AchievementChart
+                      details={[
+                        `${parseInt(parseInt(product.salesValue)).toFixed(2)}`,
+                        `${parseInt(product.targetValue).toFixed(2)}`,
+                      ]}
+                      name={product.productNickName}
+                      yaxisName="Value $"
+                      xaxisName=""
+                      image={product.productImage}
+                      totalSales={parseInt(product.salesValue)}
+                      totalTarget={parseInt(product.targetValue)}
+                      achievement={product.achievement}
+                      secondColor={() => secondColor(product.achievement)}
+                      currencySymbol={product.currencySymbol}
+                      height={globalHeight("30%")}
+                      width={globalWidth("12%")}
+                      smallImage
+                    />
+                  </View>
+                );
+              })}
+          </View>
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -210,12 +204,43 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: globalHeight("0.5%"),
   },
+  itemsContainer: {
+    flex: 1,
+    marginTop: globalHeight("3%"),
+  },
+  achContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  mainRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    alignItems: "center",
+    flex: 1,
+    height: "100%",
+  },
+  smallRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    alignItems: "center",
+    flex: 1,
+    height: "100%",
+    marginTop: globalWidth("40%"),
+    paddingHorizontal: globalWidth("2%"),
+  },
+  smallAchContainer: {
+    borderColor: Colors.primary,
+    borderWidth: 2,
+    borderRadius: 10,
+    overflow: "hidden",
+    marginVertical: globalHeight("1%"),
+    width: globalWidth("16%"),
+    height: globalHeight("55%"),
+    padding: globalHeight("1%"),
+  },
 });
-
-export const IndividualMonthlyOptions = (navData) => {
-  return {
-    headerTitle: "IndividualMonthly",
-  };
-};
 
 export default IndividualMonthly;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import TabBarNavigator from "../../components/tabBar/TabBarNavigator";
@@ -17,8 +17,36 @@ import IndividualMonthly from "../../components/team/individualSales/IndividualM
 import IndividualYTD from "../../components/team/individualSales/IndividualYTD";
 import IndividualFullYear from "../../components/team/individualSales/IndividualFullYear";
 
+import * as authActions from "../../store/auth/authActions";
+
 const IndividualAchievementScreen = (props) => {
   const [direction, setDirection] = useState(null);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        let storedUserDetails;
+        if (Platform.OS === "web") {
+          storedUserDetails = window.localStorage.getItem("userDetails");
+        } else {
+          storedUserDetails = await AsyncStorage.getItem("userDetails");
+        }
+
+        if (storedUserDetails) {
+          const parsedUserDetails = JSON.parse(storedUserDetails);
+
+          if (parsedUserDetails.user) {
+            dispatch(authActions.getUserIn(parsedUserDetails));
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [dispatch]);
 
   const ShownItem = () => {
     if (direction === "team-overview") {

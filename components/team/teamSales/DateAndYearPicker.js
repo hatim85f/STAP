@@ -8,7 +8,7 @@ import { months } from "../../helpers/months";
 import moment from "moment";
 
 const DateAndYearPicker = (props) => {
-  const { getYear, getMonth, getIsOpened, month, year } = props;
+  const { getYear, getMonth, getIsOpened, month, year, width } = props;
 
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -44,7 +44,7 @@ const DateAndYearPicker = (props) => {
   }, [isOpened]);
 
   return (
-    <View style={styles.dateRow}>
+    <View style={[styles.dateRow, { width: width ? width : "75%" }]}>
       <View style={[styles.dateItemContainer, { zIndex: 1000 }]}>
         <DropPicker
           list={months.map((month) => {

@@ -9,7 +9,6 @@ import {
 
 const initialState = {
   team: [],
-  fullTeamAch: [],
   memberSales: [],
 };
 
@@ -41,11 +40,6 @@ export const teamReducer = (state = initialState, action) => {
       return {
         ...state,
         team: state.team.filter((item) => item._id !== action.memberId),
-      };
-    case FULL_TEAM_ACHIEVEMENT:
-      return {
-        ...state,
-        fullTeamAch: action.fullTeamAch,
       };
     default:
       return state;

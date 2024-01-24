@@ -15,8 +15,8 @@ import AnimatedChevron from "../../components/AnimatedChevron";
 const LeftMenu = (props) => {
   const { getDirection } = props;
 
-  const [selectedMenu, setSelectedMenu] = useState("");
-  const [subMenu, setSubMenu] = useState("");
+  const [selectedMenu, setSelectedMenu] = useState("team");
+  const [subMenu, setSubMenu] = useState("team-ytd");
 
   const animatedMaxHeightTeam = useRef(new Animated.Value(0)).current;
   const animatedMaxHeightIndividual = useRef(new Animated.Value(0)).current;

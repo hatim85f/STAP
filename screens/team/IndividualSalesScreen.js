@@ -257,6 +257,24 @@ const IndividualSalesScreen = (props) => {
       animateBoxIn();
     } else {
       setSalesIsLoading(true);
+
+      const salesData = teamList.find(
+        (x) => x._id === selectedMember
+      ).salesData;
+      console.log({
+        userId: selectedMember,
+        startDate,
+        endDate,
+        versionName,
+        salesData: salesData.map((x) => {
+          return {
+            product: x.product,
+            quantity: x.salesQuantity,
+            price: x.price,
+          };
+        }),
+      });
+
       const memberSales = teamList.find(
         (x) => x._id === selectedMember
       ).salesData;

@@ -24,8 +24,6 @@ export const getPhasing = () => {
 
     const resData = await response.json();
 
-    console.log(resData);
-
     dispatch({
       type: GET_PHASING,
       phasing: resData.phasing,

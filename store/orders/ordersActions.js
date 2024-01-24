@@ -217,3 +217,30 @@ export const editItem = (
     getOrders(startDate, endDate);
   };
 };
+
+export const changeOrderStatus = (orderId, status) => {
+  return async (dispatch, getState) => {
+    const { token } = getState().auth;
+
+    const response = await fetch(`${mainLink}/api/orders/status/${orderId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+      body: JSON.stringify({
+        status,
+      }),
+    });
+
+    const resData = await response.json();
+
+    console.log(resData);
+
+    dispatch({
+      type: ERROR,
+      error: resData.error ? resData.error : "Done",
+      errorMessage: resData.message,
+    });
+  };
+};

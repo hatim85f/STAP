@@ -9,7 +9,7 @@ import {
   Easing,
   Animated,
 } from "react-native";
-import { Button, Input } from "react-native-elements";
+import { Button, CheckBox, Input } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import numberWithComa from "../../helpers/numberWithComa";
 import { Entypo } from "@expo/vector-icons";
@@ -21,7 +21,7 @@ import { Table, Row, Rows } from "react-native-table-component";
 import * as salesActions from "../../../store/sales/salesActions";
 
 const ItemSalesDetails = (props) => {
-  const { sales, currencySymbol } = props;
+  const { sales, currencySymbol, monthNumber, year } = props;
 
   const [salesData, setSalesData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(null);
@@ -63,6 +63,7 @@ const ItemSalesDetails = (props) => {
           totalTarget: totalTarget.toFixed(2),
           achievement: (totalSales / totalTarget) * 100,
           profilePicture: item.profilePicture,
+          isFinal: item.isFinal,
         };
       });
 
@@ -159,6 +160,12 @@ const ItemSalesDetails = (props) => {
     setShowEditContainer(false);
   };
 
+  const changeSinlgeIsFinal = (userSalesId, userId) => {
+    dispatch(
+      salesActions.changeSingleIsFinal(userSalesId, userId, monthNumber, year)
+    );
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -176,16 +183,35 @@ const ItemSalesDetails = (props) => {
             <View style={{ width: "5%" }}>
               <Text style={[styles.number, { color: "white" }]}> # </Text>
             </View>
-            <View style={[styles.smallRow, { width: "40%" }]}>
-              <Text style={[styles.name, { color: "white" }]}> Name </Text>
+            <View
+              style={[
+                {
+                  width: "40%",
+                  alignItems: "flex-start",
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.name,
+                  {
+                    color: "white",
+                    textDecorationLine: "none",
+                    marginLeft: globalWidth("3%"),
+                  },
+                ]}
+              >
+                {" "}
+                Member{" "}
+              </Text>
             </View>
-            <View style={{ width: "20%" }}>
+            <View style={{ width: "15%" }}>
               <Text style={[styles.salesData, { color: "white" }]}>
                 {" "}
                 Sales{" "}
               </Text>
             </View>
-            <View style={{ width: "20%" }}>
+            <View style={{ width: "15%" }}>
               <Text style={[styles.salesData, { color: "white" }]}>
                 {" "}
                 Target{" "}
@@ -195,6 +221,12 @@ const ItemSalesDetails = (props) => {
               <Text style={[styles.achievement, { color: "white" }]}>
                 {" "}
                 Achievement{" "}
+              </Text>
+            </View>
+            <View style={[styles.smallRow, { width: "10%" }]}>
+              <Text style={[styles.achievement, { color: "white" }]}>
+                {" "}
+                Status{" "}
               </Text>
             </View>
           </View>
@@ -207,14 +239,14 @@ const ItemSalesDetails = (props) => {
                 <View
                   style={[styles.salesContainer, styles.lowerSalesContainer]}
                 >
-                  <View style={{ width: "2.5%" }}>
+                  <View style={{ width: "5%" }}>
                     <Text style={styles.number}> {index + 1}) </Text>
                   </View>
                   <View
                     style={[
                       styles.smallRow,
                       {
-                        width: "42.5%",
+                        width: "38%",
                         justifyContent: "center",
                         alignItems: "flex-start",
                       },
@@ -222,8 +254,8 @@ const ItemSalesDetails = (props) => {
                   >
                     <View
                       style={{
-                        width: "5%",
-                        alignItems: "center",
+                        width: "15%",
+                        alignItems: "flex-start",
                         justifyContent: "center",
                       }}
                     >
@@ -237,22 +269,21 @@ const ItemSalesDetails = (props) => {
                         setCurrentIndex(index === currentIndex ? null : index)
                       }
                       style={{
-                        width: "37.5%",
-                        alignItems: "center",
+                        width: "85%",
+                        alignItems: "flex-start",
                         justifyContent: "center",
-                        paddingLeft: "1%",
                       }}
                     >
                       <Text style={styles.name}> {item.userName} </Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={{ width: "20%" }}>
+                  <View style={{ width: "15%" }}>
                     <Text style={styles.salesData}>
                       {" "}
                       {currencySymbol} {numberWithComa(item.totalSales)}{" "}
                     </Text>
                   </View>
-                  <View style={{ width: "20%" }}>
+                  <View style={{ width: "15%" }}>
                     <Text style={styles.salesData}>
                       {" "}
                       {currencySymbol} {numberWithComa(item.totalTarget)}{" "}
@@ -264,6 +295,16 @@ const ItemSalesDetails = (props) => {
                       {" "}
                       {item.achievement.toFixed(2)} %{" "}
                     </Text>
+                  </View>
+                  <View style={{ width: "10%", alignItems: "center" }}>
+                    <CheckBox
+                      checked={item.isFinal}
+                      checkedColor={Colors.primary}
+                      onPress={() =>
+                        changeSinlgeIsFinal(item.userSalesId, item.userId)
+                      }
+                      title={item.isFinal ? "Final" : "Not Final"}
+                    />
                   </View>
                 </View>
                 {index === currentIndex && (
@@ -373,9 +414,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     marginVertical: globalHeight("1%"),
-    width: "80%",
+    width: "90%",
     alignSelf: "center",
     borderRadius: 4,
+    paddingHorizontal: globalWidth("0.5%"),
   },
   number: {
     fontFamily: "open-sans-bold",

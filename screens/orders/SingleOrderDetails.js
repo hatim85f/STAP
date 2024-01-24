@@ -26,7 +26,7 @@ import * as orderActions from "../../store/orders/ordersActions";
 import EditProductOrder from "./EditProductOrder";
 
 const SingleOrderDetails = (props) => {
-  const { details, status, startDate, endDate } = props.route.params;
+  const { details, status, startDate, endDate, order_id } = props.route.params;
 
   const [totalValue, setTotalValue] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -35,6 +35,7 @@ const SingleOrderDetails = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [changingStatus, setChangingStatus] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -43,6 +44,7 @@ const SingleOrderDetails = (props) => {
   const containerHeight = useRef(
     new Animated.Value(-globalHeight("100%"))
   ).current;
+  const dropperHeight = useRef(new Animated.Value(-globalHeight(0))).current;
 
   const startAnimation = () => {
     Animated.timing(containerHeight, {
@@ -104,6 +106,37 @@ const SingleOrderDetails = (props) => {
     setOrderId(orderId);
   };
 
+  // ================================== CHANGE STATUS =======================================
+
+  const openDropper = () => {
+    setChangingStatus(true);
+    Animated.timing(dropperHeight, {
+      toValue: globalHeight("20%"),
+      duration: 250,
+      useNativeDriver: true,
+      easing: Easing.linear,
+    }).start();
+  };
+
+  const changeStatus = (status) => {
+    console.log(order_id);
+
+    setIsLoading(true);
+    setLoadingMessage("Changing Status");
+    dispatch(orderActions.changeOrderStatus(order_id, status)).then(() => {
+      setIsLoading(false);
+    });
+    Animated.timing(dropperHeight, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: true,
+      easing: Easing.linear,
+    }).start();
+    setChangingStatus(false);
+  };
+
+  // ================================== RENDERING =======================================
+
   if (isLoading) {
     return <Loader center loadingMessage={loadingMessage} />;
   }
@@ -111,28 +144,51 @@ const SingleOrderDetails = (props) => {
   return (
     <View style={styles.container}>
       <BackArrow navigation={props.navigation} />
-      <Text
-        style={[
-          styles.header,
-          {
-            color:
-              status === "Pending"
-                ? "orange"
-                : status === "In Progress"
-                ? Colors.font
-                : status === "Completed"
-                ? "green"
-                : "red",
-          },
-        ]}
-      >
-        {status}
-      </Text>
+      {changingStatus && (
+        <Animated.View style={[styles.dropper, { height: dropperHeight }]}>
+          <TouchableOpacity onPress={() => changeStatus("In Progress")}>
+            <Text style={styles.statusText}> In Progress </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeStatus("Completed")}>
+            <Text style={styles.statusText}> Completed </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeStatus("Pending")}>
+            <Text style={styles.statusText}> Pending </Text>
+          </TouchableOpacity>
+        </Animated.View>
+      )}
+      {!changingStatus && (
+        <TouchableOpacity onPress={openDropper}>
+          <Text
+            style={[
+              styles.header,
+              {
+                color:
+                  status === "Pending"
+                    ? "orange"
+                    : status === "In Progress"
+                    ? "skyblue"
+                    : status === "Completed"
+                    ? "green"
+                    : "red",
+              },
+            ]}
+          >
+            {status}
+          </Text>
+        </TouchableOpacity>
+      )}
       <Text style={styles.number}>
         {" "}
         Order Value : {numberWithComa(totalValue ? totalValue : 0)}{" "}
       </Text>
-      <View style={{ alignItems: "center" }}>
+      <View
+        style={{
+          alignItems: "center",
+          alignSelf: "center",
+          width: globalWidth("75%"),
+        }}
+      >
         {details && details.length > 0 && (
           <FlatList
             data={details}
@@ -380,6 +436,27 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: "center",
     paddingTop: 10,
+  },
+  dropper: {
+    width: globalWidth("20%"),
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: Colors.primary,
+    borderWidth: 2.5,
+    padding: 5,
+    position: "absolute",
+    top: globalHeight("5%"),
+    zIndex: 1000,
+  },
+  statusText: {
+    fontFamily: "headers",
+    fontSize: globalWidth("1%"),
+    marginVertical: globalHeight("1%"),
+    textAlign: "center",
+    color: Colors.primary,
   },
 });
 

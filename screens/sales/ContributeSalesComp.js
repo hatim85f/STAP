@@ -37,8 +37,6 @@ const ContributeSalesComp = (props) => {
   const [searchInput, setSearchInput] = useState("");
   const [filteredTeam, setFilteredTeam] = useState([]);
 
-  console.log(salesDetails);
-
   //   ======================================================GETTING TEAM DETAILS=================================================
   const dispatch = useDispatch();
 
@@ -79,21 +77,24 @@ const ContributeSalesComp = (props) => {
   ];
   const tableHead = ["S/N", "Client", "Date", "Name", "Amount", "Assign To"];
 
-  console.log(sales);
-
   //   =========================================================CHANGING SALES DATA=================================================
 
-  const changeSalesName = (member, businessId, index) => {
+  const changeSalesName = (event, index) => {
     const newSales = [...salesDetails];
 
-    newSales[index].userName = member.userName;
-    newSales[index].user = member._id;
-    newSales[index].businessId = businessId;
+    const memberName = event.target.value;
+    const teamData = team.map((a) => a.teamMembers).flat(1);
+
+    const selectedMember = teamData.find((a) => a.userName === memberName);
+
+    newSales[index].userName = memberName;
+    newSales[index].user = selectedMember._id;
+    newSales[index].businessId = selectedMember.businessId;
+
+    console.log(newSales);
 
     setSalesDetails(newSales);
   };
-
-  console.log(sales);
 
   const resetUser = (index) => {
     const newSales = [...salesDetails];
@@ -115,6 +116,8 @@ const ContributeSalesComp = (props) => {
       const newSales = salesDetails.reduce((acc, data) => {
         const found = acc.find((a) => a.user === data.user);
 
+        const date = new Date(data.date);
+
         if (!found) {
           acc.push({
             user: data.user,
@@ -126,6 +129,16 @@ const ContributeSalesComp = (props) => {
                 price: data.productPrice,
               },
             ],
+            startPeriod: new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              1
+            ).toISOString(),
+            endPeriod: new Date(
+              date.getFullYear(),
+              date.getMonth() + 1,
+              0
+            ).toISOString(),
           });
         } else {
           found.salesData.push({
@@ -144,17 +157,15 @@ const ContributeSalesComp = (props) => {
             salesActions.addMemberSales(
               a.user,
               a.salesData,
-              sales[0].version,
-              sales[0].startPeriod,
-              sales[0].endPeriod
+              a.versionName,
+              a.startPeriod,
+              a.endPeriod
             )
           );
         })
         .then(() => {
           setIsLoading(false);
         });
-
-      console.log(newSales);
     } catch (error) {
       console.log(error.message);
       setIsLoading(false);
@@ -199,26 +210,25 @@ const ContributeSalesComp = (props) => {
                       </TouchableOpacity>
                     </View>
                   ) : (
-                    <ScrollView horizontal={true}>
-                      {team.map((a) =>
-                        a.teamMembers.map((item, indx) => {
-                          return (
-                            <TouchableOpacity
-                              key={indx}
-                              onPress={() =>
-                                changeSalesName(item, a.businessId, index)
-                              }
-                              style={styles.memberContainer}
-                            >
-                              <Text style={styles.memberName}>
-                                {" "}
-                                {item.userName}{" "}
-                              </Text>
-                            </TouchableOpacity>
-                          );
-                        })
+                    <select
+                      style={styles.memberContainer}
+                      onChange={(event) => changeSalesName(event, index)}
+                    >
+                      <option value="" disabled selected>
+                        Select a user
+                      </option>
+                      {team.map((a, i) =>
+                        a.teamMembers.map((item, indx) => (
+                          <option
+                            key={indx}
+                            value={item.userName}
+                            style={styles.memberName}
+                          >
+                            {item.userName}
+                          </option>
+                        ))
                       )}
-                    </ScrollView>
+                    </select>
                   )}
                 </View>,
               ];
@@ -256,6 +266,10 @@ const styles = StyleSheet.create({
   },
   memberContainer: {
     paddingVertical: 5,
+    width: "90%",
+    height: globalHeight("4%"),
+    alignSelf: "center",
+    borderRadius: 10,
   },
   memberName: {
     fontSize: globalWidth("1.2%"),
