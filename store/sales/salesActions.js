@@ -10,6 +10,7 @@ export const GET_SINGLE_SALES_VERSIONS = "GET_SINGLE_SALES_VERSIONS";
 export const FULL_TEAM_ACHIEVEMENT = "FULL_TEAM_ACHIEVEMENT";
 export const GET_MEMBER_ACHIEVEMENT = "GET_MEMBER_ACHIEVEMENT";
 export const TEAM_YTD = "TEAM_YTD";
+export const INDIVIDUAL_YTD = "INDIVIDUAL_YTD";
 
 export const addSales = (salesData, version, startPeriod, endPeriod) => {
   return async (dispatch, getState) => {
@@ -412,6 +413,30 @@ export const getTeamYTD = (startMonth, endMonth, year) => {
       teamYTD: resData.teamAchievement,
       teamTarget: resData.monthlyTargets,
       teamSales: resData.monthlySales,
+    });
+  };
+};
+
+export const getIndividualYTD = (userId, startMonth, endMonth, year) => {
+  return async (dispatch, getState) => {
+    const { token } = getState().auth;
+
+    const response = await fetch(
+      `${mainLink}/api/user-sales/ytd_ach/${userId}/${startMonth}/${endMonth}/${year}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token,
+        },
+      }
+    );
+
+    const resData = await response.json();
+
+    dispatch({
+      type: INDIVIDUAL_YTD,
+      individualYTD: resData.data,
     });
   };
 };

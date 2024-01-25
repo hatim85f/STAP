@@ -5,6 +5,7 @@ import {
   GET_SALES,
   GET_SALES_VERSIONS,
   GET_SINGLE_SALES_VERSIONS,
+  INDIVIDUAL_YTD,
   TEAM_YTD,
 } from "./salesActions";
 
@@ -17,6 +18,7 @@ const initialState = {
   teamYTD: [],
   teamTarget: [],
   teamSales: [],
+  individualYTD: [],
 };
 
 export const salesReducer = (state = initialState, action) => {
@@ -57,6 +59,11 @@ export const salesReducer = (state = initialState, action) => {
         teamYTD: action.teamYTD,
         teamTarget: action.teamTarget,
         teamSales: action.teamSales,
+      };
+    case INDIVIDUAL_YTD:
+      return {
+        ...state,
+        individualYTD: action.individualYTD,
       };
     default:
       return state;

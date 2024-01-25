@@ -12,8 +12,14 @@ import { years } from "../../helpers/years";
 import Colors from "../../../constants/Colors";
 
 const NativeContainer = (props) => {
-  const { getSelectedMember, getSelectedMonth, getSelectedYear, search } =
-    props;
+  const {
+    getSelectedMember,
+    getSelectedMonth,
+    getSelectedYear,
+    search,
+    secondMonthDate,
+    getSecondMonth,
+  } = props;
 
   const { user } = useSelector((state) => state.auth);
   const { team } = useSelector((state) => state.team);
@@ -22,6 +28,7 @@ const NativeContainer = (props) => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
+  const [secondMonth, setSecondMonth] = useState("");
 
   //   =================================================SEND DATA=====================================================
 
@@ -36,6 +43,12 @@ const NativeContainer = (props) => {
   useEffect(() => {
     getSelectedYear(selectedYear);
   }, [selectedYear]);
+
+  useEffect(() => {
+    if (secondMonthDate) {
+      getSecondMonth(secondMonth);
+    }
+  }, [secondMonth]);
 
   const dispatch = useDispatch();
 
@@ -75,14 +88,21 @@ const NativeContainer = (props) => {
     window.localStorage.setItem("month", item);
   };
 
+  const changeSecondMonth = (item) => {
+    setSecondMonth(item);
+    window.localStorage.setItem("secondMonth", item);
+  };
+
   return (
     <View
       style={[
         styles.selectionContainer,
         {
           width:
-            user.userType !== "Employee"
+            user.userType !== "Employee" && !secondMonthDate
               ? globalWidth("52%")
+              : user.userType !== "Employee" && secondMonthDate
+              ? globalWidth("70%")
               : globalWidth("37%"),
         },
       ]}
@@ -104,6 +124,18 @@ const NativeContainer = (props) => {
         getSelectedItem={(item) => changeMonth(item)}
         placeholder="Select Month"
       />
+      {secondMonthDate && (
+        <NativePicker
+          list={months.map((a) => {
+            return {
+              label: a,
+              value: a,
+            };
+          })}
+          getSelectedItem={(item) => changeSecondMonth(item)}
+          placeholder="Select Second Month"
+        />
+      )}
       <NativePicker
         list={years}
         getSelectedItem={(item) => changeYear(item)}

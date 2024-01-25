@@ -88,8 +88,6 @@ const TeamYTD = (props) => {
     }
   }, [teamYTD]);
 
-  console.log(selectedTeam);
-
   useEffect(() => {
     if (selectedTeam === "All Businesses") {
       setSalesData(teamYTD);
@@ -107,8 +105,6 @@ const TeamYTD = (props) => {
   // ==============================================TOOLS DOWNLOAD===========================================
 
   const download = () => {};
-
-  console.log(salesData);
 
   // =============================================MAKING CALCULATIONS===========================================
 
@@ -133,9 +129,6 @@ const TeamYTD = (props) => {
     if (salesData && salesData.length > 0) {
       const productsSales = salesData.map((a) => a.products).flat(1);
 
-      console.log({
-        productsSales: productsSales.map((x) => x.productSalesValue),
-      });
       const productsValues = productsSales.map(
         (a) => +parseInt(a.productSalesValue).toFixed(2)
       );

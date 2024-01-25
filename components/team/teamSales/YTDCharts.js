@@ -24,6 +24,10 @@ const YTDCharts = (props) => {
     targetData,
     salesData,
     productsSales,
+    salesChartTitle,
+    targetChartTitle,
+    achievementChartTitle,
+    individual,
   } = props;
 
   const [totalSales, setTotalSales] = useState(null);
@@ -36,8 +40,6 @@ const YTDCharts = (props) => {
     setTotalSales(parseFloat(sales).toFixed(2));
     setTotalTarget(parseFloat(target).toFixed(2));
   }, [salesData, targetData]);
-
-  console.log(salesData.reduce((a, b) => a + b, 0));
 
   const calculateAchievement = (salesData, targetData) => {
     const result = salesData.map((sales, index) => {
@@ -72,7 +74,10 @@ const YTDCharts = (props) => {
       >
         <View style={styles.mainContainer}>
           <Card style={styles.card}>
-            <Text style={styles.text}>Total Team Sales</Text>
+            <Text style={styles.text}>
+              {" "}
+              {salesChartTitle ? salesChartTitle : "Total Team Sales"}{" "}
+            </Text>
             <Text style={[styles.number, { color: Colors.font }]}>
               {" "}
               {currencySymbol}{" "}
@@ -81,7 +86,10 @@ const YTDCharts = (props) => {
             <LineZoomChart data={salesData} color={Colors.primary} />
           </Card>
           <Card style={styles.card}>
-            <Text style={styles.text}>Total Team Target</Text>
+            <Text style={styles.text}>
+              {" "}
+              {targetChartTitle ? targetChartTitle : "Total Team Target"}{" "}
+            </Text>
             <Text style={[styles.number, { color: Colors.font }]}>
               {" "}
               {currencySymbol}{" "}
@@ -90,7 +98,12 @@ const YTDCharts = (props) => {
             <LineZoomChart data={targetData} color="#fcba03" />
           </Card>
           <Card style={styles.card}>
-            <Text style={styles.text}>Total Team Achievement</Text>
+            <Text style={styles.text}>
+              {" "}
+              {achievementChartTitle
+                ? achievementChartTitle
+                : "Total Team Achievement"}{" "}
+            </Text>
             <Text style={[styles.number, { color: Colors.font }]}>
               {((totalTeamsSales / totalTeamTarget) * 100).toFixed(2)} %
             </Text>
@@ -134,8 +147,8 @@ const YTDCharts = (props) => {
                   yaxisName="Value $"
                   xaxisName=""
                   image={item.productImage}
-                  totalSales={item.productSalesValue}
-                  totalTarget={item.productTargetValue}
+                  totalSales={parseFloat(item.productSalesValue).toFixed(0)}
+                  totalTarget={parseFloat(item.productTargetValue).toFixed(0)}
                   achievement={item.productAchievement}
                   secondColor={() => secondColor(item.productAchievement)}
                   currencySymbol={currencySymbol}
