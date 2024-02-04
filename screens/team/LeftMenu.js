@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
   Animated,
 } from "react-native";
-import { Button } from "react-native-elements";
-import { useDispatch, useSelector } from "react-redux";
+
 import Colors from "../../constants/Colors";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import AnimatedChevron from "../../components/AnimatedChevron";
@@ -15,8 +14,8 @@ import AnimatedChevron from "../../components/AnimatedChevron";
 const LeftMenu = (props) => {
   const { getDirection } = props;
 
-  const [selectedMenu, setSelectedMenu] = useState("individual");
-  const [subMenu, setSubMenu] = useState("individual-ytd");
+  const [selectedMenu, setSelectedMenu] = useState("");
+  const [subMenu, setSubMenu] = useState("");
 
   const animatedMaxHeightTeam = useRef(new Animated.Value(0)).current;
   const animatedMaxHeightIndividual = useRef(new Animated.Value(0)).current;
@@ -147,28 +146,6 @@ const LeftMenu = (props) => {
                 YTD Achievement
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setSubMenu("team-full-year")}
-              style={[
-                styles.lowerTextContainer,
-                {
-                  backgroundColor:
-                    subMenu === "team-full-year" ? "skyblue" : "white",
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.lowerText,
-                  {
-                    color:
-                      subMenu === "team-full-year" ? "white" : Colors.primary,
-                  },
-                ]}
-              >
-                Full Year Achievement
-              </Text>
-            </TouchableOpacity>
           </View>
         )}
       </Animated.View>
@@ -254,30 +231,6 @@ const LeftMenu = (props) => {
                 ]}
               >
                 YTD Achievement
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setSubMenu("individual-full-year")}
-              style={[
-                styles.lowerTextContainer,
-                {
-                  backgroundColor:
-                    subMenu === "individual-full-year" ? "skyblue" : "white",
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.lowerText,
-                  {
-                    color:
-                      subMenu === "individual-full-year"
-                        ? "white"
-                        : Colors.primary,
-                  },
-                ]}
-              >
-                Full Year Achievement
               </Text>
             </TouchableOpacity>
           </View>

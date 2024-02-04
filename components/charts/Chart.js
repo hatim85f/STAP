@@ -43,7 +43,7 @@ const CustomChart = (props) => {
           series={series}
           type="bar"
           width={globalWidth("25%")}
-          height={globalHeight("20%")}
+          height={globalHeight("17%")}
         />
       </div>
     </View>

@@ -53,15 +53,18 @@ const YTDCharts = (props) => {
   };
 
   const secondColor = (achievement) => {
-    if (achievement <= 30) {
-      return "#FF0055";
-    } else if (achievement <= 50 && achievement > 30) {
-      return "#AB7E02";
-    } else if (achievement > 50 && achievement <= 75) {
-      return "#03FCDF";
-    } else {
-      return Colors.primary;
-    }
+    const color =
+      achievement < 30
+        ? "#eb3a09"
+        : achievement >= 30 && achievement < 60
+        ? "#f59d05"
+        : achievement >= 60 && achievement < 80
+        ? "#ccae1b"
+        : achievement >= 80 && achievement < 100
+        ? "#08fcd8"
+        : achievement >= 100 && Colors.primary;
+
+    return color;
   };
 
   return (
@@ -129,9 +132,18 @@ const YTDCharts = (props) => {
               ]}
               colors={[
                 Colors.primary,
-                () => secondColor((totalSales / totalTarget) * 100),
+                () => secondColor((totalTeamsSales / totalTeamTarget) * 100),
               ]}
             />
+            <Text
+              style={[
+                styles.number,
+                { color: Colors.font, textAlign: "center" },
+              ]}
+            >
+              Achievement :{" "}
+              {((totalTeamsSales / totalTeamTarget) * 100).toFixed(2)} %
+            </Text>
           </Card>
         </View>
         <View style={styles.chartsRow}>
