@@ -208,7 +208,13 @@ const AppNavigator = () => {
               },
             },
           },
-
+          expense: {
+            screens: {
+              Expenses: {
+                path: "/expenses",
+              },
+            },
+          },
           settings: {
             path: "/settings",
           },

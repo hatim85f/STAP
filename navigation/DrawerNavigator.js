@@ -46,6 +46,7 @@ import { PhasingNav } from "./PhasingNavigator";
 import { UploadTargetNavigator } from "./UploadTargetNavigator";
 import { OrderingMainNavigator } from "./OrderingNavigator";
 import { SalesNavigator } from "./SalesNavigator";
+import { ExpensesNavigator } from "./ExpensesNavigator";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -369,6 +370,24 @@ export const MainDrawerNavigator = () => {
             return (
               <MaterialIcons
                 name="people-alt"
+                size={24}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="expense"
+        component={ExpensesNavigator}
+        options={{
+          ...defaultNavOptions,
+          title: "Expenses",
+          headerTitle: "Expenses",
+          drawerIcon: ({ focused }) => {
+            return (
+              <FontAwesome5
+                name="money-check-alt"
                 size={24}
                 color={focused ? "white" : "black"}
               />

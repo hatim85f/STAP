@@ -115,13 +115,20 @@ const UploadImage = (props) => {
       <Text style={styles.note}>Accepting Only JPEG or PNG files</Text>
       <Progress.Bar
         progress={parseFloat(progress / 100)}
-        width={isWeb() ? globalWidth("40%") : globalWidth("90%")}
+        width={
+          props.width
+            ? props.width
+            : isWeb()
+            ? globalWidth("40%")
+            : globalWidth("90%")
+        }
         height={globalHeight("1.5%")}
         color={Colors.primary}
         style={{
           borderRadius: 50,
           borderWidth: 0,
           marginTop: globalHeight("1.5%"),
+          alignSelf: "center",
         }}
       />
     </View>
