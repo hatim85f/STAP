@@ -64,7 +64,7 @@ const AddVariableExpenses = (props) => {
     const businessList = busiessesDetails.map((business) => {
       return {
         label: business.businessName,
-        value: business._id,
+        value: business.businessId,
       };
     });
 
@@ -78,7 +78,7 @@ const AddVariableExpenses = (props) => {
   useEffect(() => {
     if (busiessesDetails.length > 0 && businessSelected !== "") {
       const businessCurrency = busiessesDetails.find(
-        (business) => business._id === businessSelected
+        (business) => business.businessId === businessSelected
       ).currencySymbol;
 
       setBusinessCurrency(businessCurrency);

@@ -31,6 +31,7 @@ import Loader from "../../components/Loader";
 
 const IndividualTargetScreen = (props) => {
   const { teamTarget, businessTargets } = useSelector((state) => state.target);
+  const { user } = useSelector((state) => state.auth);
 
   const [selectedYear, setSelectedYear] = useState(2024);
   const [isOpened, setIsOpened] = useState(false);
@@ -66,7 +67,11 @@ const IndividualTargetScreen = (props) => {
   useEffect(() => {
     if (selectedYear) {
       setIsLoading(true);
-      dispatch(targetActions.getTeamTarget(selectedYear));
+      if (user.userType === "Employee") {
+        dispatch(targetActions.getPersonalTarget(selectedYear));
+      } else {
+        dispatch(targetActions.getTeamTarget(selectedYear));
+      }
       dispatch(targetActions.businessTargets(selectedYear)).then(() => {
         setIsLoading(false);
       });

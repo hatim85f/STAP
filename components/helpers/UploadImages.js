@@ -16,7 +16,7 @@ import { Platform } from "react-native";
 import { isTablet, isWeb } from "../../constants/device";
 
 const UploadImage = (props) => {
-  const { imageName, getURL, disabled, subFolder } = props;
+  const { imageName, getURL, disabled, subFolder, hideTitle } = props;
   const [selectedImage, setSelectedImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [progress, setProgress] = useState(null);
@@ -97,6 +97,7 @@ const UploadImage = (props) => {
       }
     );
   };
+
   return (
     <View style={styles.container}>
       <CheckBox
@@ -112,7 +113,9 @@ const UploadImage = (props) => {
         disabled={disabled}
       />
 
-      <Text style={styles.note}>Accepting Only JPEG or PNG files</Text>
+      {!hideTitle && (
+        <Text style={styles.note}>Accepting Only JPEG or PNG files</Text>
+      )}
       <Progress.Bar
         progress={parseFloat(progress / 100)}
         width={

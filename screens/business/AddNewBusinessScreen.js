@@ -96,7 +96,9 @@ const AddNewBusinessScreen = (props) => {
       setSelectedCurrency("");
       setIsLoading(false);
 
-      window.location.href("/dashboard");
+      dispatch(businessActions.getBusinessesDetails());
+
+      window.location.href("/profile");
     });
   };
 

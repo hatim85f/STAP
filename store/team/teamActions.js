@@ -155,8 +155,6 @@ export const getMemberSales = (memberId, month, year) => {
 
     const resData = await response.json();
 
-    console.log(resData);
-
     dispatch({
       type: GET_MEMBER_SALES,
       memberSales: resData.memberSales,

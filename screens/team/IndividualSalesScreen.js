@@ -152,10 +152,10 @@ const IndividualSalesScreen = (props) => {
             return {
               product: item._id,
               salesQuantity: 0,
-              price: item.costPrice,
+              price: item.sellingPrice,
               totalValue: item.salesQuantity
                 ? item.salesQuantity
-                : 0 * item.costPrice,
+                : 0 * item.sellingPrice,
               imageURL: item.imageURL,
               productNickName: item.productNickName,
               currencySymbol: item.currencySymbol,

@@ -41,8 +41,6 @@ const SideBar = (props) => {
     // Add more image sources as needed
   ];
 
-  console.log("globalWidth", globalWidth("20%"));
-
   useEffect(() => {
     const interval = setInterval(() => {
       Animated.timing(translateY, {

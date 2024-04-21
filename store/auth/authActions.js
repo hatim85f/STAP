@@ -439,6 +439,8 @@ export const changeProfilePicture = (profilePicture) => {
   return async (dispatch, getState) => {
     const { user, token } = getState().auth;
 
+    console.log(profilePicture);
+
     const response = await fetch(
       `${mainLink}/api/profile/changeProfilePicture/${user._id}`,
       {

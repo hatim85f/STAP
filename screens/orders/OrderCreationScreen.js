@@ -56,6 +56,7 @@ const OrderCreationScreen = (props) => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const [addDetails, setAddDetails] = useState(false);
   const [loadingClients, setLoadingClients] = useState(false);
+  const [addVAT, setAddVAT] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -162,7 +163,7 @@ const OrderCreationScreen = (props) => {
         productId: productId,
         quantity: 0,
         productName: product?.productNickName,
-        price: product?.costPrice,
+        price: product?.sellingPrice,
         total: 0,
         image: product?.imageURL,
         bonusValue: 0,
@@ -208,6 +209,12 @@ const OrderCreationScreen = (props) => {
     setOrderList((prevOrderList) => {
       const newOrderList = [...prevOrderList];
       newOrderList[index].bonusValue = +bonus;
+
+      if (newOrderList[index].bonusType === "Value") {
+        newOrderList[index].total =
+          newOrderList[index].quantity * newOrderList[index].price -
+          newOrderList[index].bonusValue;
+      }
 
       return newOrderList;
     });
@@ -313,7 +320,9 @@ const OrderCreationScreen = (props) => {
       <View style={{ flex: 1 }}>
         {orderList.length > 0 && totalValue > 0 && (
           <Text style={[styles.orderValue, { textAlign: "center" }]}>
-            Order Value : {numberWithComa(totalValue)} {orderList[0].currency}
+            Order Value :{" "}
+            {numberWithComa(addVAT ? totalValue * 1.05 : totalValue)}{" "}
+            {orderList[0].currency}
           </Text>
         )}
       </View>
@@ -347,6 +356,7 @@ const OrderCreationScreen = (props) => {
               orderList={orderList}
               orderId={orderId}
               client={clients?.find((client) => client._id === clientId)}
+              getVatStatus={setAddVAT}
               cancelRevision={() => console.log("Cancel")}
               clearOrder={() => {
                 setClientId(null);

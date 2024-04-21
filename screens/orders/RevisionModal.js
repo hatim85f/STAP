@@ -12,21 +12,26 @@ import TableComp from "../../components/TableComp";
 import numberWithComa from "../../components/helpers/numberWithComa";
 import * as ordersActions from "../../store/orders/ordersActions";
 import Loader from "../../components/Loader";
+import PrintingComp from "./PrintingComp";
+
+import { FontAwesome } from "@expo/vector-icons";
 
 const RevisionModal = (props) => {
   const {
-    reviseOrder,
     client,
     orderList,
     cancelRevision,
     orderId,
     clearOrder,
+    getVatStatus,
   } = props;
 
   const [tableDetails, setTableDetails] = useState([]);
   const [totalValue, setTotalValue] = useState(null);
   const [values, setValues] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showingPrint, setshowingPrint] = useState(false);
+  const [addVAT, setAddVAT] = useState(false);
 
   useEffect(() => {
     const tabletails = orderList.map((order, index) => {
@@ -48,7 +53,9 @@ const RevisionModal = (props) => {
           ? order.bonusValue + "%"
           : order.bonusValue + " " + order.currency,
         totalQuantity,
-        numberWithComa(parseFloat(totalValue).toFixed(0)),
+        numberWithComa(
+          parseFloat(addVAT ? totalValue * 1.05 : totalValue).toFixed(0)
+        ),
       ];
     });
 
@@ -63,7 +70,11 @@ const RevisionModal = (props) => {
     });
 
     setValues(totals);
-  }, [orderList]);
+  }, [orderList, addVAT]);
+
+  useEffect(() => {
+    getVatStatus(addVAT);
+  }, [addVAT]);
 
   const header = [
     "#",
@@ -87,8 +98,13 @@ const RevisionModal = (props) => {
 
   useEffect(() => {
     const total = values.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-    setTotalValue(total);
-  }, [tableDetails]);
+    let finalTotal = total;
+
+    if (addVAT) {
+      finalTotal = total * 1.05;
+    }
+    setTotalValue(finalTotal);
+  }, [tableDetails, addVAT]);
 
   const dispatch = useDispatch();
 
@@ -102,13 +118,13 @@ const RevisionModal = (props) => {
           item.quantity,
           item.bonusType === "Percentage"
             ? (item.quantity * item.bonusValue) / 100
-            : item.quantity,
+            : item.bonusValue,
           item.bonusType === "Value" ? "Fixed" : "Percentage",
           item.bonusType === "Value"
             ? 0
             : (item.quantity * item.bonusValue) / 100,
           item.price,
-          item.total,
+          addVAT ? item.total * 1.05 : item.total,
           item.businessId
         )
       );
@@ -116,6 +132,10 @@ const RevisionModal = (props) => {
     setIsLoading(false);
     cancelRevision();
     clearOrder();
+  };
+
+  const addingVAT = () => {
+    setAddVAT(!addVAT);
   };
 
   if (isLoading) {
@@ -132,6 +152,27 @@ const RevisionModal = (props) => {
           </Text>
         </View>
       )}
+      <TouchableOpacity
+        style={styles.press}
+        onPress={() => setshowingPrint(true)}
+      >
+        <FontAwesome
+          name="print"
+          size={globalWidth("2%")}
+          color={Colors.primary}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={addingVAT} style={styles.middlePress}>
+        {addVAT ? (
+          <Text style={{ color: Colors.primary, textAlign: "center" }}>
+            Cancel Added
+          </Text>
+        ) : (
+          <Text style={{ color: Colors.primary, textAlign: "center" }}>
+            Add VAT
+          </Text>
+        )}
+      </TouchableOpacity>
       <ScrollView scrollEnabled showsVerticalScrollIndicator={false}>
         {tableDetails.length > 0 && (
           <View style={{ width: globalWidth("98%"), alignSelf: "center" }}>
@@ -159,7 +200,23 @@ const RevisionModal = (props) => {
           titleStyle={styles.title}
         />
 
-        <View style={{ height: globalHeight("15%") }}></View>
+        <View style={{ height: globalHeight("30%") }}></View>
+      </ScrollView>
+      <ScrollView
+        scrollEnabled
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+      >
+        <PrintingComp
+          tableDetails={tableDetails}
+          totalValue={totalValue}
+          tableHead={header}
+          showPrint={showingPrint}
+          cancelPrint={() => setshowingPrint(false)}
+          orderNumber={orderId}
+          client={client}
+          addVAT={addVAT}
+        />
       </ScrollView>
     </View>
   );
@@ -206,6 +263,18 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "headers",
     fontSize: globalWidth("1.2%"),
+  },
+  press: {
+    width: globalWidth("5%"),
+    height: globalWidth("5%"),
+    alignSelf: "flex-end",
+  },
+  middlePress: {
+    alignSelf: "center",
+    marginTop: globalHeight("2%"),
+    width: globalWidth("20%"),
+    height: globalWidth("2%"),
+    alignItems: "center",
   },
 });
 

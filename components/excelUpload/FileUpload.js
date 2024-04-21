@@ -14,6 +14,7 @@ import { ScrollView } from "react-native";
 
 import * as productsActions from "../../store/products/productsActions";
 import Loader from "../Loader";
+import { Row, Table } from "react-native-table-component";
 
 const FileUpload = (props) => {
   const { userId, businessId } = props;
@@ -138,6 +139,8 @@ const FileUpload = (props) => {
     return <Loader loadingMessage="Uploading Products" center />;
   }
 
+  console.log(tableData);
+
   return (
     <div style={styles.container}>
       <Button
@@ -149,24 +152,51 @@ const FileUpload = (props) => {
       <View style={styles.tableContainer}>
         <ScrollView scrollEnabled scrollEventThrottle={16}>
           {tableData.length > 0 && (
-            <TableComp
+            <Table
+              borderStyle={{
+                borderWidth: 2,
+                borderColor: Colors.primary,
+                borderRadius: 10,
+              }}
               widthArr={widthArr}
-              tableHead={tableHead}
-              data={tableData.map((a, index) => [
-                index + 1,
-                a.productName,
-                a.productNickName,
-                a.costPrice,
-                a.sellingPrice,
-                a.retailPrice,
-                a.description,
-                a.minimumDiscount,
-                a.maximumDiscount,
-                a.category,
-                a.productType,
-                numberWithComa(a.quantity),
-              ])}
-            />
+            >
+              <Row
+                data={tableHead}
+                style={[styles.head, { backgroundColor: Colors.haizyColor }]}
+                textStyle={styles.text}
+                widthArr={widthArr}
+              />
+              {tableData.map((rowData, index) => {
+                return (
+                  <Row
+                    key={index}
+                    data={[
+                      index + 1,
+                      rowData.productName,
+                      rowData.productNickName,
+                      numberWithComa(rowData.costPrice),
+                      numberWithComa(rowData.sellingPrice),
+                      numberWithComa(rowData.retailPrice),
+                      rowData.description,
+                      rowData.minimumDiscount,
+                      rowData.maximumDiscount,
+                      rowData.category,
+                      rowData.productType,
+                      rowData.quantity,
+                    ]}
+                    style={[
+                      styles.rows,
+                      {
+                        backgroundColor:
+                          index % 2 === 0 ? Colors.lightBG : Colors.white,
+                      },
+                    ]}
+                    textStyle={styles.text}
+                    widthArr={widthArr}
+                  />
+                );
+              })}
+            </Table>
           )}
         </ScrollView>
       </View>
@@ -229,6 +259,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginVertical: globalHeight("2%"),
+  },
+  rows: {
+    justifyContent: "center",
+    height: globalHeight("7.5%"),
+    overflow: "visible",
+    elevation: 10,
+    zIndex: 1000,
+    justifyContent: "center",
+  },
+  text: {
+    textAlign: "center",
+    fontFamily: "headers",
+    fontSize: globalWidth("0.8%"),
+    color: Colors.font,
+  },
+  head: {
+    height: globalHeight("5%"),
+    // justifyContent: "center",
   },
 });
 

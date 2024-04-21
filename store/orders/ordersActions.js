@@ -71,8 +71,6 @@ export const addOrder = (
 
     const resData = await response.json();
 
-    console.log(resData);
-
     dispatch({
       type: ERROR,
       error: resData.error ? resData.error : "Done",
@@ -132,8 +130,6 @@ export const deleteItem = (itemId, orderId) => {
     );
 
     const resData = await response.json();
-
-    console.log(resData);
 
     dispatch({
       type: ERROR,

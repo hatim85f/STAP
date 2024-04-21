@@ -23,14 +23,17 @@ const ExcelIcons = (props) => {
     // Add formulas to columns D, G, and H
     for (let rowIndex = 1; rowIndex <= data.length; rowIndex++) {
       const productCellRef = XLSX.utils.encode_cell({ c: 0, r: rowIndex });
-      const formulaD = `VLOOKUP(${productCellRef},Data!A:D,2,FALSE)`;
+      const formulaD = `VLOOKUP(${productCellRef},Data!A:E,2,FALSE)`;
       worksheet[`D${rowIndex + 1}`] = { t: "n", f: formulaD }; // +1 because header is in the first row
 
-      const formulaI = `VLOOKUP(${productCellRef},Data!A:D,3,FALSE)`;
+      const formulaI = `VLOOKUP(${productCellRef},Data!A:E,3,FALSE)`;
       worksheet[`I${rowIndex + 1}`] = { t: "n", f: formulaI };
 
-      const formulaJ = `VLOOKUP(${productCellRef},Data!A:D,4,FALSE)`;
+      const formulaJ = `VLOOKUP(${productCellRef},Data!A:E,4,FALSE)`;
       worksheet[`J${rowIndex + 1}`] = { t: "n", f: formulaJ };
+
+      const formulaK = `VLOOKUP(${productCellRef},Data!A:E,5,FALSE)`;
+      worksheet[`K${rowIndex + 1}`] = { t: "n", f: formulaK };
     }
   };
 
@@ -40,7 +43,13 @@ const ExcelIcons = (props) => {
     });
 
     const dataWorksheet = XLSX.utils.json_to_sheet(secondData, {
-      header: ["Product Name", "Product Price", "Business ID", "Product ID"],
+      header: [
+        "Product Name",
+        "Product Price",
+        "Business ID",
+        "Product ID",
+        "Selling Price",
+      ],
     });
 
     // Set dynamic column widths
@@ -164,6 +173,7 @@ const ExcelIcons = (props) => {
           Bonus: bonus,
           "Bonus Type": bonusType,
           "Business ID": businessId,
+          "Selling Price": sellingPrice,
         } = item;
 
         // Convert the date from numeric representation to JavaScript Date object
@@ -175,18 +185,17 @@ const ExcelIcons = (props) => {
           quantity,
           productId,
           date: typeof date === "number" ? parsedDate : date,
-          productPrice,
           status,
           bonus,
           bonusType,
           businessId,
+          sellingPrice,
+          productPrice,
         };
       });
 
     setfinalData(transformedData);
   }, [uploadedData]);
-
-  console.log(finalData);
 
   return (
     <View style={styles.container}>

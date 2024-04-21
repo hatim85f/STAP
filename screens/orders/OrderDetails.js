@@ -55,6 +55,7 @@ const OrderDetails = (props) => {
           </View>
         )}
       </ScrollView>
+      <View style={{ height: globalHeight("10%") }} />
     </View>
   );
 };

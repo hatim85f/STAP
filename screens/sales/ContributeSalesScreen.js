@@ -23,7 +23,6 @@ const ContributeSalesScreen = (props) => {
   const [endPeriod, setEndPeriod] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [finalSales, setFinalSales] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(null);
 
   // ==========================================GETTING SALES======================================================
 

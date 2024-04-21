@@ -39,6 +39,21 @@ const TopBar = (props) => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
+        onPress={() => changeRouteName("manual-sales")}
+        style={styles.button}
+      >
+        <Entypo
+          name="add-to-list"
+          size={globalWidth("2%")}
+          color={routeName === "manual-sales" ? Colors.primary : Colors.lightBG}
+        />
+        <Text
+          style={routeName === "manual-sales" ? styles.selected : styles.title}
+        >
+          Add Manually
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
         onPress={() => changeRouteName("sales-show")}
         style={styles.button}
       >

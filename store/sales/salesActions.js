@@ -54,6 +54,8 @@ export const getSales = (startPeriod, endPeriod) => {
     window.localStorage.setItem("startDate", startPeriod);
     window.localStorage.setItem("endDate", endPeriod);
 
+    console.log({ startPeriod, endPeriod });
+
     const response = await fetch(
       `${mainLink}/api/sales/${user._id}?startPeriod=${startPeriod}&endPeriod=${endPeriod}`,
       {

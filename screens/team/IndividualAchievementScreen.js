@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     width: "80%",
     height: globalHeight("85%"),
     backgroundColor: "white",
+    overflow: "scroll",
   },
   leftRow: {
     flexDirection: "row",

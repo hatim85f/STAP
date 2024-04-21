@@ -211,6 +211,8 @@ const BusinessesScreen = (props) => {
     }
   };
 
+  console.log(businessData);
+
   return (
     <View style={styles.container}>
       {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
@@ -323,7 +325,12 @@ const BusinessesScreen = (props) => {
                       <Text style={styles.type}> {item.numberOfEmployees}</Text>
                     </Text>
                   </BusinessItem>
-
+                  <BusinessItem hideEditButton>
+                    <Text style={styles.description}>
+                      Number of Partners (NOP) :{" "}
+                      <Text style={styles.type}> {item.numberOfPartners}</Text>
+                    </Text>
+                  </BusinessItem>
                   <BusinessItem
                     placeholder="Edit Website"
                     editedValue={(newValue) =>

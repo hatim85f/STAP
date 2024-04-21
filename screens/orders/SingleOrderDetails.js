@@ -119,8 +119,6 @@ const SingleOrderDetails = (props) => {
   };
 
   const changeStatus = (status) => {
-    console.log(order_id);
-
     setIsLoading(true);
     setLoadingMessage("Changing Status");
     dispatch(orderActions.changeOrderStatus(order_id, status)).then(() => {
@@ -143,7 +141,9 @@ const SingleOrderDetails = (props) => {
 
   return (
     <View style={styles.container}>
-      <BackArrow navigation={props.navigation} />
+      <View style={{ width: globalWidth("100%"), alignItems: "flex-start" }}>
+        <BackArrow navigation={props.navigation} />
+      </View>
       {changingStatus && (
         <Animated.View style={[styles.dropper, { height: dropperHeight }]}>
           <TouchableOpacity onPress={() => changeStatus("In Progress")}>
@@ -182,125 +182,120 @@ const SingleOrderDetails = (props) => {
         {" "}
         Order Value : {numberWithComa(totalValue ? totalValue : 0)}{" "}
       </Text>
-      <View
-        style={{
-          alignItems: "center",
-          alignSelf: "center",
-          width: globalWidth("75%"),
-        }}
-      >
-        {details && details.length > 0 && (
-          <FlatList
-            data={details}
-            keyExtractor={(item) => item.productId}
-            numColumns={2}
-            renderItem={({ item, index }) => {
-              return (
-                <View style={{ flexDirection: "column" }}>
-                  <View
-                    style={[
-                      styles.deleteContainer,
-                      { width: "100%", marginTop: globalHeight("2%") },
-                    ]}
+
+      {details && details.length > 0 && (
+        <FlatList
+          data={details}
+          keyExtractor={(item) => item.productId}
+          scrollEnabled
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          renderItem={({ item, index }) => {
+            return (
+              <View style={{ flexDirection: "column" }}>
+                <View
+                  style={[
+                    styles.deleteContainer,
+                    { width: "100%", marginTop: globalHeight("2%") },
+                  ]}
+                >
+                  <TouchableOpacity
+                    style={styles.touchable}
+                    onPress={() => {
+                      setSelectedProduct(item);
+                      startAnimation();
+                    }}
                   >
+                    <Feather
+                      name="edit"
+                      size={globalWidth("2%")}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <Card style={styles.card}>
+                  <View style={styles.leftContainer}>
+                    <Image
+                      source={{ uri: item.productImage }}
+                      style={styles.avatarStlye}
+                    />
+                    <Text style={styles.itemName}> {item.productName} </Text>
+                    <Text style={styles.category}>
+                      {" "}
+                      {item.productCategory}{" "}
+                    </Text>
+                  </View>
+                  <View style={styles.rightContainer}>
+                    <View style={styles.dataContainer}>
+                      <Text style={styles.title}>
+                        {" "}
+                        Product Price :{" "}
+                        <Text style={styles.data}>
+                          {numberWithComa(item.productPrice)}
+                        </Text>{" "}
+                      </Text>
+                    </View>
+                    <View style={styles.dataContainer}>
+                      <Text style={styles.title}>
+                        {" "}
+                        Quantity:{" "}
+                        <Text style={styles.data}>{item.quantity}</Text>{" "}
+                      </Text>
+                    </View>
+                    <View style={styles.dataContainer}>
+                      <Text style={styles.title}>
+                        {" "}
+                        Bonus:{" "}
+                        <Text style={styles.data}>
+                          {item.discountType === "Percentage"
+                            ? (item.bonusUnits / item.quantity).toFixed(0) *
+                                100 +
+                              "%"
+                            : item.bonusUnits}
+                        </Text>{" "}
+                      </Text>
+                    </View>
+                    <View style={styles.dataContainer}>
+                      <Text style={styles.title}>
+                        {" "}
+                        Total Units:{" "}
+                        <Text style={styles.data}>
+                          {item.discountType === "Percentage"
+                            ? numberWithComa(item.bonusUnits + item.quantity)
+                            : item.quantity}
+                        </Text>{" "}
+                      </Text>
+                    </View>
+                    <View style={styles.dataContainer}>
+                      <Text style={styles.title}>
+                        {" "}
+                        Total Value :{" "}
+                        <Text style={styles.data}>
+                          {numberWithComa(item.totalValue)}
+                        </Text>{" "}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.deleteContainer}>
                     <TouchableOpacity
+                      onPress={() => deleteItem(item.orderId, item.mainOrderId)}
                       style={styles.touchable}
-                      onPress={() => {
-                        setSelectedProduct(item);
-                        startAnimation();
-                      }}
                     >
-                      <Feather
-                        name="edit"
-                        size={globalWidth("2%")}
-                        color="black"
+                      <MaterialIcons
+                        name="delete-sweep"
+                        size={globalWidth("2.5%")}
+                        color="#ff0055"
                       />
                     </TouchableOpacity>
                   </View>
-                  <Card style={styles.card}>
-                    <View style={styles.leftContainer}>
-                      <Image
-                        source={{ uri: item.productImage }}
-                        style={styles.avatarStlye}
-                      />
-                      <Text style={styles.itemName}> {item.productName} </Text>
-                      <Text style={styles.category}>
-                        {" "}
-                        {item.productCategory}{" "}
-                      </Text>
-                    </View>
-                    <View style={styles.rightContainer}>
-                      <View style={styles.dataContainer}>
-                        <Text style={styles.title}>
-                          {" "}
-                          Product Price :{" "}
-                          <Text style={styles.data}>
-                            {numberWithComa(item.productPrice)}
-                          </Text>{" "}
-                        </Text>
-                      </View>
-                      <View style={styles.dataContainer}>
-                        <Text style={styles.title}>
-                          {" "}
-                          Quantity:{" "}
-                          <Text style={styles.data}>{item.quantity}</Text>{" "}
-                        </Text>
-                      </View>
-                      <View style={styles.dataContainer}>
-                        <Text style={styles.title}>
-                          {" "}
-                          Bonus:{" "}
-                          <Text style={styles.data}>
-                            {item.discountType === "Percentage"
-                              ? (item.bonusUnits / item.quantity).toFixed(0) *
-                                  100 +
-                                "%"
-                              : item.bonusUnits}
-                          </Text>{" "}
-                        </Text>
-                      </View>
-                      <View style={styles.dataContainer}>
-                        <Text style={styles.title}>
-                          {" "}
-                          Total Units:{" "}
-                          <Text style={styles.data}>
-                            {item.discountType === "Percentage"
-                              ? numberWithComa(item.bonusUnits + item.quantity)
-                              : item.quantity}
-                          </Text>{" "}
-                        </Text>
-                      </View>
-                      <View style={styles.dataContainer}>
-                        <Text style={styles.title}>
-                          {" "}
-                          Total Value :{" "}
-                          <Text style={styles.data}>
-                            {numberWithComa(item.totalValue)}
-                          </Text>{" "}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.deleteContainer}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          deleteItem(item.orderId, item.mainOrderId)
-                        }
-                        style={styles.touchable}
-                      >
-                        <MaterialIcons
-                          name="delete-sweep"
-                          size={globalWidth("2.5%")}
-                          color="#ff0055"
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </Card>
-                </View>
-              );
-            }}
-          />
-        )}
-      </View>
+                </Card>
+              </View>
+            );
+          }}
+        />
+      )}
+      <View style={{ height: globalHeight("10%") }} />
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
         <OrdersTabBar navigation={props.navigation} route="orders-show" />
       </View>
@@ -344,6 +339,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    alignItems: "center",
   },
   header: {
     fontFamily: "headers",

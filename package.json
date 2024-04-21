@@ -77,7 +77,11 @@
     "sweetalert2": "^11.7.31",
     "victory-native": "^36.6.12",
     "xlsx": "^0.18.5",
-    "@react-native-picker/picker": "2.4.10"
+    "@react-native-picker/picker": "2.4.10",
+    "expo-notifications": "~0.20.1",
+    "expo-print": "~12.4.2",
+    "expo-sharing": "~11.5.0",
+    "@react-native-community/slider": "4.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

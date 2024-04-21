@@ -653,6 +653,99 @@ const data = [
       },
     ],
   },
+  {
+    name: "Managing Expenses",
+    route: "Accessing and managing expenses within the application.",
+    steps: [
+      {
+        step: "Navigate to Expenses Section",
+        details: [
+          "Accessing the expenses management section within the app or website.",
+        ],
+      },
+      {
+        step: "Add Fixed Expenses",
+        details: [
+          "Selecting the option to add fixed expenses.",
+          "Providing mandatory details such as expense name, amount, description, and category (e.g., COGS, Rent, Salaries).",
+          "Submitting the fixed expenses details.",
+        ],
+      },
+      {
+        step: "Manage Fixed Expenses",
+        details: [
+          "Viewing and managing previously added fixed expenses.",
+          "Options to edit or delete existing fixed expenses.",
+        ],
+      },
+      {
+        step: "Add Variable Expenses",
+        details: [
+          "Selecting the option to add variable expenses.",
+          "Providing mandatory details such as expense name, amount, description, and whether a receipt is available.",
+          "Optionally, selecting a different currency if submitting a receipt with a different currency.",
+        ],
+      },
+      {
+        step: "Manage Variable Expenses",
+        details: [
+          "Viewing and managing previously added variable expenses.",
+          "Options to edit, delete, or upload receipt details for variable expenses.",
+        ],
+      },
+      {
+        step: "Add Marketing Expenses",
+        details: [
+          "Selecting the option to add marketing expenses.",
+          "Providing mandatory details such as expense value, type, recipient (customer or stakeholder), due date, and rationale.",
+          "Submitting the marketing expenses details for approval.",
+        ],
+      },
+      {
+        step: "Manage Marketing Expenses",
+        details: [
+          "Viewing and managing marketing expenses awaiting approval.",
+          "Options for marketing manager or admin to approve, reject, or revise marketing expenses.",
+          "Employees can view the status of their submitted marketing expenses but cannot approve or revise them.",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Managing Business Partners",
+    route:
+      "Adding and managing business partners associated with the business.",
+    steps: [
+      {
+        step: "Navigate to Business Details Section",
+        details: [
+          "Accessing the section within the app or website to manage business details.",
+        ],
+      },
+      {
+        step: "Add Business Partner",
+        details: [
+          "Selecting the option to add a new business partner.",
+          "Providing mandatory details such as partner name, email, phone number, address, and percentage share of profits.",
+          "Submitting the business partner details.",
+        ],
+      },
+      {
+        step: "Create User Account",
+        details: [
+          "Upon submission, a new user account will be created using the provided email and password.",
+          "The created user account will be associated with the business partner for future access to business details and profits.",
+        ],
+      },
+      {
+        step: "Manage Business Partners",
+        details: [
+          "Viewing and managing existing business partners associated with the business.",
+          "Options to edit or delete current business partners.",
+        ],
+      },
+    ],
+  },
 ];
 
 export default data;

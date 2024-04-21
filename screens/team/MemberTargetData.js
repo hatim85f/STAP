@@ -193,7 +193,9 @@ const MemberTargetData = (props) => {
                                       productPrice={numberWithComa(
                                         parseInt(item.costPrice)
                                       )}
-                                      phasing={month.monthPhasing}
+                                      phasing={parseFloat(
+                                        month.monthPhasing
+                                      ).toFixed(2)}
                                     />
                                   );
                                 })}

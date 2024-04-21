@@ -53,9 +53,7 @@ const AppNavigator = () => {
         screens: {
           Account: {
             screens: {
-              Profile: {
-                path: "/profile",
-              },
+              Profile: "/profile",
               Upgrade: {
                 path: "/profile/upgrade-details/:packageId",
               },
@@ -83,6 +81,13 @@ const AppNavigator = () => {
               },
             },
           },
+          partners: {
+            screens: {
+              Partners: {
+                path: "/partners/business_partners",
+              },
+            },
+          },
           products: {
             screens: {
               main_products_nav: {
@@ -99,7 +104,12 @@ const AppNavigator = () => {
               },
             },
           },
-
+          inventory: {
+            path: "/inventory",
+          },
+          purchases: {
+            path: "/purchases",
+          },
           target: {
             screens: {
               target_show: {
@@ -156,7 +166,13 @@ const AppNavigator = () => {
               contribute: {
                 path: "/sales/contribute/",
               },
+              manual: {
+                path: "/sales/manual-sales/",
+              },
             },
+          },
+          suppliers: {
+            path: "/suppliers",
           },
           team: {
             screens: {
@@ -212,6 +228,9 @@ const AppNavigator = () => {
             screens: {
               Expenses: {
                 path: "/expenses",
+              },
+              expenses_actions: {
+                path: "/expenses_actions/:id/:month/:year",
               },
             },
           },

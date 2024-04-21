@@ -26,6 +26,15 @@ const IndividualOverview = (props) => {
 
   const dispatch = useDispatch();
 
+  // ==============================================MANAGEMENT OF STATE====================================================
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [isOpened, setIsOpened] = useState(false);
+  const [teamIsOpened, setTeamIsOpened] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [selectedMember, setSelectedMember] = useState(null);
+
   // ===============================================SEARCH=====================================================
 
   const search = () => {
@@ -43,14 +52,7 @@ const IndividualOverview = (props) => {
     });
   };
 
-  // ==============================================MANAGEMENT OF STATE====================================================
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
-  const [isOpened, setIsOpened] = useState(false);
-  const [teamIsOpened, setTeamIsOpened] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("");
-  const [selectedMember, setSelectedMember] = useState(null);
+  console.log("memberSales", selectedMember);
 
   // ============================================RENDERING=====================================================
 

@@ -46,6 +46,10 @@ const AddProductScreen = (props) => {
   // submitting form
 
   const handleSubmitForm = () => {
+    if (category.length === 0) {
+      alert("Please Type a category");
+      return;
+    }
     setIsLoading(true);
     dispatch(
       productsActions.addProduct(

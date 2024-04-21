@@ -323,13 +323,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: globalWidth("1%"),
     color: "#000",
+    marginHorizontal: globalWidth("2%"),
   },
   card: {
     borderWidth: 1,
     width: "100%",
     borderRadius: 10,
     marginBottom: 10,
-    minHeight: globalHeight("55%"),
+    minHeight: globalHeight("65%"),
+    maxHeight: globalHeight("65%"),
   },
   image: {
     height: globalWidth("7%"),

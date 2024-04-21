@@ -101,8 +101,6 @@ const WebAddingScreen = (props) => {
     dispatch(settingsActions.getCurrencyList());
   }, [dispatch]);
 
-  console.log(businessName, "businessName");
-
   useEffect(() => {
     const updatedList = [...new Set(currencyList)];
     const currencyData = updatedList.map((currency) => {

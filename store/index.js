@@ -11,6 +11,11 @@ import { ordersReducer } from "./orders/ordersReducer";
 import { clientReducer } from "./clients/cleintReducer";
 import { salesReducer } from "./sales/salesReducer";
 import { expensesReducer } from "./expenses/expensesReducer";
+import { partnersReducer } from "./partners/partnersReducer";
+import { profitReducer } from "./profit/profitReducer";
+import { suppliersReducer } from "./suppliers/suppliersReducer";
+import { purchaseReducer } from "./purchases/purchaseReducer";
+import { inventoryReducer } from "./inventory/inventoryReducer";
 
 const mainStore = configureStore({
   reducer: {
@@ -26,6 +31,11 @@ const mainStore = configureStore({
     clients: clientReducer,
     sales: salesReducer,
     expenses: expensesReducer,
+    partners: partnersReducer,
+    profit: profitReducer,
+    suppliers: suppliersReducer,
+    purchases: purchaseReducer,
+    inventory: inventoryReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),

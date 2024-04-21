@@ -70,6 +70,7 @@ const SalesUploadScreen = (props) => {
         "Product Price": product.costPrice,
         "Business ID": product.businessId,
         "Product ID": product._id,
+        "Selling Price": product.sellingPrice,
       };
     });
 
@@ -98,11 +99,12 @@ const SalesUploadScreen = (props) => {
       if (!found) {
         acc.push({
           businessId: data.businessId,
-          salesValue: data.productPrice * data.quantity,
+          salesValue: data.sellingPrice * data.quantity,
           sales: [
             {
               productId: data.productId,
               productName: data.productName,
+              sellingPrice: data.sellingPrice,
               productPrice: data.productPrice,
               quantity: data.quantity,
               date: data.date,
@@ -115,10 +117,11 @@ const SalesUploadScreen = (props) => {
           ],
         });
       } else {
-        found.salesValue += data.productPrice * data.quantity;
+        found.salesValue += data.sellingPrice * data.quantity;
         found.sales.push({
           productId: data.productId,
           productName: data.productName,
+          sellingPrice: data.sellingPrice,
           productPrice: data.productPrice,
           quantity: data.quantity,
           date: data.date,
@@ -179,6 +182,7 @@ const SalesUploadScreen = (props) => {
             "Status",
             "Business ID",
             "Product ID",
+            "Selling Price",
           ]}
           sheetName={"Sales"}
           templateName={"Sales Template"}

@@ -19,6 +19,7 @@ import AnimatedChevron from "../../components/AnimatedChevron";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
 import * as salesActions from "../../store/sales/salesActions";
+import * as authActions from "../../store/auth/authActions";
 import Loader from "../../components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -43,6 +44,8 @@ const SalesShowComp = (props) => {
     dispatch(salesActions.setIsFinal(id));
     setUpdateSales(true);
   };
+
+  console.log(startDate, endDate);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -125,11 +128,17 @@ const SalesShowComp = (props) => {
                   >
                     <Text style={styles.cardName}>
                       {" "}
+                      <Text style={{ color: Colors.font, fontStyle: "italic" }}>
+                        Added in:{" "}
+                      </Text>{" "}
                       {moment(item.addedIn).format("DD/MM/YY")}{" "}
                     </Text>
                     <Text style={styles.number}>
                       {" "}
-                      {numberWithComa(item.totalValue)} {item.currencySymbol}{" "}
+                      {numberWithComa(
+                        +parseFloat(item.totalValue).toFixed(2)
+                      )}{" "}
+                      {item.currencySymbol}{" "}
                     </Text>
                     <AnimatedChevron isOpen={index === currentIndex} />
                   </View>
@@ -224,7 +233,9 @@ const SalesShowComp = (props) => {
                             </View>
                             <View style={styles.itemContainer}>
                               <Text style={styles.itemHeader}>
-                                {numberWithComa(sale.itemValue)}{" "}
+                                {numberWithComa(
+                                  +parseFloat(sale.itemValue).toFixed(2)
+                                )}{" "}
                                 {item.currencySymbol}
                               </Text>
                             </View>

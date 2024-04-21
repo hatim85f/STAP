@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { Button, Input } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -45,6 +52,9 @@ const AddFixedExpenses = (props) => {
   const [recurringDay, setRecurringDay] = useState(null);
   const [recurringType, setRecurringType] = useState("");
   const [source, setSource] = useState("");
+  const [submissionLoading, setSubmissionLoading] = useState(false);
+
+  console.log(busiessesDetails);
 
   // =================================================GETTING BUSINESSES DETAILS=================================================
 
@@ -61,7 +71,7 @@ const AddFixedExpenses = (props) => {
     const businessList = busiessesDetails.map((business) => {
       return {
         label: business.businessName,
-        value: business._id,
+        value: business.businessId,
       };
     });
 
@@ -75,7 +85,7 @@ const AddFixedExpenses = (props) => {
   useEffect(() => {
     if (busiessesDetails.length > 0 && businessSelected !== "") {
       const businessCurrency = busiessesDetails.find(
-        (business) => business._id === businessSelected
+        (business) => business.businessId === businessSelected
       ).currencySymbol;
 
       setBusinessCurrency(businessCurrency);
@@ -83,8 +93,7 @@ const AddFixedExpenses = (props) => {
   }, [businessSelected, busiessesDetails]);
 
   const submit = () => {
-    setIsLoading(true);
-    setLoadingMessage("Adding fixed expenses");
+    setSubmissionLoading(true);
     dispatch(
       expensesActions.addFixedExpenses(
         businessSelected,
@@ -100,7 +109,7 @@ const AddFixedExpenses = (props) => {
         source
       )
     ).then(() => {
-      setIsLoading(false);
+      setSubmissionLoading(false);
       setLoadingMessage("");
       setTitle("");
       setAmount(0);
@@ -119,6 +128,7 @@ const AddFixedExpenses = (props) => {
     { label: "Daily", value: "Daily" },
     { label: "Weekly", value: "Weekly" },
     { label: "Monthly", value: "Monthly" },
+    { label: "Quarterly", value: "Quarterly" },
     { label: "Yearly", value: "Yearly" },
   ];
 
@@ -167,6 +177,7 @@ const AddFixedExpenses = (props) => {
               />
             </View>
           </View>
+          <View style={{ height: globalHeight("2%") }} />
           <Input
             label="Title"
             labelStyle={styles.inputLabel}
@@ -255,19 +266,25 @@ const AddFixedExpenses = (props) => {
               Any Source other than sales will not be deducted from profit
             </Text>
           )}
-          <Button
-            title="Submit"
-            onPress={submit}
-            titleStyle={styles.buttonTitle}
-            buttonStyle={styles.buttonStyle}
-            disabled={
-              selectedCategory === "" ||
-              businessSelected === "" ||
-              amount === 0 ||
-              selectedDate === null
-            }
-            disabledStyle={styles.disabledButton}
-          />
+          {submissionLoading ? (
+            <View style={{ alignItems: "center", justifyContent: "center" }}>
+              <ActivityIndicator size="small" color={Colors.primary} />
+            </View>
+          ) : (
+            <Button
+              title="Submit"
+              onPress={submit}
+              titleStyle={styles.buttonTitle}
+              buttonStyle={styles.buttonStyle}
+              disabled={
+                selectedCategory === "" ||
+                businessSelected === "" ||
+                amount === 0 ||
+                selectedDate === null
+              }
+              disabledStyle={styles.disabledButton}
+            />
+          )}
         </View>
       </ScrollView>
       <SideBar />
@@ -301,7 +318,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontFamily: "HelveticaNeue",
-    fontSize: globalWidth("1.2%"),
+    fontSize: globalWidth("1%"),
     color: Colors.font,
   },
   descriptionContainer: {

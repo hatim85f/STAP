@@ -77,7 +77,7 @@ const AboutScreen = (props) => {
           </Text>
         </Pressable>
         <Pressable
-          onPress={() => props.navigation.navigate("Home")}
+          onPress={() => props.navigation.goBack()}
           style={styles.backButton}
         >
           <Text style={styles.buttonText}>Back</Text>

@@ -13,6 +13,8 @@ import Colors from "../constants/Colors";
 import { isWeb } from "../constants/device";
 
 const BusinessSelection = (props) => {
+  const { getOpen } = props;
+
   const { token } = useSelector((state) => state.auth);
   const { business } = useSelector((state) => state.business);
 
@@ -22,6 +24,12 @@ const BusinessSelection = (props) => {
   const [businessLogo, setBusinessLogo] = useState("");
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (props.getOpen) {
+      props.getOpen(open);
+    }
+  }, [open]);
 
   useEffect(() => {
     if (token) {

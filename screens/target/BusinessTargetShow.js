@@ -81,7 +81,8 @@ const BusinessTargetShow = (props) => {
           <Text style={styles.header}>{businessTarget.businessName}</Text>
           <Text style={styles.value}>
             {" "}
-            {numberWithComa(value)} {businessTarget.currencyCode}{" "}
+            {numberWithComa(parseFloat(value).toFixed(2))}{" "}
+            {businessTarget.currencyCode}{" "}
           </Text>
         </View>
         <View style={styles.listContainer}>
@@ -113,7 +114,9 @@ const BusinessTargetShow = (props) => {
                     <View style={{ width: "25%" }}>
                       <Text style={styles.value}>
                         {" "}
-                        {numberWithComa(item.target.totalValue)}{" "}
+                        {numberWithComa(
+                          parseFloat(item.target.totalValue).toFixed(2)
+                        )}{" "}
                         {businessTarget.currencySymbol}{" "}
                       </Text>
                     </View>

@@ -132,20 +132,6 @@ const WebLoginScreen = (props) => {
                   source={require("../../../assets/icon.png")}
                   style={styles.logo}
                 />
-                <View style={styles.buttonsRow}>
-                  <Button
-                    title="ABOUT"
-                    titleStyle={styles.buttonTitle}
-                    buttonStyle={styles.button}
-                    onPress={() => {}}
-                  />
-                  <Button
-                    title="REQUEST DEMO"
-                    titleStyle={styles.buttonTitle}
-                    buttonStyle={styles.button}
-                    onPress={() => {}}
-                  />
-                </View>
               </View>
               <Image
                 source={require("../../../assets/vectors/leftCircle.png")}

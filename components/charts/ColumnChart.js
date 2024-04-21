@@ -7,78 +7,91 @@ import Chart from "react-apexcharts";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 
 const ColumnChart = (props) => {
-  const { target, sales } = props;
+  const { categories, data, width, height } = props;
 
-  const options = {
+  // set colors an array of 12 colors
+  const colors = [
+    "#008FFB",
+    "#00E396",
+    "#FEB019",
+    "#FF4560",
+    "#775DD0",
+    "#3F51B5",
+    "#546E7A",
+    "#D4526E",
+    "#8D5B4C",
+    "#F86624",
+    "#D7263D",
+    "#1B998B",
+  ];
+
+  var options = {
     series: [
       {
-        name: "Servings",
-        data: [500, 1500],
+        data: data,
       },
     ],
-    annotations: {
-      points: [
-        {
-          x: "Achievement",
-          seriesIndex: 0,
-          label: {
-            borderColor: "#775DD0",
-            offsetY: 0,
-            style: {
-              color: "#fff",
-              background: "#775DD0",
-            },
-            text: "Bananas are good",
+    chart: {
+      dropShadow: {
+        enabled: true,
+        top: 1,
+        left: 1,
+        blur: 1,
+        color: "#000",
+        opacity: 0.8,
+      },
+      height: 350,
+      type: "bar",
+      events: {
+        click: function (chart, w, e) {
+          // console.log(chart, w, e)
+        },
+      },
+      options: {
+        chart: {
+          toolbar: {
+            show: false,
           },
         },
-      ],
+        stroke: {
+          width: 0,
+        },
+        yaxis: {
+          show: false,
+        },
+        xaxis: {
+          labels: {
+            style: {
+              colors: ["#ff0055"],
+              fontSize: "12px",
+            },
+          },
+        },
+        grid: {
+          borderColor: "#f1f1f1",
+        },
+      },
     },
-    chart: {
-      height: 150,
-      type: "bar",
-    },
+    colors: colors,
     plotOptions: {
       bar: {
-        borderRadius: 10,
-        columnWidth: "10%",
+        distributed: true,
+        borderRadius: 8,
+        width: 15,
+        dataLabels: {
+          position: "top", // top, center, bottom
+        },
       },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      width: 2,
     },
 
-    grid: {
-      row: {
-        colors: ["#fff", "#f2f2f2"],
-      },
+    dataLabels: {
+      enabled: true,
+    },
+    legend: {
+      show: false,
     },
     xaxis: {
-      labels: {
-        rotate: -45,
-      },
-      categories: ["Target", "Sales"],
-      tickPlacement: "on",
-    },
-    yaxis: {
-      title: {
-        text: "Servings",
-      },
-    },
-    fill: {
-      type: "gradient",
-      gradient: {
-        shade: "light",
-        type: "horizontal",
-        shadeIntensity: 0.25,
-        gradientToColors: undefined,
-        inverseColors: true,
-        opacityFrom: 0.85,
-        opacityTo: 0.85,
-        stops: [50, 0, 100],
-      },
+      categories: categories,
     },
   };
 
@@ -88,8 +101,8 @@ const ColumnChart = (props) => {
         options={options}
         series={options.series}
         type="bar"
-        width={globalWidth("24%")}
-        height={globalHeight("15%")}
+        width={width ? width : globalWidth("30%")}
+        height={height ? height : globalHeight("15%")}
       />
     </View>
   );

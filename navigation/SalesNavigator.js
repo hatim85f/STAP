@@ -3,6 +3,7 @@ import SalesUploadScreen from "../screens/sales/SalesUploadScreen";
 import MainSalesScreen from "../screens/sales/MainSalesScreen";
 import ShowSalesScreen from "../screens/sales/ShowSalesScreen";
 import ContributeSalesScreen from "../screens/sales/ContributeSalesScreen";
+import AddSalesManually from "../screens/sales/AddSalesManually";
 
 const MainSalesNavigator = createStackNavigator();
 
@@ -43,6 +44,14 @@ export const SalesNavigator = () => {
         options={{
           title: "Contribute",
           headerTitle: "Contribute",
+        }}
+      />
+      <MainSalesNavigator.Screen
+        name="manual"
+        component={AddSalesManually}
+        options={{
+          title: "Manual Sales",
+          headerTitle: "Manual Sales",
         }}
       />
     </MainSalesNavigator.Navigator>

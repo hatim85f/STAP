@@ -111,6 +111,36 @@ export const getTarget = (year) => {
   };
 };
 
+export const getPersonalTarget = (year) => {
+  return async (dispatch, getState) => {
+    const { user, token } = getState().auth;
+
+    const response = await fetch(
+      `${mainLink}/api/userTarget/${user._id}/${year}`,
+      {
+        headers: {
+          "x-auth-token": token,
+        },
+      }
+    );
+
+    const resData = await response.json();
+
+    if (!response.ok) {
+      dispatch({
+        type: ERROR,
+        error: resData.error,
+        errorMessage: resData.message,
+      });
+    }
+
+    dispatch({
+      type: GET_TEAM_TARGET,
+      target: resData.userTargetData,
+    });
+  };
+};
+
 export const addTeamTarget = (userTargetData, year) => {
   return async (dispatch, getState) => {
     const { token, user } = getState().auth;

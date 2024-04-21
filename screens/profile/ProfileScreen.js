@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Platform } from "react-native";
+import React, { useState, useEffect, useRef, Fragment } from "react";
+import { ActivityIndicator, Platform } from "react-native";
 import {
   View,
   Text,
@@ -42,6 +42,7 @@ import Loader from "../../components/Loader";
 
 const ProfileScreen = (props) => {
   const { profile, payments, user } = useSelector((state) => state.auth);
+  const { userType } = user;
 
   const [currentIndex, setCurrentIndex] = useState(null);
   const [itemOpen, setItemOpen] = useState(-1);
@@ -49,6 +50,7 @@ const ProfileScreen = (props) => {
   const [selectedImage, setSelectedImage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [profileIsLoading, setProfileIsLoading] = useState(false);
 
   const codeContainerHeight = useRef(
     new Animated.Value(-globalHeight("200%"))
@@ -148,8 +150,15 @@ const ProfileScreen = (props) => {
 
   const onImageSelected = (imageUri) => {
     setSelectedImage(imageUri);
-    setShowAlert(true);
+    setProfileIsLoading(true);
   };
+
+  useEffect(() => {
+    if (profileURL) {
+      setProfileIsLoading(false);
+      setShowAlert(true);
+    }
+  }, [profileURL]);
 
   const userList = [
     {
@@ -166,22 +175,28 @@ const ProfileScreen = (props) => {
           editPhone={editPhone}
         />
       ),
+      hideFrom: null,
     },
     {
       title: "Businesses",
       element: () => <UserBusinesses business={profile.business} />,
+      hideFrom: "Employee",
     },
     {
       title: "Subscription Details",
       element: () => (
         <UserPackage profile={profile} navigation={props.navigation} />
       ),
+      hideFrom: "Employee",
     },
     {
       title: "Payment History",
       element: () => <UserPayments payment={payments} profile={profile} />,
+      hideFrom: "Employee",
     },
   ];
+
+  console.log(userType);
 
   if (isLoading) {
     return <Loader center />;
@@ -192,52 +207,72 @@ const ProfileScreen = (props) => {
       <ScrollView scrollEnabled scrollEventThrottle={16}>
         {Platform.OS === "web" && <MenuButton navigation={props.navigation} />}
         <View style={styles.innerContainer}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: profile.profilePicture }}
-              style={styles.profile}
-            />
-            <TouchableOpacity
-              onPress={() =>
-                uploadImageFn({
-                  imageName: profile.userName,
-                  getURL: setProfileURL,
-                  subFolder: "profile/",
-                  onImageSelected: onImageSelected,
-                })()
-              }
-              style={styles.cameraContainer}
+          {profileIsLoading ? (
+            <View
+              style={[
+                styles.imageContainer,
+                {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              ]}
             >
-              <FontAwesome name="camera" size={28} color="#888" />
-            </TouchableOpacity>
-          </View>
+              <ActivityIndicator size="small" color={Colors.accent} />
+            </View>
+          ) : (
+            <View style={styles.imageContainer}>
+              <Image
+                source={{ uri: profile.profilePicture }}
+                style={styles.profile}
+              />
+              <TouchableOpacity
+                onPress={() =>
+                  uploadImageFn({
+                    imageName: profile.userName,
+                    getURL: setProfileURL,
+                    subFolder: "profile/",
+                    onImageSelected: onImageSelected,
+                  })()
+                }
+                style={styles.cameraContainer}
+              >
+                <FontAwesome name="camera" size={28} color="#888" />
+              </TouchableOpacity>
+            </View>
+          )}
           <HeaderText text={profile.userName} />
           <Text style={styles.position}>{profile.designation}</Text>
           <View style={{ height: 30 }} />
           <View style={styles.profileDetails}>
             {userList.map((item, index) => {
               return (
-                <View style={styles.itemContainer}>
-                  <Pressable
-                    onPress={() => {
-                      LayoutAnimation.configureNext(
-                        LayoutAnimation.Presets.easeInEaseOut
-                      );
-                      setItemOpen(itemOpen === index ? -1 : index);
-                      setCurrentIndex(index === currentIndex ? null : index);
-                    }}
-                    style={styles.itemHeader}
-                  >
-                    <View style={{ justifyContent: "center" }}>
-                      <Text style={styles.itemTitle}>{item.title}</Text>
-                    </View>
-                    <AnimatedChevron isOpen={index === currentIndex} />
-                  </Pressable>
+                <Fragment>
+                  {userType !== item.hideFrom && (
+                    <View style={styles.itemContainer}>
+                      <Pressable
+                        onPress={() => {
+                          LayoutAnimation.configureNext(
+                            LayoutAnimation.Presets.easeInEaseOut
+                          );
+                          setItemOpen(itemOpen === index ? -1 : index);
+                          setCurrentIndex(
+                            index === currentIndex ? null : index
+                          );
+                        }}
+                        style={styles.itemHeader}
+                      >
+                        <View style={{ justifyContent: "center" }}>
+                          <Text style={styles.itemTitle}>{item.title}</Text>
+                        </View>
+                        <AnimatedChevron isOpen={index === currentIndex} />
+                      </Pressable>
 
-                  {currentIndex === index && (
-                    <View style={styles.itemContent}>{item.element()}</View>
+                      {currentIndex === index && (
+                        <View style={styles.itemContent}>{item.element()}</View>
+                      )}
+                    </View>
                   )}
-                </View>
+                </Fragment>
               );
             })}
           </View>

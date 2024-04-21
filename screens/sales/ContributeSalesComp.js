@@ -3,10 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   ScrollView,
-  TextInput,
-  TouchableOpac,
   TouchableOpacity,
 } from "react-native";
 import { Button } from "react-native-elements";
@@ -33,9 +30,6 @@ const ContributeSalesComp = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [salesDetails, setSalesDetails] = useState([]);
-  const [isOpened, setIsOpened] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-  const [filteredTeam, setFilteredTeam] = useState([]);
 
   //   ======================================================GETTING TEAM DETAILS=================================================
   const dispatch = useDispatch();
@@ -90,9 +84,6 @@ const ContributeSalesComp = (props) => {
     newSales[index].userName = memberName;
     newSales[index].user = selectedMember._id;
     newSales[index].businessId = selectedMember.businessId;
-
-    console.log(newSales);
-
     setSalesDetails(newSales);
   };
 
@@ -167,7 +158,6 @@ const ContributeSalesComp = (props) => {
           setIsLoading(false);
         });
     } catch (error) {
-      console.log(error.message);
       setIsLoading(false);
     }
   };

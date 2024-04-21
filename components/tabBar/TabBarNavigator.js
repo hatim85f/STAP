@@ -15,6 +15,8 @@ import { isTablet } from "../../constants/device";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 
 const TabBarNavigator = (props) => {
+  const { user } = useSelector((state) => state.auth);
+
   const [selectedRoute, setSelectedRoute] = useState(props.route);
 
   const changeRoute = (route) => {
@@ -42,7 +44,7 @@ const TabBarNavigator = (props) => {
             <Text style={styles.routeName}>Team</Text>
           )}
         </View>
-        <View style={styles.contentContainer}>
+        {/* <View style={styles.contentContainer}>
           <TouchableOpacity
             onPress={() => changeRoute("monthly-container")}
             style={styles.touchable}
@@ -60,7 +62,7 @@ const TabBarNavigator = (props) => {
               <Text style={styles.routeName}>Monthly</Text>
             )}
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={styles.contentContainer}>
           <TouchableOpacity
             onPress={() => changeRoute("individual-target")}
@@ -80,25 +82,27 @@ const TabBarNavigator = (props) => {
             <Text style={styles.routeName}>Target</Text>
           )}
         </View>
-        <View style={styles.contentContainer}>
-          <TouchableOpacity
-            onPress={() => changeRoute("individual-sales")}
-            style={styles.touchable}
-          >
-            <MaterialIcons
-              name="attach-money"
-              size={globalWidth("2%")}
-              color={
-                selectedRoute === "individual-sales"
-                  ? "#ff0055"
-                  : Colors.primary
-              }
-            />
-          </TouchableOpacity>
-          {selectedRoute === "individual-sales" && (
-            <Text style={styles.routeName}>Sales</Text>
-          )}
-        </View>
+        {user.userType !== "Employee" && (
+          <View style={styles.contentContainer}>
+            <TouchableOpacity
+              onPress={() => changeRoute("individual-sales")}
+              style={styles.touchable}
+            >
+              <MaterialIcons
+                name="attach-money"
+                size={globalWidth("2%")}
+                color={
+                  selectedRoute === "individual-sales"
+                    ? "#ff0055"
+                    : Colors.primary
+                }
+              />
+            </TouchableOpacity>
+            {selectedRoute === "individual-sales" && (
+              <Text style={styles.routeName}>Sales</Text>
+            )}
+          </View>
+        )}
         <View style={styles.contentContainer}>
           <TouchableOpacity
             onPress={() => changeRoute("individual-achievement")}

@@ -185,7 +185,7 @@ const TargetShowScreen = (props) => {
                       <Text style={styles.name}>
                         {" "}
                         {numberWithComa(parseInt(item.costPrice))}{" "}
-                        {item.currencyCode}{" "}
+                        {item.currencyCode} Cost Price
                       </Text>
                       <Text style={styles.name}>{item.category} </Text>
                       <Text style={styles.details}>

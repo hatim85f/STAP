@@ -5,7 +5,7 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Avatar, Button } from "react-native-elements";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/Colors";
 import {
   widthPercentageToDP as wp,
@@ -21,17 +21,14 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import { StyleSheet, Image, ScrollView } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { logOut } from "../store/auth/authActions";
 import { View } from "react-native";
 import { Platform } from "react-native";
 
 import AddNewBusinessScreen from "../screens/business/AddNewBusinessScreen";
 import HomeScreen from "../screens/home/HomeScreen";
-import UploadImage from "../screens/test/UploadImage";
 import BusinessesScreen from "../screens/business/BusinessesScreen";
-import Svg, { Circle, Rect, Path } from "react-native-svg";
-import ProductsScreen from "../screens/products/ProductsScreen";
 import Icon from "react-native-vector-icons/Feather";
 
 import { MainProductNavigator } from "./ProductNavigator";
@@ -43,10 +40,13 @@ import { PaymentNav } from "./PaymentNav";
 import { ClientsNavigation } from "./ClientsNavigation";
 import { TargetNavigator } from "./TargetNavigator";
 import { PhasingNav } from "./PhasingNavigator";
-import { UploadTargetNavigator } from "./UploadTargetNavigator";
 import { OrderingMainNavigator } from "./OrderingNavigator";
 import { SalesNavigator } from "./SalesNavigator";
 import { ExpensesNavigator } from "./ExpensesNavigator";
+import { PatnerNavigator } from "./PartnerNavigator";
+import SupplierMainScreen from "../screens/suppliers/SupplierMainScreen";
+import PurchasesMainScreen from "../screens/purchase/PurchasesMainScreen";
+import InventoryScreen from "../screens/inventory/InventoryScreen";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -91,10 +91,13 @@ const styles = StyleSheet.create({
 export const MainDrawer = createDrawerNavigator();
 
 export const MainDrawerNavigator = () => {
+  const { user } = useSelector((state) => state.auth);
+  const { userType } = user;
   return (
     <MainDrawer.Navigator
       drawerContent={(props) => {
         const dispatch = useDispatch();
+
         return (
           <ScrollView scrollEnabled scrollEventThrottle={16}>
             <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
@@ -214,42 +217,67 @@ export const MainDrawerNavigator = () => {
           },
         }}
       />
-      <MainDrawer.Screen
-        name="businesses"
-        component={BusinessesScreen}
-        options={{
-          ...defaultNavOptions,
-          title: "Businesses",
-          headerTitle: "Businesses",
-          drawerIcon: ({ focused }) => {
-            return (
-              <Fontisto
-                name="shopping-store"
-                size={24}
-                color={focused ? "white" : "black"}
-              />
-            );
-          },
-        }}
-      />
-      <MainDrawer.Screen
-        name="add_businesses"
-        component={AddNewBusinessScreen}
-        options={{
-          ...defaultNavOptions,
-          title: "Add New Business",
-          headerTitle: "Add New Business",
-          drawerIcon: ({ focused }) => {
-            return (
-              <MaterialIcons
-                name="library-add"
-                size={hp("2.5%")}
-                color={focused ? "white" : "black"}
-              />
-            );
-          },
-        }}
-      />
+      {userType !== "Employee" && (
+        <MainDrawer.Screen
+          name="businesses"
+          component={BusinessesScreen}
+          options={{
+            ...defaultNavOptions,
+            title: "Businesses",
+            headerTitle: "Businesses",
+            drawerIcon: ({ focused }) => {
+              return (
+                <Fontisto
+                  name="shopping-store"
+                  size={24}
+                  color={focused ? "white" : "black"}
+                />
+              );
+            },
+          }}
+        />
+      )}
+      {userType !== "Employee" && (
+        <MainDrawer.Screen
+          name="partners"
+          component={PatnerNavigator}
+          options={{
+            ...defaultNavOptions,
+            headerTitle: "Partners",
+            title: "Partners",
+            drawerIcon: ({ focused }) => {
+              return (
+                <FontAwesome
+                  name="handshake-o"
+                  size={24}
+                  color={focused ? "white" : "black"}
+                />
+              );
+            },
+          }}
+        />
+      )}
+
+      {userType !== "Employee" && (
+        <MainDrawer.Screen
+          name="add_businesses"
+          component={AddNewBusinessScreen}
+          options={{
+            ...defaultNavOptions,
+            title: "Add New Business",
+            headerTitle: "Add New Business",
+            drawerIcon: ({ focused }) => {
+              return (
+                <MaterialIcons
+                  name="library-add"
+                  size={hp("2.5%")}
+                  color={focused ? "white" : "black"}
+                />
+              );
+            },
+          }}
+        />
+      )}
       <MainDrawer.Screen
         name="clients"
         component={ClientsNavigation}
@@ -286,7 +314,46 @@ export const MainDrawerNavigator = () => {
           },
         }}
       />
-
+      {userType !== "Employee" && (
+        <MainDrawer.Screen
+          name="purchases"
+          component={PurchasesMainScreen}
+          options={{
+            ...defaultNavOptions,
+            title: "Purchases",
+            headerTitle: "Purchases",
+            drawerIcon: ({ focused }) => {
+              return (
+                <FontAwesome5
+                  name="warehouse"
+                  size={24}
+                  color={focused ? "white" : "black"}
+                />
+              );
+            },
+          }}
+        />
+      )}
+      {userType !== "Employee" && (
+        <MainDrawer.Screen
+          name="inventory"
+          component={InventoryScreen}
+          options={{
+            ...defaultNavOptions,
+            title: "Inventory",
+            headerTitle: "Inventory",
+            drawerIcon: ({ focused }) => {
+              return (
+                <MaterialIcons
+                  name="inventory"
+                  size={24}
+                  color={focused ? "white" : "black"}
+                />
+              );
+            },
+          }}
+        />
+      )}
       <MainDrawer.Screen
         name="target"
         component={TargetNavigator}
@@ -305,24 +372,26 @@ export const MainDrawerNavigator = () => {
           },
         }}
       />
-      <MainDrawer.Screen
-        name="target_phasing"
-        component={PhasingNav}
-        options={{
-          ...defaultNavOptions,
-          title: "Phasing",
-          headerTitle: "Phasing",
-          drawerIcon: ({ focused }) => {
-            return (
-              <MaterialCommunityIcons
-                name="ladder"
-                size={24}
-                color={focused ? "white" : "black"}
-              />
-            );
-          },
-        }}
-      />
+      {userType !== "Employee" && (
+        <MainDrawer.Screen
+          name="target_phasing"
+          component={PhasingNav}
+          options={{
+            ...defaultNavOptions,
+            title: "Phasing",
+            headerTitle: "Phasing",
+            drawerIcon: ({ focused }) => {
+              return (
+                <MaterialCommunityIcons
+                  name="ladder"
+                  size={24}
+                  color={focused ? "white" : "black"}
+                />
+              );
+            },
+          }}
+        />
+      )}
       <MainDrawer.Screen
         name="ordering"
         component={OrderingMainNavigator}
@@ -341,24 +410,46 @@ export const MainDrawerNavigator = () => {
           },
         }}
       />
-      <MainDrawer.Screen
-        name="sales"
-        component={SalesNavigator}
-        options={{
-          ...defaultNavOptions,
-          title: "Sales",
-          headerTitle: "Sales",
-          drawerIcon: ({ focused }) => {
-            return (
-              <FontAwesome5
-                name="money-check"
-                size={24}
-                color={focused ? "white" : "black"}
-              />
-            );
-          },
-        }}
-      />
+      {userType !== "Employee" && (
+        <MainDrawer.Screen
+          name="sales"
+          component={SalesNavigator}
+          options={{
+            ...defaultNavOptions,
+            title: "Sales",
+            headerTitle: "Sales",
+            drawerIcon: ({ focused }) => {
+              return (
+                <FontAwesome5
+                  name="money-check"
+                  size={24}
+                  color={focused ? "white" : "black"}
+                />
+              );
+            },
+          }}
+        />
+      )}
+      {userType !== "Employee" && (
+        <MainDrawer.Screen
+          name="suppliers"
+          component={SupplierMainScreen}
+          options={{
+            ...defaultNavOptions,
+            title: "Suppliers",
+            headerTitle: "Suppliers",
+            drawerIcon: ({ focused }) => {
+              return (
+                <FontAwesome5
+                  name="truck"
+                  size={24}
+                  color={focused ? "white" : "black"}
+                />
+              );
+            },
+          }}
+        />
+      )}
       <MainDrawer.Screen
         name="team"
         component={TeamNavigator}
@@ -395,24 +486,26 @@ export const MainDrawerNavigator = () => {
           },
         }}
       />
-      <MainDrawer.Screen
-        name="packages"
-        component={PaymentNav}
-        options={{
-          ...defaultNavOptions,
-          title: "Packages",
-          headerTitle: "Packages",
-          drawerIcon: ({ focused }) => {
-            return (
-              <Entypo
-                name="price-tag"
-                size={24}
-                color={focused ? "white" : "black"}
-              />
-            );
-          },
-        }}
-      />
+      {userType !== "Employee" && (
+        <MainDrawer.Screen
+          name="packages"
+          component={PaymentNav}
+          options={{
+            ...defaultNavOptions,
+            title: "Packages",
+            headerTitle: "Packages",
+            drawerIcon: ({ focused }) => {
+              return (
+                <Entypo
+                  name="price-tag"
+                  size={24}
+                  color={focused ? "white" : "black"}
+                />
+              );
+            },
+          }}
+        />
+      )}
       <MainDrawer.Screen
         name="settings"
         component={SettingsScreen}

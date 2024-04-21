@@ -14,6 +14,7 @@ const Chevron = (props) => {
 
   useEffect(() => {
     if (open) {
+      console.log("open ");
       Animated.timing(rotationRef, {
         toValue: 360,
         duration: 750,
@@ -31,13 +32,13 @@ const Chevron = (props) => {
   }, [open, close, rotationRef]);
 
   const callPress = () => {
-    nextAnimation();
+    // nextAnimation();
     setIndex();
   };
 
   return (
     <Pressable onPress={callPress}>
-      <Animated.View style={{ transform: `rotate(${rotationInterpolate})` }}>
+      <Animated.View style={{ transform: [{ rotate: rotationInterpolate }] }}>
         <Entypo name="chevron-small-down" size={30} color="black" />
       </Animated.View>
     </Pressable>

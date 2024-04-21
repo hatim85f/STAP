@@ -292,6 +292,8 @@ const IndividualMonthly = (props) => {
     }
   };
 
+  console.log(memberAchievement);
+
   // =========================================================RETURN JSX=============================================================
 
   if (isLoading) {
