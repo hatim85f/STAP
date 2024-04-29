@@ -43,7 +43,9 @@
 
     "web": {
       "favicon": "./assets/favicon.png",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "output": "server",
+      "bundler": "metro"
     },
     "extra": {
       "stripePublishKey": "STRIPE_PUBLISH_KEY"

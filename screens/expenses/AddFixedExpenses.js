@@ -11,9 +11,6 @@ import { Button, Input } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
 import DropWithButton from "../../components/DropWithButton";
 import Loader from "../../components/Loader";
 
