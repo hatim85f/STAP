@@ -71,143 +71,144 @@ const ItemCreation = (props) => {
         list={orderList}
         index={currentIndex}
       >
-        {orderList.map((order, index) => {
-          return (
-            <Fragment key={index}>
-              {index === currentIndex && (
-                <View style={styles.slideContainer} key={index}>
-                  <Image
-                    source={{ uri: order.image }}
-                    style={styles.avatarStyle}
-                  />
-                  <View style={styles.orderContainer}>
-                    <View
-                      style={[
-                        styles.nameRow,
-                        { width: "100%", justifyContent: "space-between" },
-                      ]}
-                    >
-                      <Text style={styles.number}>
-                        {index + 1})
-                        <Text style={styles.name}> {order.productName} </Text>{" "}
-                      </Text>
-
-                      <View style={styles.smallRow}>
-                        <TextInput
-                          style={[
-                            styles.input,
-                            {
-                              backgroundColor: "transparent",
-                              fontSize: globalWidth("1%"),
-                              fontFamily: "numbers",
-                            },
-                          ]}
-                          keyboardType="numeric"
-                          placeholder="Price"
-                          onChangeText={(price) => changePrice(index, price)}
-                          defaultValue={
-                            order.price > 0 ? order.price.toString() : 0
-                          }
-                        />
-                        <Text style={styles.number}> {order.currency} </Text>
-                      </View>
-                    </View>
-                    <View style={styles.nameRow}>
-                      <Input
-                        containerStyle={styles.input}
-                        style={{ textAlign: "center" }}
-                        keyboardType="numeric"
-                        placeholder="Quantity"
-                        onChangeText={(qty) => addQuantity(index, qty)}
-                        defaultValue={order.quantity.toString()}
-                      />
-                      <View style={styles.valueContainer}>
-                        <Text style={styles.value}> Value </Text>
-                        <Text style={styles.value}>
-                          {" "}
-                          {order.total
-                            ? numberWithComa(parseInt(order.total).toFixed(0))
-                            : 0}{" "}
+        {orderList.length > 0 &&
+          orderList.map((order, index) => {
+            return (
+              <Fragment key={index}>
+                {index === currentIndex && (
+                  <View style={styles.slideContainer} key={index}>
+                    <Image
+                      source={{ uri: order.image }}
+                      style={styles.avatarStyle}
+                    />
+                    <View style={styles.orderContainer}>
+                      <View
+                        style={[
+                          styles.nameRow,
+                          { width: "100%", justifyContent: "space-between" },
+                        ]}
+                      >
+                        <Text style={styles.number}>
+                          {index + 1})
+                          <Text style={styles.name}> {order.productName} </Text>{" "}
                         </Text>
-                      </View>
-                    </View>
-                    <View style={styles.nameRow}>
-                      <View style={{ width: "25%" }}>
-                        <Text style={[styles.value, { textAlign: "center" }]}>
-                          {" "}
-                          Bonus Type{" "}
-                        </Text>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "space-around",
-                          }}
-                        >
-                          <View
-                            style={{
-                              width: "100%",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <CheckBox
-                              onPress={() => {
-                                changeBonusType(index, "Percentage");
-                                console.log(order.bonusType === "Percentage");
-                              }}
-                              checkedColor={Colors.primary}
-                              style={{ cursor: "pointer" }}
-                              checked={order.bonusType === "Percentage"}
-                            />
 
-                            <Text style={styles.value}> Percentage </Text>
-                          </View>
-                          <View
-                            style={{
-                              width: "100%",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <CheckBox
-                              onPress={() => changeBonusType(index, "Value")}
-                              checked={
-                                itemsValues[index] === true ? true : false
-                              }
-                              checkedColor={Colors.primary}
-                            />
-                            <Text style={styles.value}> Value </Text>
-                          </View>
+                        <View style={styles.smallRow}>
+                          <TextInput
+                            style={[
+                              styles.input,
+                              {
+                                backgroundColor: "transparent",
+                                fontSize: globalWidth("1%"),
+                                fontFamily: "numbers",
+                              },
+                            ]}
+                            keyboardType="numeric"
+                            placeholder="Price"
+                            onChangeText={(price) => changePrice(index, price)}
+                            defaultValue={
+                              order.price > 0 ? order.price.toString() : 0
+                            }
+                          />
+                          <Text style={styles.number}> {order.currency} </Text>
                         </View>
                       </View>
-                      <Input
-                        style={{ textAlign: "center" }}
-                        containerStyle={styles.input}
-                        keyboardType="numeric"
-                        placeholder="Bonus"
-                        onChangeText={(bonus) => changeBonus(index, bonus)}
-                        defaultValue={order.bonusValue.toString()}
-                      />
+                      <View style={styles.nameRow}>
+                        <Input
+                          containerStyle={styles.input}
+                          style={{ textAlign: "center" }}
+                          keyboardType="numeric"
+                          placeholder="Quantity"
+                          onChangeText={(qty) => addQuantity(index, qty)}
+                          defaultValue={order.quantity.toString()}
+                        />
+                        <View style={styles.valueContainer}>
+                          <Text style={styles.value}> Value </Text>
+                          <Text style={styles.value}>
+                            {" "}
+                            {order.total
+                              ? numberWithComa(parseInt(order.total).toFixed(0))
+                              : 0}{" "}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={styles.nameRow}>
+                        <View style={{ width: "25%" }}>
+                          <Text style={[styles.value, { textAlign: "center" }]}>
+                            {" "}
+                            Bonus Type{" "}
+                          </Text>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "space-around",
+                            }}
+                          >
+                            <View
+                              style={{
+                                width: "100%",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <CheckBox
+                                onPress={() => {
+                                  changeBonusType(index, "Percentage");
+                                  console.log(order.bonusType === "Percentage");
+                                }}
+                                checkedColor={Colors.primary}
+                                style={{ cursor: "pointer" }}
+                                checked={order.bonusType === "Percentage"}
+                              />
+
+                              <Text style={styles.value}> Percentage </Text>
+                            </View>
+                            <View
+                              style={{
+                                width: "100%",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <CheckBox
+                                onPress={() => changeBonusType(index, "Value")}
+                                checked={
+                                  itemsValues[index] === true ? true : false
+                                }
+                                checkedColor={Colors.primary}
+                              />
+                              <Text style={styles.value}> Value </Text>
+                            </View>
+                          </View>
+                        </View>
+                        <Input
+                          style={{ textAlign: "center" }}
+                          containerStyle={styles.input}
+                          keyboardType="numeric"
+                          placeholder="Bonus"
+                          onChangeText={(bonus) => changeBonus(index, bonus)}
+                          defaultValue={order.bonusValue.toString()}
+                        />
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => deleteItem(index)}
+                        style={{
+                          alignSelf: "flex-end",
+                          width: globalWidth("5%"),
+                        }}
+                      >
+                        <MaterialCommunityIcons
+                          name="delete-sweep"
+                          size={globalWidth("2%")}
+                          color="#ff0055"
+                        />
+                      </TouchableOpacity>
                     </View>
-                    <TouchableOpacity
-                      onPress={() => deleteItem(index)}
-                      style={{
-                        alignSelf: "flex-end",
-                        width: globalWidth("5%"),
-                      }}
-                    >
-                      <MaterialCommunityIcons
-                        name="delete-sweep"
-                        size={globalWidth("2%")}
-                        color="#ff0055"
-                      />
-                    </TouchableOpacity>
                   </View>
-                </View>
-              )}
-            </Fragment>
-          );
-        })}
+                )}
+              </Fragment>
+            );
+          })}
       </CustomSwiper>
     </View>
   );

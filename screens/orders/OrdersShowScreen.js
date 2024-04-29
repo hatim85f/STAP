@@ -16,7 +16,7 @@ import * as authActions from "../../store/auth/authActions";
 
 import Loader from "../../components/Loader";
 import Card from "../../components/Card";
-import { isTablet } from "../../constants/device";
+
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
@@ -99,6 +99,15 @@ const OrdersShowScreen = (props) => {
 
   // =========================================RETURN JSX==============================================================
 
+  if (orders.length === 0) {
+    return (
+      <View style={styles.container}>
+        <MenuButton navigation={props.navigation} />
+        <Text style={styles.note}>No Orders Found</Text>
+      </View>
+    );
+  }
+
   if (isLoading) {
     return <Loader center loadingMessage={loadingMessage} />;
   }
@@ -167,8 +176,6 @@ const OrdersShowScreen = (props) => {
       </View>
     );
   }
-
-  console.log(orders);
 
   return (
     <View style={styles.container}>
