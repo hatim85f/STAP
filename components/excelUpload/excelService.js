@@ -1,5 +1,5 @@
 // excelService.js
-import * as XLSX from "xlsx";
+import * as XLSX from "sheetjs-style";
 
 export const readExcel = async (fileUri) => {
   try {
