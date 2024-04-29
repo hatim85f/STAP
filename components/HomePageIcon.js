@@ -46,11 +46,11 @@ const HomePageIcon = (props) => {
       onPressIn={handleTouchStart}
       onPressOut={handleTouchEnd}
     >
-      {Platform.OS === "web" ? (
-        <Avatar source={iconSource} size={isPhone() ? 40 : 60} />
+      {/* {Platform.OS === "web" ? (
+        <Avatar source={iconSource} size={globalWidth("2.5%")} />
       ) : (
         <Image source={iconSource} style={styles.image} />
-      )}
+      )} */}
 
       <Text style={styles.text}> {props.title} </Text>
     </Pressable>
@@ -59,7 +59,7 @@ const HomePageIcon = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255,255,255,0.4)",
+    backgroundColor: "rgba(255,255,255,0.6)",
     width: isWeb()
       ? globalWidth("13%")
       : isTablet()
