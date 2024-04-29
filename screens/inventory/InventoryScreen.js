@@ -24,6 +24,8 @@ const InventoryScreen = (props) => {
   const [open, setOpen] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
 
+  console.log(inventory);
+
   const dispatch = useDispatch();
 
   // getting user back if he is logged out for any reason except he pressed logout button

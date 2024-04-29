@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
-import { globalWidth } from "../../constants/globalWidth";
+import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import SalesChart from "./SalesChart";
 
 const SalesChartEmployee = (props) => {
-  const { userName, performance } = props;
+  const { userName, performance, showInFull } = props;
 
   const [text, setText] = useState("");
 
@@ -22,8 +22,20 @@ const SalesChartEmployee = (props) => {
     }
   }, [performance]);
 
+  if (performance?.length === 0) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          width: showInFull ? "100%" : "72%",
+          borderTopRightRadius: showInFull ? 10 : 0,
+        },
+      ]}
+    >
       <Text style={styles.header}> {userName} </Text>
       {performance?.length > 0 && <Text style={styles.note}>Sales {text}</Text>}
       {performance?.length > 0 && (
@@ -43,19 +55,18 @@ const SalesChartEmployee = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
     alignSelf: "flex-start",
     borderColor: "black",
     borderWidth: 1,
     padding: globalWidth("0.5%"),
-    height: globalWidth("20%"),
+    height: globalHeight("30%"),
     backgroundColor: "#FFFFF3",
     shadowColor: "white",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    borderRadius: 10,
+    borderTopLeftRadius: 10,
     paddingBottom: 0,
   },
   header: {

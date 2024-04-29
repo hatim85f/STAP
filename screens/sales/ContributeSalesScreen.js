@@ -18,6 +18,8 @@ import ContributeSalesComp from "./ContributeSalesComp";
 const ContributeSalesScreen = (props) => {
   const { sales } = useSelector((state) => state.sales);
 
+
+
   // ==========================================STATE MANAGEMENT==========================================
   const [startPeriod, setStartPeriod] = useState(null);
   const [endPeriod, setEndPeriod] = useState(null);

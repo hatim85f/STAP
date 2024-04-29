@@ -13,10 +13,8 @@ import { globalHeight, globalWidth } from "../../constants/globalWidth";
 
 import { AntDesign } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
-import ColumnChart from "../charts/ColumnChart";
-import numberWithComa from "../helpers/numberWithComa";
 
-const ProductsAchievement = (props) => {
+const ItemInventory = (props) => {
   const { performanceData } = props;
 
   const [maxScrollNumber, setMaxScrollNumber] = useState(0);
@@ -61,7 +59,7 @@ const ProductsAchievement = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Products Performance</Text>
+      <Text style={styles.header}>Items Inventory</Text>
       <View style={styles.mainRow}>
         <TouchableOpacity onPress={scrollLeft} style={styles.arrowContainer}>
           <AntDesign
@@ -78,22 +76,19 @@ const ProductsAchievement = (props) => {
           contentContainerStyle={{ width: globalWidth("55%") }}
           ref={scrollViewRef}
         >
-          {performanceData?.map((product, index) => {
-            return (
-              <View key={index} style={styles.itemContainer}>
-                <ColumnChart
-                  categories={["Target", "Sales"]}
-                  data={[
-                    parseFloat(product.productTargetValue).toFixed(0),
-                    parseFloat(product.salesValue).toFixed(0),
-                  ]}
-                  width={globalWidth("10%")}
-                  height={globalHeight("15%")}
-                />
-                <Text style={styles.itemName}> {product.productNickName} </Text>
-              </View>
-            );
-          })}
+          {performanceData &&
+            performanceData.map((item, index) => {
+              return (
+                <View style={styles.itemContainer} key={index}>
+                  <Text style={styles.itemName}> {item.productName} </Text>
+                  <Image source={{ uri: item.imageURL }} style={styles.image} />
+                  <Text style={styles.itemName}>
+                    {" "}
+                    Availble Quantity: {item.inventory}{" "}
+                  </Text>
+                </View>
+              );
+            })}
         </ScrollView>
         <TouchableOpacity
           onPress={scrollRight}
@@ -113,7 +108,7 @@ const ProductsAchievement = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "42%",
+    width: "70%",
     borderColor: "black",
     borderWidth: 1,
     padding: globalWidth("1%"),
@@ -124,6 +119,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    borderBottomRightRadius: 10,
     paddingBottom: 0,
   },
   header: {
@@ -157,19 +153,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginHorizontal: globalWidth("0.5%"),
+    marginHorizontal: globalWidth("1%"),
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
   },
-
   itemName: {
     fontFamily: "openSansBold",
     fontSize: globalWidth("0.8%"),
     color: Colors.font,
     marginBottom: globalHeight("0.5%"),
     fontStyle: "italic",
+    textAlign: "center",
+  },
+  image: {
+    width: globalWidth("5%"),
+    height: globalWidth("5%"),
+    borderRadius: globalWidth("2.5%"),
+    borderWidth: 1,
+    borderCoolor: Colors.primary,
+    marginVertical: globalHeight("1%"),
   },
 });
 
-export default ProductsAchievement;
+export default ItemInventory;

@@ -9,13 +9,6 @@ export const getPurchase = (startMonth, endMonth, year) => {
   return async (dispatch, getState) => {
     const { token, user } = getState().auth;
 
-    console.log({
-      startMonth,
-      endMonth,
-      year,
-      userId: user._id,
-    });
-
     const response = await fetch(
       `${mainLink}/api/purchaseOrder/${user._id}/${startMonth}/${endMonth}/${year}`,
       {
@@ -37,6 +30,8 @@ export const getPurchase = (startMonth, endMonth, year) => {
 export const addPurchase = (order, supplier, totalBill) => {
   return async (dispatch, getState) => {
     const { token, user } = getState().auth;
+
+    console.log(order);
 
     const response = await fetch(`${mainLink}/api/purchaseOrder`, {
       method: "POST",

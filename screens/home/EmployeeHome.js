@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   View,
   Text,
@@ -24,11 +24,13 @@ import EmployeeDonutChart from "../../components/home/EmployeeDonutChart";
 import ItemsChartHome from "../../components/home/ItemsChartHome";
 import ProductsAchievement from "../../components/home/ProductsAchievement";
 import SalesDetails from "../../components/home/SalesDetails";
+import LastOrders from "../../components/home/LastOrders";
+import ItemInventory from "../../components/home/ItemInventory";
 
 const EmployeeHome = (props) => {
   const { userName } = props;
 
-  const { userPerformance } = useSelector((state) => state.profit);
+  const { userPerformance, lastOrders } = useSelector((state) => state.profit);
   const { products } = useSelector((state) => state.products);
 
   //   =====================================================MANAGING STATE=====================================================
@@ -165,22 +167,7 @@ const EmployeeHome = (props) => {
             <View style={[styles.rowItem, { height: "100%" }]}></View>
             <View
               style={[styles.rowItem, { borderWidth: 0, borderBottomWidth: 1 }]}
-            >
-              <DropWithButton
-                list={productsList}
-                getSelection={setSelectedProduct}
-                buttonTitle={
-                  selectedProduct
-                    ? productsList.find(
-                        (product) => product.value === selectedProduct
-                      ).label
-                    : "Product"
-                }
-                width={globalWidth("11%")}
-                margin={5}
-                isOpened={setButtonIsOpened}
-              />
-            </View>
+            ></View>
 
             <View style={styles.rowItem}>
               {searchIsLoading ? (
@@ -207,26 +194,21 @@ const EmployeeHome = (props) => {
             </View>
           </View>
           <View style={styles.upperRow}>
-            <View style={{ width: globalWidth("70%") }}>
-              {userPerformance?.length > 0 && (
-                <SalesChartEmployee
-                  userName={userName}
-                  performance={userPerformance}
-                />
-              )}
-            </View>
-            <View style={{ width: globalWidth("28%") }}>
-              {userPerformance?.length > 0 && (
-                <EmployeeDonutChart
-                  series={[
+            <SalesChartEmployee
+              userName={userName}
+              performance={userPerformance}
+              showInFull={userPerformance[0]?.totalProductTargetValue === 0}
+            />
+            {userPerformance[0]?.totalProductTargetValue === 0 ? null : (
+              <EmployeeDonutChart
+                series={[
+                  userPerformance[0]?.totalSalesValue,
+                  userPerformance[0]?.totalProductTargetValue -
                     userPerformance[0]?.totalSalesValue,
-                    userPerformance[0]?.totalProductTargetValue -
-                      userPerformance[0]?.totalSalesValue,
-                  ]}
-                  labels={["Achievement", "Remaining"]}
-                />
-              )}
-            </View>
+                ]}
+                labels={["Achievement", "Remaining"]}
+              />
+            )}
           </View>
           <View style={styles.lowerRow}>
             <ItemsChartHome
@@ -234,8 +216,18 @@ const EmployeeHome = (props) => {
               sales={userPerformance[0]?.totalSalesValue}
               currency={userPerformance[0]?.performanceData[0].currencySymbol}
             />
-            <ProductsAchievement />
-            <SalesDetails />
+            <ProductsAchievement
+              performanceData={userPerformance[0]?.performanceData}
+            />
+            <SalesDetails
+              performanceData={userPerformance[0]?.performanceData}
+            />
+          </View>
+          <View style={styles.lowerRow}>
+            <LastOrders lastOrders={lastOrders} />
+            <ItemInventory
+              performanceData={userPerformance[0]?.performanceData}
+            />
           </View>
         </ScrollView>
       </View>
@@ -296,7 +288,7 @@ const styles = StyleSheet.create({
   lowerRow: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: globalWidth("1%"),
+    marginTop: globalWidth("0.5%"),
   },
 });
 

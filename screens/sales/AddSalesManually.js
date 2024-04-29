@@ -465,14 +465,14 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: "Poppins-Medium",
-    fontSize: globalWidth("1.2%"),
+    fontSize: globalWidth("0.8%"),
     color: Colors.font,
     fontStyle: "italic",
     textAlign: "center",
   },
   description: {
     fontFamily: "Poppins-Regular",
-    fontSize: globalWidth("1%"),
+    fontSize: globalWidth("0.6%"),
     color: Colors.primary,
     lineHeight: globalWidth("2%"),
   },

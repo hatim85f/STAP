@@ -11,6 +11,7 @@ import { ScrollView } from "react-native";
 
 const OrderDetails = (props) => {
   const { orderList, addDetails, deleteItem } = props;
+
   return (
     <View style={styles.container}>
       <ScrollView

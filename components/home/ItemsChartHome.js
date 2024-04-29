@@ -12,18 +12,26 @@ const ItemsChartHome = (props) => {
     <View style={styles.container}>
       <Text style={styles.header}>Sales Details</Text>
       <View style={styles.details}>
-        {!isNaN(target) && (
-          <Text style={styles.title}>
-            {" "}
-            Target : {numberWithComa(parseFloat(target).toFixed(2))} {currency}{" "}
-          </Text>
+        {target > 0 && (
+          <View style={styles.salesContainer}>
+            {!isNaN(target) && <Text style={styles.title}> Target</Text>}
+            {!isNaN(target) && (
+              <Text style={styles.title}>
+                {" "}
+                {numberWithComa(parseFloat(target).toFixed(2))} {currency}{" "}
+              </Text>
+            )}
+          </View>
         )}
-        {!isNaN(sales) && (
-          <Text style={styles.title}>
-            {" "}
-            Sales : {numberWithComa(parseFloat(sales).toFixed(2))} {currency}{" "}
-          </Text>
-        )}
+        <View style={styles.salesContainer}>
+          {!isNaN(sales) && <Text style={styles.title}> Sales</Text>}
+          {!isNaN(sales) && (
+            <Text style={styles.title}>
+              {" "}
+              {numberWithComa(parseFloat(sales).toFixed(2))} {currency}{" "}
+            </Text>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -35,7 +43,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     padding: globalWidth("1%"),
-    height: globalHeight("33%"),
+    height: globalHeight("30%"),
     backgroundColor: "#FFFFF3",
     shadowColor: "white",
     shadowOffset: { width: 0, height: 2 },
@@ -52,16 +60,24 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   details: {
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: globalHeight("3%"),
   },
   title: {
-    fontSize: globalWidth("1.1%"),
+    fontSize: globalWidth("1%"),
     fontStyle: "italic",
-    fontFamily: "Helvetica",
+    fontFamily: "roboto",
     lineHeight: globalWidth("2.5%"),
     fontWeight: "bold",
+    color: "white",
+  },
+  salesContainer: {
+    backgroundColor: "#54494B",
+    padding: globalWidth("1%"),
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

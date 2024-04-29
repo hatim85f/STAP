@@ -84,7 +84,7 @@ const SalesChart = (props) => {
           options={options}
           series={series}
           type="bar"
-          height={globalHeight("25%")}
+          height={globalHeight("20%")}
         />
       </div>
     </View>

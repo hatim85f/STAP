@@ -168,6 +168,8 @@ const OrdersShowScreen = (props) => {
     );
   }
 
+  console.log(orders);
+
   return (
     <View style={styles.container}>
       <MenuButton navigation={props.navigation} />

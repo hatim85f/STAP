@@ -47,6 +47,7 @@ import { PatnerNavigator } from "./PartnerNavigator";
 import SupplierMainScreen from "../screens/suppliers/SupplierMainScreen";
 import PurchasesMainScreen from "../screens/purchase/PurchasesMainScreen";
 import InventoryScreen from "../screens/inventory/InventoryScreen";
+import ContactUs from "../screens/contactus/ContactUs";
 
 const defaultNavOptions = {
   headerShown: Platform.OS !== "web",
@@ -517,6 +518,24 @@ export const MainDrawerNavigator = () => {
             return (
               <MaterialIcons
                 name="settings"
+                size={24}
+                color={focused ? "white" : "black"}
+              />
+            );
+          },
+        }}
+      />
+      <MainDrawer.Screen
+        name="Contact Us"
+        component={ContactUs}
+        options={{
+          ...defaultNavOptions,
+          titel: "Contact Us",
+          headerTitle: "Contact Us",
+          drawerIcon: ({ focused }) => {
+            return (
+              <FontAwesome5
+                name="wpforms"
                 size={24}
                 color={focused ? "white" : "black"}
               />

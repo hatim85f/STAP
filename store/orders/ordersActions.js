@@ -218,6 +218,8 @@ export const changeOrderStatus = (orderId, status) => {
   return async (dispatch, getState) => {
     const { token } = getState().auth;
 
+    console.log(orderId, status);
+
     const response = await fetch(`${mainLink}/api/orders/status/${orderId}`, {
       method: "PUT",
       headers: {
@@ -230,8 +232,6 @@ export const changeOrderStatus = (orderId, status) => {
     });
 
     const resData = await response.json();
-
-    console.log(resData);
 
     dispatch({
       type: ERROR,

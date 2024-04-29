@@ -237,6 +237,9 @@ const AppNavigator = () => {
           settings: {
             path: "/settings",
           },
+          "Contact Us": {
+            path: "/contact_us",
+          },
         },
       },
     },

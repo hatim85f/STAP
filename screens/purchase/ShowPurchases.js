@@ -131,7 +131,6 @@ const ShowPurchases = (props) => {
         </View>
       </View>
       {purchases.length > 0 && <PurchasingList purchases={purchases} />}
-      <PurchasingList />
     </View>
   );
 };

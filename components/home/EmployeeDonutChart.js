@@ -70,13 +70,19 @@ const EmployeeDonutChart = (props) => {
     },
   };
 
+  console.log(target);
+
+  if (target === 0) {
+    retun(<Text style={styles.note}>Target is not assigned yet... !</Text>);
+  }
+
   return (
     <View style={styles.container}>
       <Chart
         options={options}
         series={options.series}
         type="donut"
-        width={globalWidth("25%")}
+        width={globalWidth("22%")}
       />
     </View>
   );
@@ -84,18 +90,19 @@ const EmployeeDonutChart = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: "28%",
     borderColor: "black",
     borderWidth: 1,
     padding: globalWidth("1%"),
-    height: globalWidth("20%"),
+    height: globalHeight("30%"),
     backgroundColor: "#FFFFF3",
     shadowColor: "white",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    borderRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
     paddingBottom: 0,
   },
   title: {

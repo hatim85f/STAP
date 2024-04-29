@@ -12,6 +12,8 @@ import { ScrollView } from "react-native";
 const InventoryList = (props) => {
   const { inventory } = props;
 
+  const [inventoryData, setInventoryData] = useState([]);
+
   const header = [
     "Image",
     "Name",
@@ -55,6 +57,12 @@ const InventoryList = (props) => {
     "#aaffaa",
   ];
 
+  useEffect(() => {
+    const inventoryData = inventory.map((a) => a.products).flat();
+
+    setInventoryData(inventoryData);
+  }, [inventory]);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -70,7 +78,7 @@ const InventoryList = (props) => {
             textStyle={styles.headerText}
             widthArr={widthArr}
           />
-          {inventory[0].products.map((item, index) => {
+          {inventoryData.map((item, index) => {
             return (
               <Row
                 data={[

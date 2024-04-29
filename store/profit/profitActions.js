@@ -135,6 +135,7 @@ export const getUserPerformance = (startMonth, endMonth, year, userId) => {
     dispatch({
       type: GET_USER_PERFORMANCE,
       userPerformance: resData.personalAchievement,
+      lastOrders: resData.lastOrders,
     });
   };
 };
