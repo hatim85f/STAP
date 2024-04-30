@@ -9,5 +9,6 @@
       "source": "/:path*",
       "destination": "/"
     }
-  ]
+  ],
+  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
 }
