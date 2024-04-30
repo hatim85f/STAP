@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Colors from "../../constants/Colors";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import ContactsData from "./ContactsData";
+import MenuButton from "../../components/MenuButton";
 
 import * as formsActions from "../../store/contact/contactActions";
 import * as authActions from "../../store/auth/authActions";
@@ -67,6 +68,7 @@ const ContactUs = (props) => {
 
   return (
     <View style={styles.container}>
+      <MenuButton navigation={props.navigation} />
       <View style={styles.mainRow}>
         <View style={styles.leftView}></View>
         <View style={styles.contactContainer}>

@@ -229,6 +229,16 @@ const HomeScreen = (props) => {
   return (
     <View style={styles.container}>
       <MenuButton navigation={props.navigation} />
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: 20,
+          fontWeight: "bold",
+          color: "black",
+        }}
+      >
+        Welcome {user.userName}
+      </Text>
       <View style={styles.filterContainer}>
         <Text style={styles.header}>Filter</Text>
         <View style={styles.filtersRow}>
