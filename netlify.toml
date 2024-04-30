@@ -1,8 +1,7 @@
 # Netlify build instructions
 [build]
   # Directory to publish (output of the build command)
-   command = "expo export --public-url https://your-domain.com/"
-  publish = "web-build"
+  publish = "dist"
 
   # Build command to run
   command = "expo export -p web"
