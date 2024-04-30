@@ -4,7 +4,7 @@
   publish = "web-build"
 
   # Build command to run
-  command = "expo export:web"
+  command = "expo export -p web"
 
 # Redirects and rewrites for single-page application (SPA)
 [[redirects]]
