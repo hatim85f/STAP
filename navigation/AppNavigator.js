@@ -142,13 +142,13 @@ const AppNavigator = () => {
           ordering: {
             screens: {
               order_creation: {
-                path: "/ordering/order-creation/",
+                path: "/ordering/order_creation/",
               },
               orders_show: {
-                path: "/ordering/orders-show/",
+                path: "/ordering/orders_show/",
               },
               single_order_details: {
-                path: "/ordering/orders-details/:details/:status:/startDate/:endDate",
+                path: "/ordering/orders_details/:details/:status:/startDate/:endDate",
               },
             },
           },
