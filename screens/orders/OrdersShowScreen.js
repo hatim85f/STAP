@@ -16,7 +16,7 @@ import * as authActions from "../../store/auth/authActions";
 
 import Loader from "../../components/Loader";
 import Card from "../../components/Card";
-
+import { isTablet } from "../../constants/device";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import Colors from "../../constants/Colors";
 import MenuButton from "../../components/webComponents/menu/MenuButton";
@@ -65,48 +65,51 @@ const OrdersShowScreen = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (startDate && endDate) {
-      setIsLoading(true);
-      setLoadingMessage("Getting Orders");
-      dispatch(ordersActions.getOrders(startDate, endDate)).then(() => {
-        setIsLoading(false);
-        setLoadingMessage("");
-        setOrdersList(orders?.sort((a, b) => a.timeStamp - b.timeStamp));
-      });
+    try {
+      if (startDate && endDate) {
+        setIsLoading(true);
+        setLoadingMessage("Getting Orders");
+        dispatch(ordersActions.getOrders(startDate, endDate)).then(() => {
+          setIsLoading(false);
+          setLoadingMessage("");
+          setOrdersList(orders?.sort((a, b) => a.timeStamp - b.timeStamp));
+        });
+      }
+    } catch (error) {
+      console.log("Error getting orders:", error);
     }
   }, [dispatch, startDate, endDate]);
 
   useEffect(() => {
-    if (orders && orders.length > 0) {
-      const totalValue = orders.reduce((acc, item) => {
-        return acc + item.totalValue;
-      }, 0);
+    try {
+      if (orders && orders.length > 0) {
+        const totalValue = orders.reduce((acc, item) => {
+          return acc + item.totalValue;
+        }, 0);
 
-      settotalValue(totalValue);
+        settotalValue(totalValue);
+      }
+    } catch (error) {
+      console.log("Error getting total value:", error);
     }
   });
 
   const deleteOrder = (orderId) => {
-    setIsLoading(true);
-    setLoadingMessage("Deleting Order");
-    dispatch(ordersActions.deleteOrder(orderId, startDate, endDate)).then(
-      () => {
-        setIsLoading(false);
-        setLoadingMessage("");
-      }
-    );
+    try {
+      setIsLoading(true);
+      setLoadingMessage("Deleting Order");
+      dispatch(ordersActions.deleteOrder(orderId, startDate, endDate)).then(
+        () => {
+          setIsLoading(false);
+          setLoadingMessage("");
+        }
+      );
+    } catch (error) {
+      console.log("Error deleting order:", error);
+    }
   };
 
   // =========================================RETURN JSX==============================================================
-
-  if (orders.length === 0) {
-    return (
-      <View style={styles.container}>
-        <MenuButton navigation={props.navigation} />
-        <Text style={styles.note}>No Orders Found</Text>
-      </View>
-    );
-  }
 
   if (isLoading) {
     return <Loader center loadingMessage={loadingMessage} />;
@@ -176,6 +179,8 @@ const OrdersShowScreen = (props) => {
       </View>
     );
   }
+
+  // console.log(orders);
 
   return (
     <View style={styles.container}>
