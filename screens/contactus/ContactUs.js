@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Colors from "../../constants/Colors";
 import { globalHeight, globalWidth } from "../../constants/globalWidth";
 import ContactsData from "./ContactsData";
-import MenuButton from "../../components/MenuButton";
+import MenuButton from "../../components/webComponents/menu/MenuButton";
 
 import * as formsActions from "../../store/contact/contactActions";
 import * as authActions from "../../store/auth/authActions";
