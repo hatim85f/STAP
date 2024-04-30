@@ -1,0 +1,13 @@
+# Netlify build instructions
+[build]
+  # Directory to publish (output of the build command)
+  publish = "web-build"
+
+  # Build command to run
+  command = "expo export:web"
+
+# Redirects and rewrites for single-page application (SPA)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
