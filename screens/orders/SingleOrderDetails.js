@@ -297,7 +297,7 @@ const SingleOrderDetails = (props) => {
       )}
       <View style={{ height: globalHeight("10%") }} />
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
-        <OrdersTabBar navigation={props.navigation} route="orders-show" />
+        <OrdersTabBar navigation={props.navigation} route="orders_show" />
       </View>
       <WebAlert
         showAlert={showAlert}

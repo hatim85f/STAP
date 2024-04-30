@@ -142,7 +142,7 @@ const OrdersShowScreen = (props) => {
             </Text>
           </View>
         </View>
-        <OrdersTabBar navigation={props.navigation} route="orders-show" />
+        <OrdersTabBar navigation={props.navigation} route="orders_show" />
       </View>
     );
   }
@@ -175,7 +175,7 @@ const OrdersShowScreen = (props) => {
             </Text>
           </View>
         </View>
-        <OrdersTabBar navigation={props.navigation} route="orders-show" />
+        <OrdersTabBar navigation={props.navigation} route="orders_show" />
       </View>
     );
   }
@@ -313,7 +313,7 @@ const OrdersShowScreen = (props) => {
           )}
         </View>
       </View>
-      <OrdersTabBar navigation={props.navigation} route="orders-show" />
+      <OrdersTabBar navigation={props.navigation} route="orders_show" />
     </View>
   );
 };
