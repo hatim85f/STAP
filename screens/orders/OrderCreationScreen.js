@@ -392,7 +392,7 @@ const OrderCreationScreen = (props) => {
           )}
         </View>
       )}
-      <OrdersTabBar route="order-creation" navigation={props.navigation} />
+      <OrdersTabBar route="order_creation" navigation={props.navigation} />
     </View>
   );
 };

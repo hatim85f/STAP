@@ -23,12 +23,13 @@ const OrdersTabBar = (props) => {
 
     window.location.href = `/ordering/${route}/`;
   };
+
   return (
     <View style={[styles.barContainer, { flex: props.flex }]}>
       <Card style={[styles.container]}>
         <View style={styles.contentContainer}>
           <TouchableOpacity
-            onPress={() => changeRoute("order-creation")}
+            onPress={() => changeRoute("order_creation")}
             style={styles.touchable}
           >
             <FontAwesome5
@@ -45,18 +46,18 @@ const OrdersTabBar = (props) => {
         </View>
         <View style={styles.contentContainer}>
           <TouchableOpacity
-            onPress={() => changeRoute("orders-show")}
+            onPress={() => changeRoute("orders_show")}
             style={styles.touchable}
           >
             <Entypo
               name="list"
               size={globalWidth("2%")}
               color={
-                selectedRoute === "orders-show" ? "#ff0055" : Colors.primary
+                selectedRoute === "orders_show" ? "#ff0055" : Colors.primary
               }
             />
           </TouchableOpacity>
-          {selectedRoute === "orders-show" && (
+          {selectedRoute === "orders_show" && (
             <Text style={styles.routeName}>List</Text>
           )}
         </View>
