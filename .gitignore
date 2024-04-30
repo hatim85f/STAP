@@ -38,3 +38,6 @@ yarn-error.*
 # env
 .env
 .vercel
+
+# Local Netlify folder
+.netlify
