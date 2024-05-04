@@ -321,7 +321,7 @@ const OrderCreationScreen = (props) => {
         {orderList.length > 0 && totalValue > 0 && (
           <Text style={[styles.orderValue, { textAlign: "center" }]}>
             Order Value :{" "}
-            {numberWithComa(addVAT ? totalValue * 1.05 : totalValue)}{" "}
+            {numberWithComa(addVAT ? +totalValue * 1.05 : +totalValue)}{" "}
             {orderList[0].currency}
           </Text>
         )}

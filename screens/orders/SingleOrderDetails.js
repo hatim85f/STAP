@@ -180,7 +180,7 @@ const SingleOrderDetails = (props) => {
       )}
       <Text style={styles.number}>
         {" "}
-        Order Value : {numberWithComa(totalValue ? totalValue : 0)}{" "}
+        Order Value : {numberWithComa(totalValue ? +totalValue : 0)}{" "}
       </Text>
 
       {details && details.length > 0 && (
